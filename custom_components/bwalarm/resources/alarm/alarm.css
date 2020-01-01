@@ -86,6 +86,10 @@
   --status-bar-height:                        var(--inner-panel-default-height);
   --info-panel-height:                        var(--inner-panel-default-height);
 
+  /* general - codepanel */
+  --default-controls-justify-content:         space-evenly;
+  --controls-justify-content;                 /* dynaimcally adjusted by the panel */
+
   /* button - codepanel */
   --button-default-shape:                     4px;  /* Npx for rounded edges or 50% for circles */
   --button-default-height:                    10vmin;
@@ -101,6 +105,8 @@
   --button-raised-border-color:               var(--button-raised-text-color);/* The defaul background of raised (action) buttons.*/
   --button-raised-background-color:           var(--button-border-color);/* The defaul background of raised (action) buttons.*/
   --button-raised-text-color:                 var(--button-text-color);/* The defaul color of the text within raised (action) buttons.*/
+  --button-clear-border-color:                red;
+  --button-disarm-border-color:               green;
 
   --arm-button-default-height:                18vmin;
   --arm-button-default-width:                 18vmin;
@@ -591,6 +597,10 @@ div.code iron-label {
    font-size: x-large;
 }
 
+.controls-justify-content {
+  justify-content: var(--controls-justify-content, --default-controls-justify-content);
+}
+
 /* NIGHT, HOME and AWAY buttons */
 div.arm button {
   margin: var(--arm-button-top-bottom-margin, var(--arm-button-default-top-bottom-margin)) var(--arm-button-left-right-margin, var(--arm-button-default-left-right-margin));
@@ -622,7 +632,11 @@ div.arm button {
 }
 
 #codepanel button.clear {
-  border: var(--button-border-width) var(--button-border-style) red;
+  border: var(--button-border-width) var(--button-border-style) var(--button-clear-border-color);
+}
+
+#codepanel button.disarm {
+  border: var(--button-raised-border-width) var(--button-raised-border-style) var(--button-disarm-border-color);
 }
 
 /* invisible and inactive button - used as a placeholder to make layout the same with or without the button */

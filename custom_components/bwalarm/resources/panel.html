@@ -104,7 +104,7 @@
                     <div id='codepanel' class='horizontal layout center-justified'>
                       <div style='width: 100%'>
                         <!-- 1 2 3 {CLEAR if code to arm required or in Landscape orientation} -->
-                        <div class='horizontal layout' style='justify-content: space-evenly;'>
+                        <div class='horizontal layout controls-justify-content'>
                           <div class$=[[mwc_button_wrapper_class()]]>
                             <button class$="[[mwc_button__outlined()]]" on-click='callcode' data-digit=1>1</button>
                           </div>
@@ -122,7 +122,7 @@
                           </template>
                         </div>
                         <!-- 4 5 6 {0 if code required to arm or in Landscape orientation}-->
-                        <div class='horizontal layout' style='justify-content: space-evenly;'>
+                        <div class='horizontal layout controls-justify-content'>
                           <div class$=[[mwc_button_wrapper_class()]]>
                             <button class$="[[mwc_button__outlined()]]" on-click='callcode' data-digit=4>4</button>
                           </div>
@@ -139,7 +139,7 @@
                           </template>
                         </div>
                         <!-- 7 8 9 {DISARM if code to arm required or in Landscape orientation}-->
-                        <div class='horizontal layout' style='justify-content: space-evenly;'>
+                        <div class='horizontal layout controls-justify-content'>
                           <div class$=[[mwc_button_wrapper_class()]]>
                             <button class$="[[mwc_button__outlined()]]" on-click='callcode' data-digit=7>
                               <span class="mdc-button__label" data-digit=7>7</span>
@@ -164,7 +164,7 @@
                         </div>
                         <!-- only when no code to arm required or in Portrait orientation: CLEAR 0 {DISARM if not disarmed} -->
                         <template is='dom-if' if='[[!needHorizontalCodepanel(orientationLandscape, alarm.attributes.code_arm_required)]]'>
-                          <div class='horizontal layout' style='justify-content: space-evenly;'>
+                          <div class='horizontal layout controls-justify-content'>
                             <div class$=[[mwc_button_wrapper_class()]]>
                               <button class$="[[mwc_button__outlined()]] clear" on-click='callclearcode'>clear</button>
                             </div>
@@ -220,7 +220,7 @@
 
                       <!-- show Arm buttons if there is no errors/sensors to show -->
                       <template is='dom-if' if='[[bothFalse(attemptedArm, attemptedArmWithoutCode)]]'>
-                        <div class='horizontal layout arm' style='justify-content: space-evenly;'>
+                        <div class='horizontal layout arm controls-justify-content'>
                           <template is='dom-if' if='[[isChecked(alarm.attributes.enable_night_mode)]]'>
                             <div class$=[[mwc_button_wrapper_class()]]>
                               <button class$="[[mwc_button__raised()]]" on-click='callAlarmService' data-call='arm' data-arm='alarm_arm_night_from_panel'>night</button>
@@ -2314,13 +2314,20 @@
             return;
           }
 
-          console.log('_updateButtonsStyles: buttonsShape=' + this.buttonsShape);
+          var min_dimension = Math.min(this.viewport_width, this.viewport_height);
+          var code_arm_required = this.isChecked(this.alarm.attributes.code_arm_required);
+          var night_mode_enabled = this.alarm.attributes.enable_night_mode;
+          var width_to_height_ratio = this.buttonWidthToHeightRatio;
+          console.log('_updateButtonsStyles: code_arm_required=' + code_arm_required + ', night_mode_enabled=' + night_mode_enabled + 'buttonsShape=' + this.buttonsShape);
+
           var button_shape = (this.buttonsShape == 'circle')? '50%' : '4px';
           var symmetric_button = (this.buttonsShape == 'rectangle')? false : true;
 
-          var min_dimension = Math.min(this.viewport_width, this.viewport_height);
-          var code_arm_required = this.isChecked(this.alarm.attributes.code_arm_required);
-          var width_to_height_ratio = this.buttonWidthToHeightRatio;
+          var horizontalCodepanel = this.needHorizontalCodepanel(this.orientationLandscape, code_arm_required);
+          var buttons_in_row = horizontalCodepanel? 4 : 3;
+          var buttons_in_column = horizontalCodepanel? 3 : 4;
+
+          var arm_buttons = this.isChecked(night_mode_enabled)? 3 : 2;
 
           // vh of arm buttons depending on code_arm_required (as we have less space on disarmed screen when code required)
           var arm_button_width_percentage = code_arm_required? 18 : 30;
@@ -2342,19 +2349,13 @@
           var left_margin = this.orientationLandscape? 5 : 15; // left margin
           var right_margin = left_margin; // right margin
 
-          var button_top_bottom_margin = (min_dimension < 768)? 4: 5;
+          var button_top_bottom_margin = (min_dimension < 768)? (code_arm_required? 10 : 4) : (code_arm_required? 15 : 5);
           var button_left_right_margin = (min_dimension < 768)? 5: 10;
 
           var arm_button_top_bottom_margin = (min_dimension < 768)? 5: 10;
           var arm_button_left_right_margin = arm_button_top_bottom_margin;
 
-          var arm_buttons = this.isChecked(this.alarm.attributes.enable_night_mode)? 3 : 2;
-
-          var horizontalCodepanel = this.needHorizontalCodepanel(this.orientationLandscape, this.alarm.attributes.code_arm_required);
-          var buttons_in_row = horizontalCodepanel? 4 : 3;
-          var buttons_in_column = horizontalCodepanel? 3 : 4;
-
-          console.log('_updateButtonsStyles: min_dimension=' + min_dimension + ', available ' + available_width + 'x' + available_height + ', horizontalCodepanel=' + horizontalCodepanel + ', buttons_in_row=' + buttons_in_row + ', buttons_in_column=' + buttons_in_column + 'arm_buttons=' + arm_buttons);
+          console.log('_updateButtonsStyles: min_dimension=' + min_dimension + ', available ' + available_width + 'x' + available_height + ', horizontalCodepanel=' + horizontalCodepanel + ', buttons_in_row=' + buttons_in_row + ', buttons_in_column=' + buttons_in_column + ', arm_buttons=' + arm_buttons);
 
           var button_width;
           var button_height;
@@ -2370,7 +2371,20 @@
           }
           else {
             button_width = Math.min(max_button_width, arm_button_width); // to avoid too wide codepanel buttons
-            button_height = arm_button_height;
+            if (code_arm_required) {
+              button_height = Math.trunc(arm_button_height*0.9); // make the codepanel buttons smaller that arm buttons
+              arm_button_top_bottom_margin = button_height; // and add bigger margin to visually isolate arm buttons from codepanel
+              console.log('_updateButtonsStyles: code_arm_required, set button_height to ' + button_height + ' and arm_button_top_bottom_margin to ' + arm_button_top_bottom_margin);
+            }
+            else {
+              button_height = arm_button_height;
+              console.log('_updateButtonsStyles: set button_height equal to and arm_button_top_bottom_margin: ' + arm_button_top_bottom_margin);
+            }
+          }
+
+          if (code_arm_required) {
+            arm_button_left_right_margin = button_left_right_margin;
+            console.log('_updateButtonsStyles: code_arm_required, set arm_button_left_right_margin equal to button_left_right_margin: ' + button_left_right_margin);
           }
 
           // apply computed styles
@@ -2402,6 +2416,9 @@
           styles['--message-button-height'] = _numberToPx(message_button_height);
           styles['--message-button-width'] = _numberToPx(message_button_width);
           styles['--message-button-margin'] = '20px';
+
+          // set codepanel's justify-content value
+          styles['--controls-justify-content'] = code_arm_required? 'space-between' : 'space-evenly'; // if code_arm_required, change justification so arm buttons are to the edges and look better together with codepanel
 
           this.updateStyles(styles);
         }
