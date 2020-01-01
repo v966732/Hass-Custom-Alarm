@@ -649,7 +649,7 @@
                             </template>
                           </paper-listbox>
                         </template>
-                        <button on-click='unhideDiv' data-div='#themeDetail' style='background: unset; text-transform: capitalize;'><iron-icon  on-click='unhideDiv' data-div='#themeDetail' icon='mdi:plus-circle-outline' style='padding-right: 7px;'></iron-icon>New</button>
+                        <button on-click='unhideDiv' data-div='#themeDetail' style='background: unset; text-transform: capitalize; color: var(--panel-text-color);'><iron-icon  on-click='unhideDiv' data-div='#themeDetail' icon='mdi:plus-circle-outline' style='padding-right: 7px;'></iron-icon>New</button>
                       </div>
 
                       <!-- /* Theme Name [Input] | Update [Button] | Delete [Button] */ -->
@@ -794,7 +794,7 @@
                             <div style='margin-top: auto; margin-bottom: auto; margin-left: 15px;'>
                               <ha-switch class='setting-toggle' checked='{{isChecked(user.enabled)}}' data-userid$='[[user.id]]' on-change='toggleUser'>Enable</ha-switch>
                             </div>
-                            <button data-type='button' style='background-color: unset; width: 40%;' data-userid$='{{user.id}}' on-click='editUser'>
+                            <button data-type='button' style='background-color: unset; width: 40%; border: 0px; color: var(--panel-text-color);' data-userid$='{{user.id}}' on-click='editUser'>
                               <div style='margin-left: 5px; margin-right: 10px; padding-left: 15px;' data-userid$='[[user.id]]' on-click='editUser'>
                                 <state-badge style$='background-image: url({{computeImage(user.picture)}});' data-userid$='[[user.id]]' on-click='editUser'></state-badge>
                               </div>
@@ -810,7 +810,7 @@
                         </div>
                       </template>
 
-                      <button id='user-add' data-type='button' on-click='unhideDiv' data-div='#userDetail' style='background-color: unset; margin-bottom: 15px;'><iron-icon icon='mdi:account-plus'></iron-icon>&nbsp;&nbsp;Add A New User</button>
+                      <button id='user-add' data-type='button' on-click='unhideDiv' data-div='#userDetail' style='background-color: unset; margin-bottom: 15px; color: var(--panel-text-color);'><iron-icon icon='mdi:account-plus'></iron-icon>&nbsp;&nbsp;Add A New User</button>
 
                       <div id='userDetail' class='remove'>
 

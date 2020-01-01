@@ -263,6 +263,7 @@ a:hover {
   background-color: unset;
   padding-left: 0;
   margin-left: 0;
+  color: var(--panel-text-color);
   text-transform: none;
 }
 
