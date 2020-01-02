@@ -1298,32 +1298,27 @@
         <!-- ###########################################SELECTION BAR############################################### -->
         <div id='info-panel-selection'>
           <paper-icon-button icon='mdi:dialpad' title='Keypad' on-click='carouselClick' data-selection='controls'></paper-icon-button>
+
           <template is='dom-if' if='[[isChecked(alarm.attributes.panel.enable_floorplan_panel)]]' >
             <paper-icon-button icon='mdi:floor-plan' title='Floorplan' on-click='carouselClick' data-selection='floorplan'></paper-icon-button>
           </template>
 
-          <template is='dom-if' if='[[isChecked(alarm.attributes.panel.enable_sensors_panel)]]' >
-            <template is='dom-if' if='[[!isDisarmed(alarm)]]' >
-              <template is='dom-if' if='[[!isChecked(alarm.attributes.panel.hide_sensors)]]' >
-                <paper-icon-button icon='mdi:radio-tower' title='Sensors' on-click='carouselClick' data-selection='sensors' style$='color: [[computeButtonColor(opencount)]] !important;'></paper-icon-button>
-              </template>
-            </template>
-            <template is='dom-if' if='[[isDisarmed(alarm)]]' >
-                <paper-icon-button icon='mdi:radio-tower' title='Sensors' on-click='carouselClick' data-selection='sensors' style$='color: [[computeButtonColor(opencount)]] !important;'></paper-icon-button>
-            </template>
+          <template is='dom-if' if='[[needSensorsPanel(alarm)]]'>
+            <paper-icon-button icon='mdi:radio-tower' title='Sensors' on-click='carouselClick' data-selection='sensors' style$='color: [[computeButtonColor(opencount)]] !important;'></paper-icon-button>
           </template>
-          
+
           <template is='dom-if' if='[[isChecked(alarm.attributes.panel.enable_camera_panel)]]' >
             <paper-icon-button icon='mdi:cctv' title='Cameras' on-click='carouselClick' data-selection='cameras'></paper-icon-button>
           </template>
-          <template is='dom-if' if='[[isChecked(alarm.attributes.enable_log)]]' >
-            <template is='dom-if' if='[[isDisarmed(alarm)]]' >
-              <paper-icon-button icon='mdi:view-headline' title='Activity log' on-click='carouselClick' data-selection='log'></paper-icon-button>
-            </template>
+
+          <template is='dom-if' if='[[needLogPanel(alarm)]]' >
+            <paper-icon-button icon='mdi:view-headline' title='Activity log' on-click='carouselClick' data-selection='log'></paper-icon-button>
           </template>
+
           <template is='dom-if' if='[[isChecked(alarm.attributes.panel.enable_custom_panel)]]' >
             <paper-icon-button icon='mdi:atom' title='Custom Panel' on-click='carouselClick' data-selection='custom'></paper-icon-button>
           </template>
+
           <template is='dom-if' if='[[isDisarmed(alarm)]]' >
             <paper-icon-button icon='mdi:tune' title='Settings' on-click='carouselClick' data-selection='set-login'></paper-icon-button>
           </template>
@@ -3156,6 +3151,20 @@
           var result = orientationLandscape || this.isChecked(code_arm_required);
           console.log('needHorizontalCodepanel: orientationLandscape=' + orientationLandscape + ', code_arm_required=' + this.isChecked(code_arm_required) + ', result=' + result);
           return result;
+        }
+
+        // show sensors panel only if enable_sensors_panel and
+        // it's disarmed OR (armed && !hide_sensors)
+        needSensorsPanel(alarm) {
+          if (this.isChecked(alarm.attributes.panel.enable_sensors_panel))
+            return this.isDisarmed(alarm)? true : !this.isChecked(alarm.attributes.panel.hide_sensors);
+          else
+            return false;
+        }
+
+        // show activity log when log enabled and alarm disarmed
+        needLogPanel(alarm) {
+          return this.isChecked(alarm.attributes.enable_log) && this.isDisarmed(alarm);
         }
       }
 
