@@ -430,6 +430,14 @@ ha-label-badge {
    padding: 15px 0px;
 }
 
+.open-sensors-above-arm-buttons-box {
+  align-items: center;
+}
+
+.open-sensors-list {
+  width: 60vmin;
+}
+
 .summary {
    margin: 0px auto 0px;
    text-align: center;

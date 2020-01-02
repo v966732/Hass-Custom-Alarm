@@ -188,7 +188,7 @@
                           <div style='text-align: center;'>
                             <h1>Open Sensors Found</h1>
                           </div>
-                          <div class='sensors'>
+                          <div class='sensors open-sensors-list'>
                             <template is='dom-repeat' items='[[opensensors_for_attempted_arm(alarm)]]' as='entity'>
                               <state-card-display state-obj='[[entity]]' hass='[[hass]]' class='tappable' on-tap='entityTapped' data-entity='[[entity.entity_id]]'></state-card-display>
                             </template>
@@ -232,6 +232,19 @@
                             <button class$="[[mwc_button__raised()]]" on-click='callAlarmService' data-call='arm' data-arm='alarm_arm_away_from_panel'>away</button>
                           </div>
                         </div>
+
+                        <template is='dom-if' if='[[needOpenSensorsBelowArmButtons(opencount, alarm.attributes.code_arm_required)]]'>
+                          <div class='vertical layout open-sensors-above-arm-buttons-box'>
+                            <div style='text-align: center;'>
+                              <h1>Open Sensors</h1>
+                            </div>
+                            <div class='sensors open-sensors-list'>
+                              <template is='dom-repeat' items='[[opensensors(alarm, allsensors)]]' as='entity'>
+                                <state-card-display state-obj='[[entity]]' hass='[[hass]]' class='tappable' on-tap='entityTapped' data-entity='[[entity.entity_id]]'></state-card-display>
+                              </template>
+                            </div>
+                          </div>
+                        </template>
                       </template>
                   </template>
                 </div>
@@ -249,36 +262,34 @@
                 <!-- ########################################### SENSORS############################################### -->
                 <div id='sensors' class='carousel-cell remove' style='position: absolute;'>
                   <!-- ###########################################OPEN SENSORS############################################### -->
-                  <template is='dom-if' if='[[opencount]]'>
-                    <div>
-                      <div class='openSensors'>Open Sensors</div>
-                          <div class='sensors'>
-                          <template is='dom-repeat' items='[[opensensors(alarm, allsensors)]]' as='entity'>
-                            <state-card-display state-obj='[[entity]]' hass='[[hass]]' class='tappable' on-tap='entityTapped' data-entity='[[entity.entity_id]]'></state-card-display>
-                          </template>
-                        </div>
+                  <template is='dom-if' if='[[hasAnyOpenSensors(alarm, allsensors)]]'>
+                    <div class='openSensors'>Open Sensors</div>
+                    <div class='sensors'>
+                      <template is='dom-repeat' items='[[opensensors(alarm, allsensors)]]' as='entity'>
+                        <state-card-display state-obj='[[entity]]' hass='[[hass]]' class='tappable' on-tap='entityTapped' data-entity='[[entity.entity_id]]'></state-card-display>
+                      </template>
                     </div>
                   </template>
 
                   <!-- ###########################################ARMED############################################## -->
                   <template is='dom-if' if='[[!isDisarmed(alarm)]]'>
-                    <div >
-                      <template is='dom-if' if='[[computeArray(delayed)]]'>
+                    <div>
+                      <template is='dom-if' if='[[computeArray(immediate)]'>
                         <div class='box-sensors'>
-                          <div class='sensor-title'>Delayed Sensors</div>
+                          <div class='sensor-title'>Immediate Sensors</div>
                           <div class='sensors'>
-                            <template is='dom-repeat' items='[[delayed]]' as='entity'>
+                            <template is='dom-repeat' items='[[immediate]]' as='entity'>
                               <state-card-display state-obj='[[entity]]' hass='[[hass]]' class='tappable' on-tap='entityTapped' data-entity='[[entity.entity_id]]'></state-card-display>
                             </template>
                           </div>
                         </div>
                       </template>
 
-                      <template is='dom-if' if='[[computeArray(immediate)]'>
+                      <template is='dom-if' if='[[computeArray(delayed)]]'>
                         <div class='box-sensors'>
-                          <div class='sensor-title'>Immediate Sensors</div>
+                          <div class='sensor-title'>Delayed Sensors</div>
                           <div class='sensors'>
-                            <template is='dom-repeat' items='[[immediate]]' as='entity'>
+                            <template is='dom-repeat' items='[[delayed]]' as='entity'>
                               <state-card-display state-obj='[[entity]]' hass='[[hass]]' class='tappable' on-tap='entityTapped' data-entity='[[entity.entity_id]]'></state-card-display>
                             </template>
                           </div>
@@ -301,11 +312,11 @@
                   <!-- ###########################################DISARMED############################################### -->
                   <template is='dom-if' if='[[isDisarmed(alarm)]]'>
                     <div class='box-sensors'>
-                      <div class='sensor-title'>All Sensors</div>
+                      <div class='sensor-title'>Closed Sensors</div>
                       <div class='sensors'>
-                        <template is='dom-repeat' items='[[opensensors(alarm, allsensors)]]' as='entity'>
+                        <!--<template is='dom-repeat' items='[[opensensors(alarm, allsensors)]]' as='entity'>
                           <state-card-display state-obj='[[entity]]' hass='[[hass]]' class='tappable' on-tap='entityTapped' data-entity='[[entity.entity_id]]'></state-card-display>
-                        </template>
+                        </template>-->
                         <template is='dom-repeat' items='[[closedsensors(alarm, allsensors)]]' as='entity'>
                           <state-card-display state-obj='[[entity]]' hass='[[hass]]' class='tappable' on-tap='entityTapped' data-entity='[[entity.entity_id]]'></state-card-display>
                         </template>
@@ -2141,22 +2152,22 @@
 
           //Get the selection
           var selection = ev.target.getAttribute('data-selection');
-          console.log("carouselClick: " + selection);
+          //console.log("carouselClick: " + selection);
 
           // deal with special tabs like set-login/logout to show/hide settings and prevent entering password every time
           if (selection == 'set-login') {
             if (this.trustedSession) {
-              console.log('carouselClick: ' + selection + ', trustedSession=' + this.trustedSession + ', automatically showing lastSettings');
+              //console.log('carouselClick: ' + selection + ', trustedSession=' + this.trustedSession + ', automatically showing lastSettings');
               this.settingsUnlock = true;
               selection = this.lastSettings;
             }
             else {
-              console.log('carouselClick: ' + selection + ', trustedSession=' + this.trustedSession + ', hiding settings and focusing input');
+              //console.log('carouselClick: ' + selection + ', trustedSession=' + this.trustedSession + ', hiding settings and focusing input');
               this.settingsUnlock = false;
             }
           }
           else if (selection == 'set-logout') {
-            console.log('carouselClick: ' + selection + ', resetting trustedSession and settingsUnlock and redirecting to set-login');
+            //console.log('carouselClick: ' + selection + ', resetting trustedSession and settingsUnlock and redirecting to set-login');
             this.trustedSession = false;
             this.settingsUnlock = false;
             selection = 'set-login';
@@ -2164,11 +2175,11 @@
           //If the selection is not a settings item then clear the flag so they are not showed
           else if (selection.includes('settings-')) {
             this.lastSettings = selection;
-            console.log('carouselClick: ' + selection + ', store it as lastSettings');
+            //console.log('carouselClick: ' + selection + ', store it as lastSettings');
           }
           else {
             this.settingsUnlock = false;
-            console.log('carouselClick: hiding settings');
+            //console.log('carouselClick: hiding settings');
           }
 
           //Show the selected tab
@@ -2246,6 +2257,7 @@
 
         entityTapped(ev){
           ev.stopPropagation();
+          console.log('entityTapped: fire hass-more-info for entity_id:' + ev.target.getAttribute('data-entity'));
           this.fire('hass-more-info', { entity_id: ev.target.getAttribute('data-entity')});
         }
 
@@ -2554,20 +2566,20 @@
         opensensors(alarm, sensors)   {
           var ret = [];
 
-          if (sensors != null)
+          if ((alarm != null) && (sensors != null))
             ret = sensors.filter(function (e){ return alarm.attributes.supported_statuses_on.indexOf(e.state.toLowerCase()) > -1; });
 
           this.opencount = ret.length;
 
           //if (ret.length > 0)
-          //  console.log("%i opensensors:", ret.length);
+          //console.log("opensensors: return " + this.opencount);
           //ret.forEach(function (obj) {console.log("\t" + obj.entity_id + ":" + obj.state);});
 
           return ret;
         }
 
         opensensors_for_attempted_arm(alarm) {
-          if (this.attemptedArm == true) {
+          if (this.attemptedArm) {
             var arm_state = this.service_name2arm_state(this.attemptArmMode);
             return this.opensensors(alarm, this.computeSensors(this.hass, alarm.attributes.states[arm_state][this.INT_ATTR_STATE_CHECK_BEFORE_ARM]) );
           }
@@ -2707,6 +2719,7 @@
             return false;
           return this.isChecked(alarm.attributes.code_arm_required) || !this.isDisarmed(alarm);
         }
+
         // need it to avoid nesting 3 templates
         showCodePanelWhenBothFalse(alarm, arg_1, arg_2) {
           return this.showCodePanel(alarm) && ! arg_1 && !arg_2;
@@ -3164,6 +3177,21 @@
         // show activity log when log enabled and alarm disarmed
         needLogPanel(alarm) {
           return this.isChecked(alarm.attributes.enable_log) && this.isDisarmed(alarm);
+        }
+
+        // only show open sensors info above arm buttons when !code_arm-required (as there is no space then)
+        // and this option is enabled
+        needOpenSensorsBelowArmButtons(opencount, code_arm_required) {
+          //console.log('needOpenSensorsBelowArmButtons: opencount=' + opencount + ', code_arm_required=' + code_arm_required);
+          return opencount>0 && !this.isChecked(code_arm_required);
+        }
+
+        // instead of opencount in dom-if templates
+        // each opensensors call updates opencount
+        hasAnyOpenSensors(alarm, allsensors) {
+          this.opensensors(alarm, allsensors);
+          //console.log('hasAnyOpenSensors: this.opencount=' + this.opencount + ', return ' + (this.opencount > 0));
+          return (this.opencount > 0);
         }
       }
 
