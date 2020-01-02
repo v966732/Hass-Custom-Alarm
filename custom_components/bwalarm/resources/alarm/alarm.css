@@ -100,13 +100,16 @@
   --button-border-style:                      solid;
   --button-border-color:                      var(--mdc-theme-primary);/* The border color of the alarm buttons. --mdc-theme-secondary*/
   --button-text-color:                        var(--mdc-theme-on-primary);/* The defaul color of the text within buttons. --mdc-theme-on-secondary*/
-  --button-raised-border-width:               2px;/* The defaul background of raised (action) buttons.*/
+  --button-raised-border-width:               2px;
   --button-raised-border-style:               solid;
   --button-raised-border-color:               var(--button-raised-text-color);/* The defaul background of raised (action) buttons.*/
   --button-raised-background-color:           var(--button-border-color);/* The defaul background of raised (action) buttons.*/
   --button-raised-text-color:                 var(--button-text-color);/* The defaul color of the text within raised (action) buttons.*/
+  --button-increased-border-width:            calc(var(--button-border-width) + 2px);
+  --button-clear-border-width:                var(--button-increased-border-width);
   --button-clear-border-color:                red;
-  --button-disarm-border-color:               green;
+  --button-disarm-border-width:               var(--button-increased-border-width);
+  --button-disarm-border-color:               lime;
 
   --arm-button-default-height:                18vmin;
   --arm-button-default-width:                 18vmin;
@@ -632,11 +635,11 @@ div.arm button {
 }
 
 #codepanel button.clear {
-  border: var(--button-border-width) var(--button-border-style) var(--button-clear-border-color);
+  border: var(--button-clear-border-width, var(--button-border-width)) var(--button-border-style) var(--button-clear-border-color);
 }
 
 #codepanel button.disarm {
-  border: var(--button-raised-border-width) var(--button-raised-border-style) var(--button-disarm-border-color);
+  border: var(--button-disarm-border-width, --button-raised-border-width) var(--button-raised-border-style) var(--button-disarm-border-color);
 }
 
 /* invisible and inactive button - used as a placeholder to make layout the same with or without the button */

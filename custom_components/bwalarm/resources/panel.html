@@ -262,7 +262,6 @@
 
                   <!-- ###########################################ARMED############################################## -->
                   <template is='dom-if' if='[[!isDisarmed(alarm)]]'>
-
                     <div >
                       <template is='dom-if' if='[[computeArray(delayed)]]'>
                         <div class='box-sensors'>
@@ -1982,13 +1981,13 @@
             case 'message':
               switch (entry[2]){
                 case 0: return 'disarmed the alarm';
-                case 1: return 'Disarm attempt failed, wrong passcode';
+                case 1: return 'Wrong passcode, disarm attempt failed';
                 case 2: return 'Alarm has been triggered by ' + this.computeFriendlyName(entry[3]);
-                case 3: return 'set the alarm to Home mode';
-                case 4: return 'set the alarm to Away mode';
+                case 3: return 'set the alarm to Armed - Home';
+                case 4: return 'set the alarm to Armed - Away';
                 case 5: return 'Alarm has been tripped by ' + this.computeFriendlyName(entry[3]);
                 case 6: return 'Panel Locked';
-                case 8: return 'set the alarm to Night mode';
+                case 8: return 'set the alarm to Armed - Night';
               }
               var err = "unknown message \"" + entry[2] + "\"";
               console.log("computeLog: ", err);
@@ -2370,7 +2369,7 @@
           var left_margin = this.orientationLandscape? 5 : 15; // left margin
           var right_margin = left_margin; // right margin
 
-          var button_top_bottom_margin = (min_dimension < 768)? (code_arm_required? 10 : 4) : (code_arm_required? 15 : 5);
+          var button_top_bottom_margin = (min_dimension < 768)? (code_arm_required? 10 : 5) : (code_arm_required? 15 : 10);
           var button_left_right_margin = (min_dimension < 768)? 5: 10;
 
           var arm_button_top_bottom_margin = (min_dimension < 768)? 5: 10;
