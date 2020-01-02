@@ -334,7 +334,7 @@
                 <!-- ###########################################ACTIVITY LOG############################################### -->
                 <div id='log' class='carousel-cell remove' style='position: absolute;'>
                   <template is='dom-if' if='[[isChecked(alarm.attributes.enable_log)]]' >
-                      <div class='title'>Activity</div>
+                      <div class='title'>Activity log</div>
                           <div >
                           <template is='dom-repeat' items='[[reverseArray(alarm.attributes.logs, 10)]]' as='entry'>
                             <div style='display:flex; padding: 8px;'>
@@ -439,9 +439,33 @@
 
                     <!-- ########################################################################### INFO ##################################################################################################### -->
                     <div id='settings-info' class='carousel-cell remove'>
+                      <div>
+                        <h1>Your Versions:</h1>
+                        <div>
+                          <p><span class='info-header'>This integration: </span><span class='info-detail'>[[version]]</span></p>
+                          <p><span class='info-header'>Home Assistant: </span><span class='info-detail'>v[[hass.config.version]]</span></p>
+                          <p><span class='info-header'>Python: </span><span class='info-detail'>v([[alarm.attributes.py_version]])</span></p>
+                        </div>
+                      </div>
+
+                      <div>
+                        <template is='dom-if' if='[[errors]]' >
+                          <h1>Issues:</h1>
+                          <div>
+                            <template is='dom-repeat' items='[[errors]]' as='entity'>
+                              <p class='info-detail'>&#8226;  [[entity]]</p>
+                            </template>
+                          </div>
+                        </template>
+                      </div>
+
+                      <div>
+                        <h1>Contribute</h1>
+                        <a href='https://github.com/akasma74/Hass-Custom-Alarm/issues'><iron-icon icon='mdi:bug' style='padding-right: 8px'></iron-icon><span>Found a bug or got a feature idea? Let's talk about it on Github</span></a><br>
+                        <iron-icon icon='mdi:earth' style='padding-right: 8px'></iron-icon><span><a href='https://community.home-assistant.io/t/bwalarm-akasma74-edition/113666'>Talk to your friends and colleagues about how awesome this alarm and smart panel is</a></span><br>
+                      </div>
 
                       <div class='setting-outer vertical layout'>
-
                         <h1><iron-icon icon='mdi:heart-pulse' style='padding-right: 8px'></iron-icon>Help Support This Work</h1>
 
                         <span class='info-detail'>Thanks to the community for all the input into this. Consider supporting this project and donate! All funds will go towards bug squashing! It is a community effort to make both the alarm and this smart panel feature-rich as well as simple to deploy and use. We need all the help we can get!</span>
@@ -480,39 +504,10 @@
                               </div>
                               <span class='info-detail'>ltc1qvdd488jpus0gkncm8qemhjlettz6ye9253aex0</span>
                           </div>
-
                         </div>
-                      </div>
-
-                      <div>
-                        <h1>Contribute</h1>
-                        <a href='https://github.com/akasma74/Hass-Custom-Alarm/issues'><iron-icon icon='mdi:bug' style='padding-right: 8px'></iron-icon><span>Found a bug or got a feature idea? Let's talk about it on Github</span></a><br>
-                        <iron-icon icon='mdi:earth' style='padding-right: 8px'></iron-icon><span><a href='https://community.home-assistant.io/t/bwalarm-akasma74-edition/113666'>Talk to your friends and colleagues about how awesome this alarm and smart panel is</a></span><br>
-
-                      </div>
-
-                      <div>
-                        <h1>Your Versions:</h1>
-                        <div>
-                          <p><span class='info-header'>This integration: </span><span class='info-detail'>[[version]]</span></p>
-                          <p><span class='info-header'>Home Assistant: </span><span class='info-detail'>v[[hass.config.version]]</span></p>
-                          <p><span class='info-header'>Python: </span><span class='info-detail'>v([[alarm.attributes.py_version]])</span></p>
-                        </div>
-                      </div>
-
-                      <div>
-                        <template is='dom-if' if='[[errors]]' >
-                          <h1>Issues:</h1>
-                          <div>
-                            <template is='dom-repeat' items='[[errors]]' as='entity'>
-                              <p class='info-detail'>&#8226;  [[entity]]</p>
-                            </template>
-                          </div>
-                        </template>
                       </div>
 
                       <button id='restart' data-type='button' on-click='restartHA'><iron-icon icon='mdi:restart' style='padding-right: 8px'></iron-icon><span>Restart Home Assistant</span></button>
-
                     </div>
 
                     <!-- ########################################################################### @PANEL ##################################################################################################### -->
@@ -1306,24 +1301,24 @@
           <template is='dom-if' if='[[isChecked(alarm.attributes.panel.enable_floorplan_panel)]]' >
             <paper-icon-button icon='mdi:floor-plan' title='Floorplan' on-click='carouselClick' data-selection='floorplan'></paper-icon-button>
           </template>
+
           <template is='dom-if' if='[[isChecked(alarm.attributes.panel.enable_sensors_panel)]]' >
             <template is='dom-if' if='[[!isDisarmed(alarm)]]' >
               <template is='dom-if' if='[[!isChecked(alarm.attributes.panel.hide_sensors)]]' >
-                <paper-icon-button icon='mdi:radio-tower' title='Alarm Sensors' on-click='carouselClick' data-selection='sensors' style$='color: [[computeButtonColor(opencount)]] !important;'></paper-icon-button>
-              </template>
-              <template is='dom-if' if='[[isChecked(alarm.attributes.panel.hide_sensors)]]' >
+                <paper-icon-button icon='mdi:radio-tower' title='Sensors' on-click='carouselClick' data-selection='sensors' style$='color: [[computeButtonColor(opencount)]] !important;'></paper-icon-button>
               </template>
             </template>
             <template is='dom-if' if='[[isDisarmed(alarm)]]' >
-                <paper-icon-button icon='mdi:radio-tower' title='Alarm Sensors' on-click='carouselClick' data-selection='sensors' style$='color: [[computeButtonColor(opencount)]] !important;'></paper-icon-button>
+                <paper-icon-button icon='mdi:radio-tower' title='Sensors' on-click='carouselClick' data-selection='sensors' style$='color: [[computeButtonColor(opencount)]] !important;'></paper-icon-button>
             </template>
           </template>
+          
           <template is='dom-if' if='[[isChecked(alarm.attributes.panel.enable_camera_panel)]]' >
             <paper-icon-button icon='mdi:cctv' title='Cameras' on-click='carouselClick' data-selection='cameras'></paper-icon-button>
           </template>
           <template is='dom-if' if='[[isChecked(alarm.attributes.enable_log)]]' >
             <template is='dom-if' if='[[isDisarmed(alarm)]]' >
-              <paper-icon-button icon='mdi:view-headline' title='Activity Log' on-click='carouselClick' data-selection='log'></paper-icon-button>
+              <paper-icon-button icon='mdi:view-headline' title='Activity log' on-click='carouselClick' data-selection='log'></paper-icon-button>
             </template>
           </template>
           <template is='dom-if' if='[[isChecked(alarm.attributes.panel.enable_custom_panel)]]' >
@@ -1994,11 +1989,11 @@
                 case 0: return 'disarmed the alarm';
                 case 1: return 'Disarm attempt failed, wrong passcode';
                 case 2: return 'Alarm has been triggered by ' + this.computeFriendlyName(entry[3]);
-                case 3: return 'set the alarm in Home mode';
-                case 4: return 'set the alarm in Away mode';
+                case 3: return 'set the alarm to Home mode';
+                case 4: return 'set the alarm to Away mode';
                 case 5: return 'Alarm has been tripped by ' + this.computeFriendlyName(entry[3]);
                 case 6: return 'Panel Locked';
-                case 8: return 'set the alarm in Night mode';
+                case 8: return 'set the alarm to Night mode';
               }
               var err = "unknown message \"" + entry[2] + "\"";
               console.log("computeLog: ", err);

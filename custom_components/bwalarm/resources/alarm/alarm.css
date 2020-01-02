@@ -338,8 +338,7 @@ a:hover {
 }
 #carousel_main{
   position: relative;
-  /* height: 60vh; */
-  padding: 0px 15px;
+  margin: 0px 5vmin;
 
   /* transition: all 1s ease-in-out; */
   /* -webkit-transition: all 1s ease-in-out; /** Chrome & Safari **/
@@ -449,12 +448,6 @@ ha-label-badge {
   color: white;
 }
 
-.content-box {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
 /* ######################################################### ALL DEVICES ################################################# */
 #icon {
   margin-right: 15px;
@@ -472,6 +465,14 @@ paper-listbox {
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+.content-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
 
 #status-bar {
   height: var(--status-bar-height);
@@ -538,14 +539,12 @@ h1 {
 }
 
 #info-panel-selection paper-icon-button {
- /*width: 60px;*/
  height: 100%;
  flex: 1 1 auto;
 }
 
 #main-content {
   display: flex;
-  /*justify-content: center;*/
   align-items: center;
   flex-direction: column;
   flex: 1 1 auto;
@@ -1063,9 +1062,9 @@ text-align: left;
 .camera-feed {
   width: 300px;
   }
-  .content-box {
+  /*.content-box {
       width: 100%;
-  }
+  }*/
   #code-display {
        margin-top: 10px;
   }
@@ -1142,11 +1141,11 @@ text-align: left;
 }
 /* ############## w2: SM > 768 ############### */
 @media screen and (min-width: 768px) {
-    .content-box {
+    /*.content-box {
       /*height: 100%;*/
-      width: 100%;
+      /*width: 100%;
       /*padding-bottom: 20px;*/
-  }
+  /*}*/
 .cameras{
     padding-right: 15px;
   }
@@ -1291,7 +1290,7 @@ div.arm button {
   }
 
   .content-box {
-      width: 75%;
+      width: 80%;
   }
   #controls {
 /*    width: 50% !important;
