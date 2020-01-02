@@ -545,7 +545,7 @@ h1 {
 
 #main-content {
   display: flex;
-  justify-content: center;
+  /*justify-content: center;*/
   align-items: center;
   flex-direction: column;
   flex: 1 1 auto;

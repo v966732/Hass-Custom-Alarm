@@ -92,7 +92,7 @@
 
             <div id='main-content'>
 
-              <div id='carousel_main' class='content-box'>
+              <div id='carousel_main' class='content-box' style='height: 100%;'>
                 <!-- ###########################################CAROUSEL MAIN############################################### -->
                 <div id='carousel_template' class='carousel-cell carousel-slide-in'> <!-- TODO style='height: 50vh' -->
 
@@ -239,7 +239,7 @@
 
                 <!-- ###########################################FLOOR PLAN############################################### -->
 
-                  <div id='floorplan' class='carousel-cell remove'>
+                  <div id='floorplan' class='carousel-cell remove' style='position: absolute;'>
                     <template is='dom-if' if='{{alarm.attributes.panel.enable_floorplan_panel}}' >
                     <div>
                       <div class='title'>Floor Plan</div>
@@ -249,7 +249,7 @@
                 </div>
 
                 <!-- ########################################### SENSORS############################################### -->
-                <div id='sensors' class='carousel-cell remove'>
+                <div id='sensors' class='carousel-cell remove' style='position: absolute;'>
                   <!-- ###########################################OPEN SENSORS############################################### -->
                   <template is='dom-if' if='[[opencount]]'>
                     <div>
@@ -318,7 +318,7 @@
                 </div>
 
                 <!-- ###########################################CAMERAS############################################### -->
-                <div id='cameras' class='carousel-cell remove'>
+                <div id='cameras' class='carousel-cell remove' style='position: absolute;'>
                   <div class='title' style='padding-bottom: 10px'>Cameras</div>
                   <div class='info-detail' style='text-align: center; padding-bottom: 5px;'>Cameras refreshed every [[alarm.attributes.panel.camera_update_interval]] seconds</div>
                   <div class=' vLayout'>
@@ -334,7 +334,7 @@
                   </div>
 
                 <!-- ###########################################ACTIVITY LOG############################################### -->
-                <div id='log' class='carousel-cell remove'>
+                <div id='log' class='carousel-cell remove' style='position: absolute;'>
                   <template is='dom-if' if='[[isChecked(alarm.attributes.enable_log)]]' >
                       <div class='title'>Activity</div>
                           <div >
@@ -356,7 +356,7 @@
                 </div>
 
                   <!-- ###########################################CUSTOM PANEL############################################### -->
-                  <div id='custom' class='carousel-cell remove'>
+                  <div id='custom' class='carousel-cell remove' style='position: absolute;'>
                     <template is='dom-if' if='{{alarm.attributes.panel.enable_custom_panel}}' >
                     <custom-element is-panel></custom-element>
                   </template>
@@ -364,7 +364,7 @@
 
 
                 <!-- ########################################################################### SETTINGS ##################################################################################################### -->
-                  <div id='settings' class='carousel-cell' style='left: 0 !important;' >
+                  <div id='settings' class='carousel-cell' style='left: 0 !important; position: absolute;' >
                     <!-- <alarm-settings is-panel></alarm-settings> -->
 
                   <!-- ###########################################SETTINGS SELECTION BAR############################################### -->
@@ -810,7 +810,7 @@
                         </div>
                       </template>
 
-                      <button id='user-add' data-type='button' on-click='unhideDiv' data-div='#userDetail' style='background-color: unset; margin-bottom: 15px; color: var(--panel-text-color);'><iron-icon icon='mdi:account-plus'></iron-icon>&nbsp;&nbsp;Add A New User</button>
+                      <button id='user-add' data-type='button' on-click='unhideDiv' data-div='#userDetail' style='background-color: unset; margin-bottom: 15px; color: var(--panel-text-color);'><iron-icon icon='mdi:account-plus'></iron-icon>&nbsp;&nbsp;Add new user</button>
 
                       <div id='userDetail' class='remove'>
 
