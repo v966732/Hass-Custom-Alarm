@@ -95,7 +95,6 @@
               <div id='carousel_main' class='content-box' style='height: 100%;'>
                 <!-- ###########################################CAROUSEL MAIN############################################### -->
                 <div id='carousel_template' class='carousel-cell carousel-slide-in'> <!-- TODO style='height: 50vh' -->
-
                 </div>
 
                 <!-- ###########################################CONTROLS############################################### -->
@@ -238,8 +237,7 @@
                 </div>
 
                 <!-- ###########################################FLOOR PLAN############################################### -->
-
-                  <div id='floorplan' class='carousel-cell remove' style='position: absolute;'>
+                <div id='floorplan' class='carousel-cell remove' style='position: absolute;'>
                     <template is='dom-if' if='{{alarm.attributes.panel.enable_floorplan_panel}}' >
                     <div>
                       <div class='title'>Floor Plan</div>
@@ -355,16 +353,15 @@
                   </template>
                 </div>
 
-                  <!-- ###########################################CUSTOM PANEL############################################### -->
-                  <div id='custom' class='carousel-cell remove' style='position: absolute;'>
+                <!-- ###########################################CUSTOM PANEL############################################### -->
+                <div id='custom' class='carousel-cell remove' style='position: absolute;'>
                     <template is='dom-if' if='{{alarm.attributes.panel.enable_custom_panel}}' >
                     <custom-element is-panel></custom-element>
                   </template>
                 </div>
 
-
                 <!-- ########################################################################### SETTINGS ##################################################################################################### -->
-                  <div id='settings' class='carousel-cell' style='left: 0 !important; position: absolute;' >
+                <div id='settings' class='carousel-cell' style='left: 0 !important; position: absolute;' >
                     <!-- <alarm-settings is-panel></alarm-settings> -->
 
                   <!-- ###########################################SETTINGS SELECTION BAR############################################### -->
@@ -410,7 +407,7 @@
                           <div class='settings-nav-text'>Help</div>
                         </div> -->
                         <div class='settings-nav-inner vertical layout' >
-                          <paper-icon-button icon='mdi:logout' title='Logout' on-click='carouselClick' data-selection='set-login'></paper-icon-button>
+                          <paper-icon-button icon='mdi:logout' title='Logout' on-click='carouselClick' data-selection='set-logout'></paper-icon-button>
                           <div class='settings-nav-text'>Logout</div>
                         </div>
                       </div>
@@ -437,7 +434,7 @@
                     <div id='set-login' class='carousel-cell remove'>
                       <div class='title'>Settings</div>
                       <!--<div class='info-detail'>Enter the admin password defined in your bwalarm.yaml to access this panel</div>-->
-                      <paper-input class="span11" id="passwordInput" type="password" placeholder="Enter admin password..." on-keyup='checkSettingsPassword'></paper-input>
+                      <paper-input class="span11" id="passwordInput" type="password" placeholder="Enter admin password..." on-keyup='checkSettingsPassword' tabindex="0"></paper-input>
                     </div>
 
                     <!-- ########################################################################### INFO ##################################################################################################### -->
@@ -1464,6 +1461,10 @@
             settingColors:        { type: Array, value: [] },
             selectedUser:         { type: Object, value: null},
 
+            // to avoid entering password every time
+            trustedSession:       { type: Boolean, value: false },
+            lastSettings:         String,
+
             viewport_width:       Number,
             viewport_height:      Number,
 
@@ -2019,12 +2020,14 @@
 
           //If it matches the stored hash then grant access
           if (passwordHash == this.alarm.attributes.admin_password){
-          //Password matches so load settings cell
-            this.settingsUnlock = true;
-            this.carouselChange(this.shadowRoot.querySelector('#settings-info'));
-
             //Clear password input
             $(passwordInput).val('');
+            // set flag to show settings block
+            this.trustedSession = true;
+            this.settingsUnlock = true;
+            //load settings cell
+            this.lastSettings = 'settings-info';
+            this.carouselChange(this.shadowRoot.querySelector('#' + this.lastSettings));
           }
         }
 
@@ -2033,15 +2036,14 @@
           return sha256_digest(password);
         }
 
-        _updateViewportProperties() {
-
+        _getViewportProperties() {
           var viewport_width = $(window).width();
           var viewport_height = $(window).height();
           var orientationLandscape = viewport_width > viewport_height;
           // instead of var orientationLandscape = window.matchMedia("(orientation: landscape)").matches;
 
           if ((this.viewport_width == undefined) || (this.viewport_height == undefined) || (this.viewport_width != viewport_width) || (this.viewport_height != viewport_height)) {
-            console.log("_updateViewportProperties(): " + viewport_width.toString() + "x" + viewport_height.toString() + ', orientationLandscape=' + orientationLandscape);
+            console.log("_getViewportProperties(): " + viewport_width.toString() + "x" + viewport_height.toString() + ', orientationLandscape=' + orientationLandscape);
             this.viewport_width = viewport_width;
             this.viewport_height = viewport_height;
             this.orientationLandscape = orientationLandscape;
@@ -2052,7 +2054,7 @@
         setupUI(){
           console.log("setupUI");
 
-          this._updateViewportProperties();
+          this._getViewportProperties();
 
           if (this.alarm.attributes.panel == null) {
             this.alarm.attributes.panel = {};
@@ -2150,14 +2152,42 @@
 
           //Get the selection
           var selection = ev.target.getAttribute('data-selection');
-          //console.log("carouselClick: ", selection);
+          console.log("carouselClick: " + selection);
 
-          //If the selection is not a settings item then lockup the settings lab
-          if (!selection.includes('settings'))
+          // deal with special tabs like set-login/logout to show/hide settings and prevent entering password every time
+          if (selection == 'set-login') {
+            if (this.trustedSession) {
+              console.log('carouselClick: ' + selection + ', trustedSession=' + this.trustedSession + ', automatically showing lastSettings');
+              this.settingsUnlock = true;
+              selection = this.lastSettings;
+            }
+            else {
+              console.log('carouselClick: ' + selection + ', trustedSession=' + this.trustedSession + ', hiding settings and focusing input');
+              this.settingsUnlock = false;
+            }
+          }
+          else if (selection == 'set-logout') {
+            console.log('carouselClick: ' + selection + ', resetting trustedSession and settingsUnlock and redirecting to set-login');
+            this.trustedSession = false;
             this.settingsUnlock = false;
+            selection = 'set-login';
+          }
+          //If the selection is not a settings item then clear the flag so they are not showed
+          else if (selection.includes('settings-')) {
+            this.lastSettings = selection;
+            console.log('carouselClick: ' + selection + ', store it as lastSettings');
+          }
+          else {
+            this.settingsUnlock = false;
+            console.log('carouselClick: hiding settings');
+          }
 
           //Show the selected tab
           this.carouselChange(this.shadowRoot.querySelector('#' + selection));
+
+          // focusing pasword input if it's login tab
+          if ((selection == 'set-login') && !this.trustedSession)
+            this.$.passwordInput.focus();
         }
 
         //Show the newly selected tab
@@ -2284,6 +2314,7 @@
             // show keypad in every instance to avoid settings changes
             //console.log("monitorAlarm: set settingsUnlock to false as alarm is armed");
             this.settingsUnlock = false;
+            this.trustedSession = false;
             //console.log("monitorAlarm: call carouselChange to make sure Settings is not displayed");
             this.carouselChange(this.$.controls);
           }
