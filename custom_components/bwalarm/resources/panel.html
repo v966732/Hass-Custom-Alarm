@@ -2257,8 +2257,17 @@
 
         entityTapped(ev){
           ev.stopPropagation();
-          console.log('entityTapped: fire hass-more-info for entity_id:' + ev.target.getAttribute('data-entity'));
-          this.fire('hass-more-info', { entity_id: ev.target.getAttribute('data-entity')});
+
+          var element = ev.target;
+          if (ev.target != null) {
+            var attr = ev.target.getAttribute('data-entity');
+            if (attr != null) {
+              console.log('entityTapped: fire hass-more-info for entity_id:' + attr);
+              this.fire('hass-more-info', { entity_id: attr});
+            }
+            else
+              console.info('entityTapped: cannot find data-entity in ' + ev.target.nodeName);
+          }
         }
 
         //Monitors the alarm status for any changes
@@ -2603,9 +2612,8 @@
           if (ids == undefined){
           // Control the exception when this.alarm is not ready
             return false;
-          } else {
+          } else
             return ids.map(function (key){ return hass.states[key]; }).filter(function (e){ return e != undefined; });
-          }
         }
 
         // Determine if array is empty
