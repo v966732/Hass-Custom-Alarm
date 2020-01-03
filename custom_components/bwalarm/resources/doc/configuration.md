@@ -505,6 +505,14 @@
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _Default value:_  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; `false`  
 &nbsp;  
+<a id="panel-open_sensors_below_arm_buttons"></a>
+&nbsp;&nbsp;&nbsp; **open_sensors_below_arm_buttons**  
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _(boolean) (Optional)_  
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Choose whether open sensors will be shown below the arm buttons when the alarm is disarmed.  
+&nbsp;  
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _Default value:_  
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; `false`  
+&nbsp;  
 <a id="panel-shadow_effect"></a>
 &nbsp;&nbsp;&nbsp; **shadow_effect**  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _(boolean) (Optional)_  

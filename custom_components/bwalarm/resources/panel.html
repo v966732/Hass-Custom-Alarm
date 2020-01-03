@@ -233,7 +233,7 @@
                           </div>
                         </div>
 
-                        <template is='dom-if' if='[[needOpenSensorsBelowArmButtons(allopensensors, alarm.attributes.code_arm_required)]]'>
+                        <template is='dom-if' if='[[needOpenSensorsBelowArmButtons(alarm.attributes.panel.open_sensors_below_arm_buttons, allopensensors, alarm.attributes.code_arm_required)]]'>
                           <div class='vertical layout open-sensors-above-arm-buttons-box'>
                             <div style='text-align: center;'>
                               <h1>Open Sensors</h1>
@@ -616,6 +616,14 @@
                           <ha-switch class='setting-toggle' checked='{{isChecked(alarm.attributes.panel.round_buttons)}}' on-change='settingsSave' data-setting='panel' data-attribute='round_buttons'></ha-switch>
                         </div>
                         <span class='info-detail'>Choose whether the alarm buttons should be round or not.</span>
+                      </div>
+
+                      <div class='setting-outer vertical layout'>
+                        <div class='setting-inner horizontal layout'>
+                          <span class='info-header'>Open Sensors below Arm buttons: </span>
+                          <ha-switch class='setting-toggle' checked='{{isChecked(alarm.attributes.panel.open_sensors_below_arm_buttons)}}' on-change='settingsSave' data-setting='panel' data-attribute='open_sensors_below_arm_buttons'></ha-switch>
+                        </div>
+                        <span class='info-detail'>Choose whether open sensors will be shown below the arm buttons when the alarm is disarmed.</span>
                       </div>
 
                       <div class='setting-outer vertical layout'>
@@ -3174,11 +3182,10 @@
           return this.isChecked(alarm.attributes.enable_log) && this.isDisarmed(alarm);
         }
 
-        // only show open sensors info above arm buttons when !code_arm-required (as there is no space then)
-        // and this option is enabled
-        needOpenSensorsBelowArmButtons(allopensensors, code_arm_required) {
+        // only show open sensors info below arm buttons when open_sensors_below_arm_buttons, !code_arm-required (as there is no space then) and there are open sensors
+        needOpenSensorsBelowArmButtons(open_sensors_below_arm_buttons, allopensensors, code_arm_required) {
           //console.log('needOpenSensorsBelowArmButtons: allopensensors.length=' + allopensensors.length + ', code_arm_required=' + code_arm_required);
-          return (allopensensors.length > 0) && !this.isChecked(code_arm_required);
+          return open_sensors_below_arm_buttons && (allopensensors.length > 0) && !this.isChecked(code_arm_required);
         }
 
         hasAnyOpenSensors(allopensensors) {
