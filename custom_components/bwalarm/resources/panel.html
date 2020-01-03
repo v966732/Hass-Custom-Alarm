@@ -615,7 +615,20 @@
                           <span class='info-header'>Round Buttons: </span>
                           <ha-switch class='setting-toggle' checked='{{isChecked(alarm.attributes.panel.round_buttons)}}' on-change='settingsSave' data-setting='panel' data-attribute='round_buttons'></ha-switch>
                         </div>
-                        <span class='info-detail'>Choose whether the alarm buttons should be round or not.</span>
+                        <span class='info-detail'>DEPRECATED. USE Shape of buttons INSTEAD. Choose whether the alarm buttons should be round or not.</span>
+                      </div>
+
+                      <div class='setting-outer vertical layout' style='width: max-content;'>
+                        <div class='setting-inner vertical layout'>
+                          <div>
+                            <span class='info-header'>Shape of buttons: </span>
+                          </div>
+                          <paper-listbox id='buttons_shape-checkbox' class='vertical layout' attr-for-selected='item-name' selected='{{alarm.attributes.panel.buttons_shape}}' selected-attribute='checked'">
+                            <template is='dom-repeat' items='[[supportedButtonShapes]]' as='shape'>
+                              <checkbox type='checkbox' item-name='[[shape]]' class='checkbox' on-click='settingsSave' data-type='listbox' data-setting='panel' data-attribute='buttons_shape'>[[shape]]</checkbox>
+                            </template>
+                          </paper-listbox>
+                        </div>
                       </div>
 
                       <div class='setting-outer vertical layout'>
@@ -1479,7 +1492,8 @@
             // viewport orientation
             orientationLandscape: { type: Boolean },
 
-            buttonsShape:         { type: String },  // valid options are: circle, square or rectangle
+            buttonsShape:         { type: String },
+            supportedButtonShapes: { type: Array, value: ['circle', 'square', 'rectangle']},
             buttonWidthToHeightRatio: { type: Number, computed: '_computeButtonWidthToHeightRatio(buttonsShape)'},
 
             // internal constants
@@ -2060,13 +2074,21 @@
 
         //Determine the screen size then set the appropriate UI
         setupUI(){
-          console.log("setupUI");
+          var FNAME = '[setupUI] '
+          console.log(FNAME);
 
           this._getViewportProperties();
 
           if (this.alarm.attributes.panel == null) {
             this.alarm.attributes.panel = {};
             this.settingsUpdate('panel', {});
+          }
+
+          if (this.alarm.attributes.panel.buttons_shape == undefined) {
+            var shape = ((alarm.attributes.panel.round_buttons == undefined) || alarm.attributes.panel.round_buttons)? supportedButtonShapes[0] : supportedButtonShapes[1];
+            this.alarm.attributes.panel.buttons_shape = shape;
+            console.log(FNAME + 'buttons_shape is undefned, set it to ' + shape);
+            //this.settingsUpdate('panel', panel);
           }
 
           this._updateButtonsStyles();
@@ -2950,14 +2972,27 @@
 
             var value = null;
 
+            console.log(FNAME + 'setting=' + setting);
+
             switch (setting) {
               case 'panel':
+                console.log(FNAME + 'attribute=' + attribute + ', type: ' + type);
                 if (typeof ev.target.checked === 'boolean')
                   this.alarm.attributes.panel[attribute] = ev.target.checked;
                 else if (type == 'input_text')
                   this.alarm.attributes.panel[attribute] = this.shadowRoot.querySelector('#' + attribute).value;
-                else if (type == 'listbox')
-                  this.alarm.attributes.panel[attribute] = this.shadowRoot.querySelector('#' + attribute + '-listbox').selected;
+                //else if (type == 'listbox') {
+                //  console.log(FNAME + 'ev.target=' + Object.keys(ev.target));
+                  //var element = this.shadowRoot.querySelector('#' + attribute + '-listbox');
+                  //if (element == undefined) {
+                  //  console.error(FNAME + 'cannot find selected element for attribute ' + attribute);
+                  //  return;
+                  //}
+                  //else {
+                  //  console.log(FNAME + 'element=' + element);
+                  //  this.alarm.attributes.panel[attribute] = element.selected;
+                  //}
+                //}
                 this.settingsUpdate(setting, this.alarm.attributes.panel);
                 return;
 
@@ -3171,6 +3206,8 @@
         // show sensors panel only if enable_sensors_panel and
         // it's disarmed OR (armed && !hide_sensors)
         needSensorsPanel(alarm) {
+          //var FNAME = '[needSensorsPanel] ';
+          //console.log(FNAME + 'enable_sensors_panel=' + this.isChecked(alarm.attributes.panel.enable_sensors_panel) + ', isDisarmed=' + this.isDisarmed(alarm) + ', hide_sensors=' + this.isChecked(alarm.attributes.panel.hide_sensors));
           if (this.isChecked(alarm.attributes.panel.enable_sensors_panel))
             return this.isDisarmed(alarm)? true : !this.isChecked(alarm.attributes.panel.hide_sensors);
           else
