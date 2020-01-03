@@ -233,13 +233,13 @@
                           </div>
                         </div>
 
-                        <template is='dom-if' if='[[needOpenSensorsBelowArmButtons(opencount, alarm.attributes.code_arm_required)]]'>
+                        <template is='dom-if' if='[[needOpenSensorsBelowArmButtons(allopensensors, alarm.attributes.code_arm_required)]]'>
                           <div class='vertical layout open-sensors-above-arm-buttons-box'>
                             <div style='text-align: center;'>
                               <h1>Open Sensors</h1>
                             </div>
                             <div class='sensors open-sensors-list'>
-                              <template is='dom-repeat' items='[[opensensors(alarm, allsensors)]]' as='entity'>
+                              <template is='dom-repeat' items='[[allopensensors]]' as='entity'>
                                 <state-card-display state-obj='[[entity]]' hass='[[hass]]' class='tappable' on-tap='entityTapped' data-entity='[[entity.entity_id]]'></state-card-display>
                               </template>
                             </div>
@@ -262,10 +262,10 @@
                 <!-- ########################################### SENSORS############################################### -->
                 <div id='sensors' class='carousel-cell remove' style='position: absolute;'>
                   <!-- ###########################################OPEN SENSORS############################################### -->
-                  <template is='dom-if' if='[[hasAnyOpenSensors(alarm, allsensors)]]'>
+                  <template is='dom-if' if='[[hasAnyOpenSensors(allopensensors)]]'>
                     <div class='openSensors'>Open Sensors</div>
                     <div class='sensors'>
-                      <template is='dom-repeat' items='[[opensensors(alarm, allsensors)]]' as='entity'>
+                      <template is='dom-repeat' items='[[allopensensors]]' as='entity'>
                         <state-card-display state-obj='[[entity]]' hass='[[hass]]' class='tappable' on-tap='entityTapped' data-entity='[[entity.entity_id]]'></state-card-display>
                       </template>
                     </div>
@@ -317,7 +317,7 @@
                         <!--<template is='dom-repeat' items='[[opensensors(alarm, allsensors)]]' as='entity'>
                           <state-card-display state-obj='[[entity]]' hass='[[hass]]' class='tappable' on-tap='entityTapped' data-entity='[[entity.entity_id]]'></state-card-display>
                         </template>-->
-                        <template is='dom-repeat' items='[[closedsensors(alarm, allsensors)]]' as='entity'>
+                        <template is='dom-repeat' items='[[getClosedSensors(alarm.attributes.supported_statuses_off, allsensors)]]' as='entity'>
                           <state-card-display state-obj='[[entity]]' hass='[[hass]]' class='tappable' on-tap='entityTapped' data-entity='[[entity.entity_id]]'></state-card-display>
                         </template>
                       </div>
@@ -1314,7 +1314,7 @@
           </template>
 
           <template is='dom-if' if='[[needSensorsPanel(alarm)]]'>
-            <paper-icon-button icon='mdi:radio-tower' title='Sensors' on-click='carouselClick' data-selection='sensors' style$='color: [[computeButtonColor(opencount)]] !important;'></paper-icon-button>
+            <paper-icon-button icon='mdi:radio-tower' title='Sensors' on-click='carouselClick' data-selection='sensors' style$='color: [[computeButtonColor(allopensensors)]] !important;'></paper-icon-button>
           </template>
 
           <template is='dom-if' if='[[isChecked(alarm.attributes.panel.enable_camera_panel)]]' >
@@ -1423,7 +1423,7 @@
             allsensors:           { type: Array, computed: 'computeSensors(hass, alarm.attributes.allsensors)'},
             ignored:              { type: Array, computed: 'computeSensors(hass, alarm.attributes.ignored)' },
 
-            opencount:            { type: Number, value: 0 },
+            allopensensors:       { type: Array, computed: 'getOpenSensors(alarm.attributes.supported_statuses_on, allsensors)'},
 
             time:                 { type: Object },
             weather:              { type: Object },
@@ -1550,8 +1550,8 @@
 
         //Page ready
         ready(){
-          console.log('ready()');
           super.ready();
+          console.log('ready()');
 
           // Check the alarm component successfully loaded if not then display an error
           if (this.alarm){
@@ -2265,8 +2265,10 @@
               console.log('entityTapped: fire hass-more-info for entity_id:' + attr);
               this.fire('hass-more-info', { entity_id: attr});
             }
-            else
+            else {
               console.info('entityTapped: cannot find data-entity in ' + ev.target.nodeName);
+              this.fire('hass-more-info', { entity_id: 'sensor.contact_1st_floor_safe'});
+            }
           }
         }
 
@@ -2277,8 +2279,6 @@
           this.callclearcode(null);
 
           var themeName = null;
-
-          this.opensensors(this.alarm, this.allsensors);
 
           this.updateStyles({'--panel-outer-background-color': ''});
 
@@ -2571,40 +2571,30 @@
         isWarning(alarm){
           return alarm.state == 'warning';
         }
+
         // Return a list of open sensors built from sensors
-        opensensors(alarm, sensors)   {
-          var ret = [];
+        getOpenSensors(supported_statuses_on, sensors) {
+          if ((supported_statuses_on == undefined) || (sensors == undefined))
+            return [];
 
-          if ((alarm != null) && (sensors != null))
-            ret = sensors.filter(function (e){ return alarm.attributes.supported_statuses_on.indexOf(e.state.toLowerCase()) > -1; });
-
-          this.opencount = ret.length;
-
-          //if (ret.length > 0)
-          //console.log("opensensors: return " + this.opencount);
-          //ret.forEach(function (obj) {console.log("\t" + obj.entity_id + ":" + obj.state);});
-
-          return ret;
+          return sensors.filter(function (e){ return supported_statuses_on.indexOf(e.state.toLowerCase()) > -1; });
         }
 
         opensensors_for_attempted_arm(alarm) {
           if (this.attemptedArm) {
             var arm_state = this.service_name2arm_state(this.attemptArmMode);
-            return this.opensensors(alarm, this.computeSensors(this.hass, alarm.attributes.states[arm_state][this.INT_ATTR_STATE_CHECK_BEFORE_ARM]) );
+            return this.getOpenSensors(alarm.attributes.supported_statuses_on, this.computeSensors(this.hass, alarm.attributes.states[arm_state][this.INT_ATTR_STATE_CHECK_BEFORE_ARM]) );
           }
           else
-            return []
+            return [];
         }
 
-        // Get closed sensors
-        closedsensors(alarm, sensors)   {
-          var ret = [];
-          if (sensors == false){
-            return false;
-          } else {
-            ret = sensors.filter(function (e){ return alarm.attributes.supported_statuses_off.indexOf(e.state.toLowerCase()) > -1; });
-            return ret;
-          }
+        // retuns array of closed sensors
+        getClosedSensors(supported_statuses_off, sensors) {
+          if ((supported_statuses_off == undefined) || (sensors == undefined))
+            return [];
+
+          return sensors.filter(function (e){ return supported_statuses_off.indexOf(e.state.toLowerCase()) > -1; });
         }
 
         // determine whether a sensor is in a particular group
@@ -2651,11 +2641,8 @@
           }
 
         // Change color of button
-        computeButtonColor(count){
-          if (count > 0) {
-            return 'var(--dark-orange)';
-          }
-          return 'var(--info-panel-buttons)';
+        computeButtonColor(array){
+          return (array.length > 0)? 'var(--dark-orange)' : 'var(--info-panel-buttons)';
         }
 
         // Gets an image from the username
@@ -3099,8 +3086,8 @@
         hasOpenSensors(service_name) {
           var FNAME = 'hasOpenSensors'
           //check to see how many open sensors there are, if none arm alarm
-          if (this.opencount == 0) {
-            //console.log(FNAME + "(" + service_name + "): opencount == 0, return False");
+          if (this.allopensensors.length == 0) {
+            //console.log(FNAME + "(" + service_name + "): allopensensors.length == 0, return False");
             return false;
           }
 
@@ -3129,8 +3116,8 @@
 
         // Observer: polymer gaurantees that this won't be called util hass and panel are both defined
         onPanelUpdate(hass, panel){
+          //console.log("onPanelUpdate: " + panel.config.alarmid);
           this.alarm = hass.states[panel.config.alarmid];
-          // config.log("onPanelUpdate: ", panel.config.alarmid);
         }
 
         fire(type, detail, options) {
@@ -3189,17 +3176,13 @@
 
         // only show open sensors info above arm buttons when !code_arm-required (as there is no space then)
         // and this option is enabled
-        needOpenSensorsBelowArmButtons(opencount, code_arm_required) {
-          //console.log('needOpenSensorsBelowArmButtons: opencount=' + opencount + ', code_arm_required=' + code_arm_required);
-          return opencount>0 && !this.isChecked(code_arm_required);
+        needOpenSensorsBelowArmButtons(allopensensors, code_arm_required) {
+          //console.log('needOpenSensorsBelowArmButtons: allopensensors.length=' + allopensensors.length + ', code_arm_required=' + code_arm_required);
+          return (allopensensors.length > 0) && !this.isChecked(code_arm_required);
         }
 
-        // instead of opencount in dom-if templates
-        // each opensensors call updates opencount
-        hasAnyOpenSensors(alarm, allsensors) {
-          this.opensensors(alarm, allsensors);
-          //console.log('hasAnyOpenSensors: this.opencount=' + this.opencount + ', return ' + (this.opencount > 0));
-          return (this.opencount > 0);
+        hasAnyOpenSensors(allopensensors) {
+          return (allopensensors != undefined) && (allopensensors.length > 0);
         }
       }
 
