@@ -347,22 +347,19 @@
                 <!-- ###########################################ACTIVITY LOG############################################### -->
                 <div id='log' class='carousel-cell remove' style='position: absolute;'>
                   <template is='dom-if' if='[[isChecked(alarm.attributes.enable_log)]]' >
-                      <div class='title'>Activity log</div>
-                          <div >
-                          <template is='dom-repeat' items='[[reverseArray(alarm.attributes.logs, 10)]]' as='entry'>
-                            <div style='display:flex; padding: 8px;'>
-                              <div>
-                                <state-badge id='icon' style$='background-image: url([[computeLog(entry, "image")]]);'></state-badge>
-                              </div>
-                              <div class='log-item'>
-                                <div style='color: var(--info-detail-text-color); margin-right: 5px;'>[[computeLog(entry,'name')]]</div>
-                                <div>[[computeLog(entry,'message')]]</div>
-                                <span></span>
-                                <div class='log-item-date' style='color: var(--info-detail-text-color);'>[[computeLog(entry,'time')]]</div>
-                              </div>
-                            </div>
-                          </template>
+                    <template is='dom-repeat' items='[[reverseArray(alarm.attributes.logs, 10)]]' as='entry'>
+                      <div style='display:flex; padding: 8px;'>
+                        <div>
+                          <state-badge id='icon' style$='background-image: url([[computeLog(entry, "image")]]);'></state-badge>
                         </div>
+                        <div class='log-item'>
+                          <div style='color: var(--info-detail-text-color); margin-right: 5px;'>[[computeLog(entry,'name')]]</div>
+                          <div>[[computeLog(entry,'message')]]</div>
+                          <span></span>
+                          <div class='log-item-date' style='color: var(--info-detail-text-color);'>[[computeLog(entry,'time')]]</div>
+                        </div>
+                      </div>
+                    </template>
                   </template>
                 </div>
 
@@ -380,46 +377,41 @@
                   <!-- ###########################################SETTINGS SELECTION BAR############################################### -->
 
                   <template is='dom-if' if='[[settingsUnlock]]' >
-                    <div class='title'>Settings</div>
                     <div id='settings-nav' class='horizontal layout'>
                       <div class='sm horizontal layout'>
-                        <div class='settings-nav-inner vertical layout'>
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-info", carouselMainSelected)]];'>
                           <paper-icon-button icon='mdi:information-outline' title='Info' on-click='carouselClick' data-selection='settings-info'></paper-icon-button>
                           <div class='settings-nav-text'>About</div>
                         </div>
-                        <div class='settings-nav-inner vertical layout' >
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-all", carouselMainSelected)]];'>
                           <paper-icon-button icon='mdi:brush' title='Design' on-click='carouselClick' data-selection='settings-all'></paper-icon-button>
                           <div class='settings-nav-text'>Design</div>
                         </div>
-                        <div class='settings-nav-inner vertical layout' >
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-alarm", carouselMainSelected)]];'>
                           <paper-icon-button icon='mdi:dialpad' title='Alarm' on-click='carouselClick' data-selection='settings-alarm'></paper-icon-button>
                           <div class='settings-nav-text'>Alarm</div>
                         </div>
-                        <div class='settings-nav-inner vertical layout' >
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-sensors", carouselMainSelected)]];'>
                           <paper-icon-button id='btn-alarm-sensors' icon='mdi:radio-tower' title='Alarm Sensors' on-click='carouselClick' data-selection='settings-sensors'></paper-icon-button>
                           <div class='settings-nav-text'>Sensors</div>
                         </div>
-                        <div class='settings-nav-inner vertical layout' >
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-floorplan", carouselMainSelected)]];'>
                           <paper-icon-button icon='mdi:floor-plan' title='Floorplan' on-click='carouselClick' data-selection='settings-floorplan'></paper-icon-button>
                           <div class='settings-nav-text'>Floorplan</div>
                         </div>
-                        <div class='settings-nav-inner vertical layout' >
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-cameras", carouselMainSelected)]];'>
                           <paper-icon-button icon='mdi:cctv' title='Camera' on-click='carouselClick' data-selection='settings-cameras'></paper-icon-button>
                           <div class='settings-nav-text'>Cameras</div>
                         </div>
-                        <div class='settings-nav-inner vertical layout' >
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-mqtt", carouselMainSelected)]];'>
                           <paper-icon-button icon='mdi:access-point' title='MQTT' on-click='carouselClick' data-selection='settings-mqtt'></paper-icon-button>
                           <div class='settings-nav-text'>MQTT</div>
                         </div>
-                        <div class='settings-nav-inner vertical layout' >
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-custom", carouselMainSelected)]];'>
                           <paper-icon-button icon='mdi:atom' title='Custom Panel' on-click='carouselClick' data-selection='settings-custom'></paper-icon-button>
                           <div class='settings-nav-text'>Custom</div>
                         </div>
-                        <!-- <div class='settings-nav-inner vertical layout' >
-                          <paper-icon-button icon='mdi:help' title='Help Guide' on-click='carouselClick' data-selection='settings-help'></paper-icon-button>
-                          <div class='settings-nav-text'>Help</div>
-                        </div> -->
-                        <div class='settings-nav-inner vertical layout' >
+                        <div class='settings-nav-inner vertical layout'>
                           <paper-icon-button icon='mdi:logout' title='Logout' on-click='carouselClick' data-selection='set-logout'></paper-icon-button>
                           <div class='settings-nav-text'>Logout</div>
                         </div>
@@ -429,14 +421,13 @@
                         <paper-listbox slot="dropdown-content" >
                           <paper-item on-click='carouselClick' data-selection='settings-info'><iron-icon icon='mdi:information-outline'></iron-icon>About</paper-item>
                           <paper-item on-click='carouselClick' data-selection='settings-all'><iron-icon icon='mdi:brush'></iron-icon>Design</paper-item>
-                            <paper-item on-click='carouselClick' data-selection='settings-alarm'><iron-icon icon='mdi:dialpad'></iron-icon>Alarm</paper-item>
-                            <paper-item on-click='carouselClick' data-selection='settings-sensors'><iron-icon icon='mdi:radio-tower'></iron-icon>Sensors</paper-item>
+                          <paper-item on-click='carouselClick' data-selection='settings-alarm'><iron-icon icon='mdi:dialpad'></iron-icon>Alarm</paper-item>
+                          <paper-item on-click='carouselClick' data-selection='settings-sensors'><iron-icon icon='mdi:radio-tower'></iron-icon>Sensors</paper-item>
                           <paper-item on-click='carouselClick' data-selection='settings-floorplan'><iron-icon icon='mdi:floor-plan'></iron-icon>Floorplan</paper-item>
                           <paper-item on-click='carouselClick' data-selection='settings-cameras'><iron-icon icon='mdi:cctv'></iron-icon>Cameras</paper-item>
-                            <paper-item on-click='carouselClick' data-selection='settings-mqtt'><iron-icon icon='mdi:access-point'></iron-icon>MQTT</paper-item>
-                            <paper-item on-click='carouselClick' data-selection='settings-custom'><iron-icon icon='mdi:atom'></iron-icon>Custom</paper-item>
-                            <!-- <paper-item on-click='carouselClick' data-selection='settings-help'><iron-icon icon='mdi:help'></iron-icon>Help</paper-item> -->
-                          </paper-listbox>
+                          <paper-item on-click='carouselClick' data-selection='settings-mqtt'><iron-icon icon='mdi:access-point'></iron-icon>MQTT</paper-item>
+                          <paper-item on-click='carouselClick' data-selection='settings-custom'><iron-icon icon='mdi:atom'></iron-icon>Custom</paper-item>
+                        </paper-listbox>
                       </paper-dropdown-menu>
                     </div>
                   </template>
@@ -453,12 +444,9 @@
                     <!-- ########################################################################### INFO ##################################################################################################### -->
                     <div id='settings-info' class='carousel-cell remove'>
                       <div>
-                        <h1>Your Versions:</h1>
-                        <div>
-                          <p><span class='info-header'>This integration: </span><span class='info-detail'>[[version]]</span></p>
-                          <p><span class='info-header'>Home Assistant: </span><span class='info-detail'>v[[hass.config.version]]</span></p>
-                          <p><span class='info-header'>Python: </span><span class='info-detail'>v([[alarm.attributes.py_version]])</span></p>
-                        </div>
+                        <p><span class='info-header'>This integration: </span><span class='info-detail'>[[version]]</span></p>
+                        <p><span class='info-header'>Home Assistant: </span><span class='info-detail'>v[[hass.config.version]]</span></p>
+                        <p><span class='info-header'>Python: </span><span class='info-detail'>v([[alarm.attributes.py_version]])</span></p>
                       </div>
 
                       <div>
@@ -525,8 +513,6 @@
 
                     <!-- ########################################################################### @PANEL ##################################################################################################### -->
                     <div id='settings-all' class='carousel-cell remove'>
-                      <h1>Panel Interface Related:</h1>
-
                       <div class='setting-outer horizontal layout'>
                         <div class='setting-inner vertical layout'>
                           <span class='info-header'>Admin Password: </span>
@@ -537,14 +523,6 @@
                           </div>
                         </div>
                       </div>
-
-                      <!-- <div class='setting-outer vertical layout'>
-                        <div class='setting-inner horizontal layout'>
-                          <span class='info-header'>Disable Animations: </span>
-                          <ha-switch class='setting-toggle' checked='{{isChecked(alarm.attributes.panel.disable_animations)}}' on-change='settingsSave' data-setting='panel' data-attribute='disable_animations'></ha-switch>
-                        </div>
-                        <span class='info-detail'>If enabled, this will disable all animations. This is designed to improve performance on older devices. NOTE you can also disable animations per user within the user section. This is handy to set animations per device.</span>
-                      </div> -->
 
                       <div class='setting-outer horizontal layout'>
                         <div class='setting-inner vertical layout'>
@@ -613,41 +591,18 @@
                         <span class='info-detail'>When the alarm is armed the sensors panel will be hidden.</span>
                       </div>
 
-                      <!--<div class='setting-outer vertical layout'>
-                        <div class='setting-inner horizontal layout'>
-                          <span class='info-header'>Round Buttons: </span>
-                          <ha-switch class='setting-toggle' checked='{{isChecked(alarm.attributes.panel.round_buttons)}}' on-change='settingsSave' data-setting='panel' data-attribute='round_buttons'></ha-switch>
-                        </div>
-                        <span class='info-detail'>DEPRECATED. USE Shape of buttons INSTEAD. Choose whether the alarm buttons should be round or not.</span>
-                      </div>-->
-
-
                       <div class='setting-outer vertical layout'>
                         <div class='setting-inner horizontal layout' style='align-items: center;'>
                           <span class='info-header'>Buttons'&nbsp;shape</span>
                           <paper-dropdown-menu style='text-align: center; top: -10px;'>
-                            <paper-listbox slot="dropdown-content" class="dropdown-content" attr-for-selected='buttons-shape' selected='{{alarm.attributes.panel.buttons_shape}}'">
+                            <paper-listbox slot="dropdown-content" attr-for-selected='buttons-shape' selected='{{alarm.attributes.panel.buttons_shape}}'">
                               <template is='dom-repeat' items='[[supportedButtonShapes]]' as='shape'>
-                                <paper-item buttons-shape='[[shape]]' on-click='settingsSave' data-type='listbox' data-setting='panel' data-attribute='buttons_shape'>[[shape]]</paper-item>
+                                <paper-item buttons-shape='[[shape]]' on-click='settingsSave' data-setting='panel' data-attribute='buttons_shape'>[[shape]]</paper-item>
                               </template>
                             </paper-listbox>
                           </paper-dropdown-menu>
                         </div>
                       </div>
-
-                      <!--<div class='setting-outer vertical layout' style='width: max-content;'>
-                        <div class='setting-inner vertical layout'>
-                          <div>
-                            <span class='info-header'>Buttons' shape: </span>
-                          </div>
-
-                          <paper-listbox id='buttons_shape-checkbox' class='vertical layout' attr-for-selected='item-name' selected='{{alarm.attributes.panel.buttons_shape}}' selected-attribute='checked'">
-                            <template is='dom-repeat' items='[[supportedButtonShapes]]' as='shape'>
-                              <checkbox type='checkbox' item-name='[[shape]]' class='checkbox' on-click='settingsSave' data-type='listbox' data-setting='panel' data-attribute='buttons_shape'>[[shape]]</checkbox>
-                            </template>
-                          </paper-listbox>
-                        </div>
-                      </div>-->
 
                       <div class='setting-outer vertical layout'>
                         <div class='setting-inner horizontal layout'>
@@ -731,8 +686,6 @@
 
                     <!-- ########################################################################### @ALARM ##################################################################################################### -->
                     <div id='settings-alarm' class='carousel-cell remove'>
-                      <h1>Alarm</h1>
-
                       <div class='setting-outer vertical layout'>
                         <div class='setting-inner horizontal layout'>
                           <span class='info-header'>Alarm Persistence: </span>
@@ -831,10 +784,6 @@
 
                         <div class='setting-outer vertical layout'>
                           <div class='setting-inner horizontal layout'>
-
-                            <div style='margin-top: auto; margin-bottom: auto; margin-left: 15px;'>
-                              <ha-switch class='setting-toggle' checked='{{isChecked(user.enabled)}}' data-userid$='[[user.id]]' on-change='toggleUser'>Enable</ha-switch>
-                            </div>
                             <button data-type='button' style='background-color: unset; width: 40%; border: 0px; color: var(--panel-text-color);' data-userid$='{{user.id}}' on-click='editUser'>
                               <div style='margin-left: 5px; margin-right: 10px; padding-left: 15px;' data-userid$='[[user.id]]' on-click='editUser'>
                                 <state-badge style$='background-image: url({{computeImage(user.picture)}});' data-userid$='[[user.id]]' on-click='editUser'></state-badge>
@@ -844,8 +793,12 @@
                               </div>
                             </button>
 
+                            <div style='margin-top: auto; margin-bottom: auto; margin-left: 15px;'>
+                              <ha-switch class='setting-toggle' checked='{{isChecked(user.enabled)}}' data-userid$='[[user.id]]' on-change='toggleUser'>Enabled</ha-switch>
+                            </div>
+
                             <div style='margin-top: auto; margin-bottom: auto;'>
-                              <button  data-userid$='[[user.id]]' on-click='deleteUser' style='color: white;background-color: unset;'><iron-icon icon='mdi:delete'></iron-icon>&nbsp;&nbsp;Delete</button>
+                              <button  data-userid$='[[user.id]]' on-click='deleteUser' style='color: white; background-color: unset;'><iron-icon icon='mdi:delete'></iron-icon>&nbsp;&nbsp;Delete</button>
                             </div>
                           </div>
                         </div>
@@ -854,9 +807,7 @@
                       <button id='user-add' data-type='button' on-click='unhideDiv' data-div='#userDetail' style='background-color: unset; margin-bottom: 15px; color: var(--panel-text-color);'><iron-icon icon='mdi:account-plus'></iron-icon>&nbsp;&nbsp;Add new user</button>
 
                       <div id='userDetail' class='remove'>
-
                         <h1>Update User</h1>
-
                         <div class='setting-outer horizontal layout'>
                           <div class='setting-inner vertical layout'>
                             <span class='info-header'>Name: </span>
@@ -887,7 +838,6 @@
 
                         <div class='setting-outer horizontal layout'>
                           <div class='setting-inner vertical layout'>
-
                             <span class='info-header'>Badge: </span>
                             <span class='info-detail'>Filename of your picture. You can use standard pictures from [[alarm.attributes.default_images_path]] or your own ones from [[alarm.attributes.override_images_path]]</span>
                             <div class='setting-input horizontal layout'>
@@ -928,17 +878,16 @@
                             <ha-switch id='user-perimeter-permission' checked='true' class='setting-toggle'></ha-switch>
                           </div>
                         </div> -->
-
-                        <button id='user-save' data-type='button' on-click='saveUser' style='background-color: unset; margin-bottom: 15px;'><iron-icon icon='mdi:content-save'></iron-icon>&nbsp;&nbsp;Save User</button>
-                        <button on-click='resetUserDetail' style='background-color: unset; margin-bottom: 15px;'><iron-icon icon='mdi:cancel'></iron-icon>&nbsp;&nbsp;Cancel</button>
+                        <div class='setting-inner horizontal layout'>
+                          <button id='user-save' data-type='button' on-click='saveUser' style='background-color: unset; margin-bottom: 15px; color: var(--panel-text-color);'><iron-icon icon='mdi:content-save'></iron-icon>&nbsp;&nbsp;Save</button>
+                          <button on-click='resetUserDetail' style='background-color: unset; margin-bottom: 15px; color: var(--panel-text-color);'><iron-icon icon='mdi:cancel'></iron-icon>&nbsp;&nbsp;Cancel</button>
+                        </div>
                       </div>
 
                     </div>
 
                     <!-- ########################################################################### @SENSORS ##################################################################################################### -->
                     <div id='settings-sensors' class='carousel-cell remove'>
-                      <h1>Sensors</h1>
-
                       <div class='setting-outer vertical layout'>
                         <div class='setting-inner horizontal layout'>
                           <span class='info-header'>Enable Sensors Panel: </span>
@@ -1154,8 +1103,6 @@
 
                     <!-- ########################################################################### @FLOORPLAN ##################################################################################################### -->
                     <div id='settings-floorplan' class='carousel-cell remove'>
-                      <h1>Floorplan</h1>
-
                       <div class='setting-outer vertical layout'>
                         <div class='setting-inner horizontal layout'>
                           <span class='info-header'>Enable Floorplan Panel: </span>
@@ -1182,8 +1129,6 @@
                     </div>
                     <!-- ########################################################################### CAMERAS ##################################################################################################### -->
                     <div id='settings-cameras' class='carousel-cell remove'>
-                      <h1>Cameras</h1>
-
                       <div class='setting-outer vertical layout'>
                         <div class='setting-inner horizontal layout'>
                           <span class='info-header'>Enable Camera Panel: </span>
@@ -1212,8 +1157,6 @@
 
                     <!-- ########################################################################### MQTT ##################################################################################################### -->
                     <div id='settings-mqtt' class='carousel-cell remove'>
-                      <h1>MQTT</h1>
-
                       <div class='setting-outer vertical layout'>
                         <div class='setting-inner horizontal layout'>
                           <span class='info-header'>Enable MQTT:</span>
@@ -1319,7 +1262,6 @@
 
                     <!-- ########################################################################### CUSTOM ##################################################################################################### -->
                     <div id='settings-custom' class='carousel-cell remove'>
-                      <h1>Custom</h1>
                       <div class='setting-outer vertical layout'>
                         <div class='setting-inner horizontal layout'>
                           <span class='info-header'>Enable Custom Panel:</span>
@@ -1328,14 +1270,6 @@
                         <span class='info-detail'>Enabling this allows you to add your own panel to this interface. For this to work see the template custom-element.html file. You will need to modify this with your own HTML code. Using this you could bring additional custom features of your own such as displaying extra information from Home Assistant or a 3rd party website. You could hook into external cameras or have a stocks and shared ticker.</span>
                       </div>
                     </div>
-
-                    <!-- ########################################################################### HELP ##################################################################################################### -->
-                    <!-- <div id='settings-help' class='carousel-cell remove'>
-                      <h1>Help Guide</h1>
-                      <div class='setting-outer vertical layout'>
-                        <span class='info-detail'>This section is a work in progress. I'm knackered from just creating this interface, too many late nights :-D Let me know what you think would be good to display here. I'll likely provide the basics plus links to yaml automations and sample node-red files</span>
-                      </div>
-                    </div> -->
 
                   </div>
                 </div>
@@ -1346,30 +1280,30 @@
 
         <!-- ###########################################SELECTION BAR############################################### -->
         <div id='info-panel-selection'>
-          <paper-icon-button icon='mdi:dialpad' title='Keypad' on-click='carouselClick' data-selection='controls'></paper-icon-button>
+          <paper-icon-button icon='mdi:dialpad' title='Keypad' on-click='carouselClick' data-selection='controls' style$='border-bottom: [[computeInfoPanelButtonBorderBottomStyle("controls", carouselMainSelected)]];'></paper-icon-button>
 
           <template is='dom-if' if='[[isChecked(alarm.attributes.panel.enable_floorplan_panel)]]' >
-            <paper-icon-button icon='mdi:floor-plan' title='Floorplan' on-click='carouselClick' data-selection='floorplan'></paper-icon-button>
+            <paper-icon-button icon='mdi:floor-plan' title='Floorplan' on-click='carouselClick' data-selection='floorplan' style$='border-bottom: [[computeInfoPanelButtonBorderBottomStyle("floorplan", carouselMainSelected)]];'></paper-icon-button>
           </template>
 
           <template is='dom-if' if='[[needSensorsPanel(alarm)]]'>
-            <paper-icon-button icon='mdi:radio-tower' title='Sensors' on-click='carouselClick' data-selection='sensors' style$='color: [[computeButtonColor(allopensensors)]] !important;'></paper-icon-button>
+            <paper-icon-button icon='mdi:radio-tower' title='Sensors' on-click='carouselClick' data-selection='sensors' style$='color: [[computeButtonColor(allopensensors)]]; border-bottom: [[computeInfoPanelButtonBorderBottomStyle("sensors", carouselMainSelected)]];'></paper-icon-button>
           </template>
 
           <template is='dom-if' if='[[isChecked(alarm.attributes.panel.enable_camera_panel)]]' >
-            <paper-icon-button icon='mdi:cctv' title='Cameras' on-click='carouselClick' data-selection='cameras'></paper-icon-button>
+            <paper-icon-button icon='mdi:cctv' title='Cameras' on-click='carouselClick' data-selection='cameras' style$='border-bottom: [[computeInfoPanelButtonBorderBottomStyle("cameras", carouselMainSelected)]];'></paper-icon-button>
           </template>
 
           <template is='dom-if' if='[[needLogPanel(alarm)]]' >
-            <paper-icon-button icon='mdi:view-headline' title='Activity log' on-click='carouselClick' data-selection='log'></paper-icon-button>
+            <paper-icon-button icon='mdi:view-headline' title='Activity log' on-click='carouselClick' data-selection='log' style$='border-bottom: [[computeInfoPanelButtonBorderBottomStyle("log", carouselMainSelected)]];'></paper-icon-button>
           </template>
 
           <template is='dom-if' if='[[isChecked(alarm.attributes.panel.enable_custom_panel)]]' >
-            <paper-icon-button icon='mdi:atom' title='Custom Panel' on-click='carouselClick' data-selection='custom'></paper-icon-button>
+            <paper-icon-button icon='mdi:atom' title='Custom Panel' on-click='carouselClick' data-selection='custom' style$='border-bottom: [[computeInfoPanelButtonBorderBottomStyle("custom", carouselMainSelected)]];'></paper-icon-button>
           </template>
 
           <template is='dom-if' if='[[isDisarmed(alarm)]]' >
-            <paper-icon-button icon='mdi:tune' title='Settings' on-click='carouselClick' data-selection='set-login'></paper-icon-button>
+            <paper-icon-button icon='mdi:tune' title='Settings' on-click='carouselClick' data-selection='set-login' style$='border-bottom: [[computeInfoPanelButtonBorderBottomStyle("set-login", carouselMainSelected)]];'></paper-icon-button>
           </template>
         </div>
 
@@ -2686,9 +2620,30 @@
           return (array.length > 0)? 'var(--dark-orange)' : 'var(--info-panel-buttons)';
         }
 
+        computeCarouselSettingsIconColor(selection, carouselMainSelected){
+          return (this.shadowRoot.querySelector('#' + selection) == this.carouselMainSelected)? 'var(--dark-orange)' : 'var(--panel-text-color)';
+        }
+
+        computeInfoPanelButtonBorderBottomStyle(selection, carouselMainSelected) {
+          //var FNAME = '[computeInfoPanelButtonBorderBottomStyle] ';
+          var is_active;
+
+          if (selection == "set-login") {
+            var pageId = carouselMainSelected.id;
+            is_active = (pageId == selection) || pageId.startsWith('settings-');
+            //console.log(FNAME + 'settings case, page id=' + pageId + ', is_active=' + is_active);
+          }
+          else {
+            is_active = this.shadowRoot.querySelector('#' + selection) == carouselMainSelected;
+            //console.log(FNAME + 'page id=' + carouselMainSelected.id + ', is_active=' + is_active);
+          }
+
+          return is_active? 'thin dashed var(--panel-text-color)' : 'none';
+        }
+
         // Gets an image from the username
         computeImage(image){
-          var FNAME = '[computeImage] '
+          //var FNAME = '[computeImage] '
           if (image == null || image == ''){
             //console.log(FNAME, "empty/null image name, return ", this.default_icon_path);
             return this.default_icon_path
@@ -2959,7 +2914,7 @@
 
         //Read the settings that are to be updated
         settingsSave(ev){
-          //var FNAME = '[settingsSave] '
+          //var FNAME = '[settingsSave] ';
           ev.stopPropagation();
 
           //Check the settings tab has been unlocked before commiting any changes
@@ -2993,16 +2948,8 @@
                 else if (type == 'input_text')
                   this.alarm.attributes.panel[attribute] = this.shadowRoot.querySelector('#' + attribute).value;
                 //else if (type == 'listbox') {
-                //  console.log(FNAME + 'ev.target=' + Object.keys(ev.target));
-                  //var element = this.shadowRoot.querySelector('#' + attribute + '-listbox');
-                  //if (element == undefined) {
-                  //  console.error(FNAME + 'cannot find selected element for attribute ' + attribute);
-                  //  return;
-                  //}
-                  //else {
-                  //  console.log(FNAME + 'element=' + element);
-                  //  this.alarm.attributes.panel[attribute] = element.selected;
-                  //}
+                  //console.log(FNAME + 'selected=' + Object.keys(ev.target));
+                  //this.alarm.attributes.panel[attribute] = ev.target.value;
                 //}
                 this.settingsUpdate(setting, this.alarm.attributes.panel);
                 return;
