@@ -497,13 +497,14 @@
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _Default value:_  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; `true`  
 &nbsp;  
-<a id="panel-round_buttons"></a>
-&nbsp;&nbsp;&nbsp; **round_buttons**  
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _(boolean) (Optional)_  
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Choose whether the alarm buttons should be round or rectangular.  
+<a id="panel-buttons_shape"></a>
+&nbsp;&nbsp;&nbsp; **buttons_shape**  
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _(string) (Optional)_  
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Choose whether the alarm buttons should be `circle`, `rectangular` or `square`.  
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Replaces obsolete `round_buttons`.  
 &nbsp;  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _Default value:_  
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; `false`  
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; `rectangle`  
 &nbsp;  
 <a id="panel-open_sensors_below_arm_buttons"></a>
 &nbsp;&nbsp;&nbsp; **open_sensors_below_arm_buttons**  
