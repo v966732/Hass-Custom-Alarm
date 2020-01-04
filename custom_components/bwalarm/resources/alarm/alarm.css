@@ -525,12 +525,14 @@ h1 {
   padding-bottom: 5px;
   width: 100%;
   padding-right: 10px;
+  justify-content: space-between;
 }
+
 .setting-input > paper-input{
   flex-grow: 3;
 }
 .setting-input > paper-icon-button{
-  flex-grow: 1;
+  /*flex-grow: 1;*/
   width: 50px;
   height: 50px;
 }

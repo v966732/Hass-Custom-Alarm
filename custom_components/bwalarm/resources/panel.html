@@ -607,7 +607,7 @@
 
                       <div class='setting-outer vertical layout'>
                         <div class='setting-inner horizontal layout'>
-                          <span class='info-header'>Hide Sensors When Armed: </span>
+                          <span class='info-header'>Hide Sensors When Armed</span>
                           <ha-switch class='setting-toggle' checked='{{isChecked(alarm.attributes.panel.hide_sensors)}}' on-change='settingsSave' data-setting='panel' data-attribute='hide_sensors'></ha-switch>
                         </div>
                         <span class='info-detail'>When the alarm is armed the sensors panel will be hidden.</span>
@@ -621,18 +621,33 @@
                         <span class='info-detail'>DEPRECATED. USE Shape of buttons INSTEAD. Choose whether the alarm buttons should be round or not.</span>
                       </div>-->
 
-                      <div class='setting-outer vertical layout' style='width: max-content;'>
+
+                      <div class='setting-outer vertical layout'>
+                        <div class='setting-inner horizontal layout' style='align-items: center;'>
+                          <span class='info-header'>Buttons'&nbsp;shape</span>
+                          <paper-dropdown-menu style='text-align: center; top: -10px;'>
+                            <paper-listbox slot="dropdown-content" class="dropdown-content" attr-for-selected='buttons-shape' selected='{{alarm.attributes.panel.buttons_shape}}'">
+                              <template is='dom-repeat' items='[[supportedButtonShapes]]' as='shape'>
+                                <paper-item buttons-shape='[[shape]]' on-click='settingsSave' data-type='listbox' data-setting='panel' data-attribute='buttons_shape'>[[shape]]</paper-item>
+                              </template>
+                            </paper-listbox>
+                          </paper-dropdown-menu>
+                        </div>
+                      </div>
+
+                      <!--<div class='setting-outer vertical layout' style='width: max-content;'>
                         <div class='setting-inner vertical layout'>
                           <div>
                             <span class='info-header'>Buttons' shape: </span>
                           </div>
+
                           <paper-listbox id='buttons_shape-checkbox' class='vertical layout' attr-for-selected='item-name' selected='{{alarm.attributes.panel.buttons_shape}}' selected-attribute='checked'">
                             <template is='dom-repeat' items='[[supportedButtonShapes]]' as='shape'>
                               <checkbox type='checkbox' item-name='[[shape]]' class='checkbox' on-click='settingsSave' data-type='listbox' data-setting='panel' data-attribute='buttons_shape'>[[shape]]</checkbox>
                             </template>
                           </paper-listbox>
                         </div>
-                      </div>
+                      </div>-->
 
                       <div class='setting-outer vertical layout'>
                         <div class='setting-inner horizontal layout'>
@@ -1285,7 +1300,7 @@
                       </div>
 
                       <div class='setting-outer vertical layout'>
-                        <div class='setting-input horizontal layout'>
+                        <div class='setting-inner horizontal layout'>
                           <span class='info-header'>Disarm Without Passcode:</span>
                           <ha-switch class='setting-toggle' checked='{{isChecked(alarm.attributes.mqtt.override_code)}}' on-change='settingsSave' data-setting='mqtt' data-attribute='override_code'></ha-switch>
                         </div>

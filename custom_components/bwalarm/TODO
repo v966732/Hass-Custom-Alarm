@@ -21,7 +21,7 @@ KNOWN POTENTIAL ISSUES
 
 panel.html
 ----------
-- settings' design (buttons/alignment/info-detail etc)
+- settings' design (buttons/alignment/info-detail/paper-input's content color etc)
 - Empty Immediate Sensors and Inactive Sensors including open ones when armed and !hide_sensors
 - entityTapped cannot find data-entity attribute
 - display "Invalid passcode" if code_to_arm and wrong passcode entered
