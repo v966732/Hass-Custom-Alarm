@@ -74,6 +74,13 @@
   --paper-listbox-background-color: blue;/* The background color of the listboxes.*/
   --paper-listbox-color:            var(--dark-light-blue);/* The text color within the listboxes.*/
 
+  /* dropdown sensors' list properties */
+  --sensors-listbox-color:            var(--paper-listbox-color);
+  --sensors-listbox-background-color: var(--panel-background-color);
+  --immediate-sensors-listbox-header-color:            red;
+  --delayed-sensors-listbox-header-color:            yellow;
+  --override-sensors-listbox-header-color:            green;
+
   --paper-item-selected_-_color:     var(--dark-orange);/* The text color of the item selected within a selection box.*/
   --paper-input-container-shared-input-style_-_color: white;
 
@@ -200,6 +207,10 @@ a, a:link, a:visited, a:active {
 a:hover {
     text-decoration: underline;
     color: var(--panel-text-color);
+}
+
+.center-text {
+  text-align: center;
 }
 
 .list-item {
@@ -463,10 +474,26 @@ ha-label-badge {
 #icon {
   margin-right: 15px;
 }
+
 paper-listbox {
   color: var(--info-panel-buttons-color);
   background: unset;
 }
+
+.settings-panel-buttons-shape {
+  align-items: center;
+}
+
+.sensors-listbox paper-listbox, .settings-panel-buttons-shape paper-listbox {
+  color:      var(--sensors-listbox-color);
+  background: var(--sensors-listbox-background-color);
+}
+
+.sensors-listbox paper-listbox {
+  color:      var(--sensors-listbox-color);
+  background: var(--sensors-listbox-background-color);
+}
+
 #content {
   display: flex;
   flex-direction: column;
@@ -516,6 +543,28 @@ h1 {
   color: var(--info-header-text-color);
   font-size: large;
   padding-right: 5px;
+}
+
+.sensors-listbox div {
+  justify-content: center;
+}
+
+.sensors-listbox span {
+  font-size: medium;
+  padding-top: 5px;
+  margin-right: 2px;
+}
+
+.sensors-listbox span.immediate {
+  color: var(--immediate-sensors-listbox-header-color);
+}
+
+.sensors-listbox span.delayed {
+  color: var(--delayed-sensors-listbox-header-color);
+}
+
+.sensors-listbox span.override {
+  color: var(--override-sensors-listbox-header-color);
 }
 .setting-outer {
   padding-top: 10px;

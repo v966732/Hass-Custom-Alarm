@@ -385,7 +385,7 @@
                         </div>
                         <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-all", carouselMainSelected)]];'>
                           <paper-icon-button icon='mdi:brush' title='Design' on-click='carouselClick' data-selection='settings-all'></paper-icon-button>
-                          <div class='settings-nav-text'>Design</div>
+                          <div class='settings-nav-text'>Panel</div>
                         </div>
                         <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-alarm", carouselMainSelected)]];'>
                           <paper-icon-button icon='mdi:dialpad' title='Alarm' on-click='carouselClick' data-selection='settings-alarm'></paper-icon-button>
@@ -393,7 +393,7 @@
                         </div>
                         <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-sensors", carouselMainSelected)]];'>
                           <paper-icon-button id='btn-alarm-sensors' icon='mdi:radio-tower' title='Alarm Sensors' on-click='carouselClick' data-selection='settings-sensors'></paper-icon-button>
-                          <div class='settings-nav-text'>Sensors</div>
+                          <div class='settings-nav-text'>Modes</div>
                         </div>
                         <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-floorplan", carouselMainSelected)]];'>
                           <paper-icon-button icon='mdi:floor-plan' title='Floorplan' on-click='carouselClick' data-selection='settings-floorplan'></paper-icon-button>
@@ -420,9 +420,9 @@
                       <paper-dropdown-menu class='xs dropdown-content' label="Settings">
                         <paper-listbox slot="dropdown-content" >
                           <paper-item on-click='carouselClick' data-selection='settings-info'><iron-icon icon='mdi:information-outline'></iron-icon>About</paper-item>
-                          <paper-item on-click='carouselClick' data-selection='settings-all'><iron-icon icon='mdi:brush'></iron-icon>Design</paper-item>
+                          <paper-item on-click='carouselClick' data-selection='settings-all'><iron-icon icon='mdi:brush'></iron-icon>Panel</paper-item>
                           <paper-item on-click='carouselClick' data-selection='settings-alarm'><iron-icon icon='mdi:dialpad'></iron-icon>Alarm</paper-item>
-                          <paper-item on-click='carouselClick' data-selection='settings-sensors'><iron-icon icon='mdi:radio-tower'></iron-icon>Sensors</paper-item>
+                          <paper-item on-click='carouselClick' data-selection='settings-sensors'><iron-icon icon='mdi:radio-tower'></iron-icon>Modes</paper-item>
                           <paper-item on-click='carouselClick' data-selection='settings-floorplan'><iron-icon icon='mdi:floor-plan'></iron-icon>Floorplan</paper-item>
                           <paper-item on-click='carouselClick' data-selection='settings-cameras'><iron-icon icon='mdi:cctv'></iron-icon>Cameras</paper-item>
                           <paper-item on-click='carouselClick' data-selection='settings-mqtt'><iron-icon icon='mdi:access-point'></iron-icon>MQTT</paper-item>
@@ -592,10 +592,10 @@
                       </div>
 
                       <div class='setting-outer vertical layout'>
-                        <div class='setting-inner horizontal layout' style='align-items: center;'>
+                        <div class='setting-inner horizontal layout settings-panel-buttons-shape'>
                           <span class='info-header'>Buttons'&nbsp;shape</span>
-                          <paper-dropdown-menu style='text-align: center; top: -10px;'>
-                            <paper-listbox slot="dropdown-content" attr-for-selected='buttons-shape' selected='{{alarm.attributes.panel.buttons_shape}}'">
+                          <paper-dropdown-menu class='center-text' style='top: -10px;'>
+                            <paper-listbox slot="dropdown-content" attr-for-selected='buttons-shape' selected='{{alarm.attributes.panel.buttons_shape}}'>
                               <template is='dom-repeat' items='[[supportedButtonShapes]]' as='shape'>
                                 <paper-item buttons-shape='[[shape]]' on-click='settingsSave' data-setting='panel' data-attribute='buttons_shape'>[[shape]]</paper-item>
                               </template>
@@ -932,38 +932,55 @@
 
                       </div>
 
-                      <div class='horizontal layout' id='sensors-away-immediate'>
+                      <div class='vertical layout'>
+                        <span class='info-header center-text'>Sensors</span>
+                        <div class='horizontal layout' style='justify-content: space-between;'>
+                          <div class='vertical layout sensors-listbox' style='flex: 1 1 auto;'>
+                            <div class='horizontal layout'>
+                              <span class='immediate'>Immediate</span>
+                              <span>[[arrayLengthAsOptionalString(alarm.attributes.states.armed_away.immediate, ':')]]</span>
+                            </div>
+                            <paper-dropdown-menu class='center-text'>
+                              <paper-listbox slot='dropdown-content' attr-for-selected='title' multi selected-values='{{alarm.attributes.states.armed_away.immediate}}'>
+                                <template is='dom-repeat' items='[[sensors]]' as='sensor'>
+                                  <paper-item  title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='immediate'>[[sensor]]</paper-item>
+                                </template>
+                              </paper-listbox>
+                            </paper-dropdown-menu>
+                          </div>
 
-                        <div class='vertical layout'>
-                          <h2>Immediate</h2>
-                          <paper-listbox id='sensors-checkboxs' class='vertical layout' attr-for-selected='title' multi selected-values='{{alarm.attributes.states.armed_away.immediate}}' selected-attribute='checked' >
-                            <template is='dom-repeat' items='{{sensors}}' as='sensor'>
-                              <checkbox type='checkbox' class='checkbox' title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='immediate' >[[computeFriendlyName(sensor)]]</checkbox>
-                            </template>
-                          </paper-listbox>
-                        </div>
+                          <div class='vertical layout sensors-listbox' style='flex: 1 1 auto; margin: 0px 10px;'>
+                            <div class='horizontal layout'>
+                              <span class='delayed'>Delayed</span>
+                              <span>[[arrayLengthAsOptionalString(alarm.attributes.states.armed_away.delayed, ':')]]</span>
+                            </div>
+                            <paper-dropdown-menu class='center-text'>
+                              <paper-listbox slot='dropdown-content' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_away.delayed}}>
+                                <template is='dom-repeat' items='[[sensors]]' as='sensor'>
+                                  <paper-item title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='delayed'>[[sensor]]</paper-item>
+                                </template>
+                              </paper-listbox>
+                            </paper-dropdown-menu>
+                          </div>
 
-                        <div class='sensor vertical layout'>
-                          <h2>Delayed</h2>
-                          <paper-listbox id='sensors-checkboxs1' class='vertical layout' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_away.delayed}} selected-attribute="checked" >
-                            <template is='dom-repeat' items='{{sensors}}' as='sensor'>
-                              <checkbox type='checkbox' class='checkbox' title="{{sensor}}" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='delayed' >[[computeFriendlyName(sensor)]]</checkbox>
-                            </template>
-                          </paper-listbox>
-                        </div>
-
-                        <div class='vertical layout'>
-                          <h2>Override</h2>
-                          <paper-listbox id='sensors-checkboxs2' class='vertical layout' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_away.override}} selected-attribute="checked" >
-                            <template is='dom-repeat' items='{{sensors}}' as='sensor'>
-                              <checkbox type='checkbox' class='checkbox' title="{{sensor}}" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='override' >[[computeFriendlyName(sensor)]]</checkbox>
-                            </template>
-                          </paper-listbox>
+                          <div class='vertical layout sensors-listbox' style='flex: 1 1 auto;'>
+                            <div class='horizontal layout'>
+                              <span class='override'>Override</span>
+                              <span>[[arrayLengthAsOptionalString(alarm.attributes.states.armed_away.override, ':')]]</span>
+                            </div>
+                            <paper-dropdown-menu class='center-text'>
+                              <paper-listbox slot='dropdown-content' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_away.override}}>
+                                <template is='dom-repeat' items='[[sensors]]' as='sensor'>
+                                  <paper-item title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='override'>[[sensor]]</paper-item>
+                                </template>
+                              </paper-listbox>
+                            </paper-dropdown-menu>
+                          </div>
                         </div>
                       </div>
 
+                      <br>
                       <h1>Home Mode</h1>
-
                       <div class='setting-outer horizontal layout'>
                         <div class='setting-inner vertical layout'>
                           <span class='info-header'>Pending (Exit) Time: </span>
@@ -973,7 +990,6 @@
                             <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_home' data-attribute='pending_time' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
                           </div>
                         </div>
-
                       </div>
 
                       <div class='setting-outer horizontal layout'>
@@ -998,7 +1014,7 @@
                         </div>
                       </div>
 
-                      <div class='horizontal layout'>
+                      <!--<div class='horizontal layout'>
                         <div class='vertical layout'>
                           <h2>Immediate</h2>
                           <paper-listbox id='sensors-checkboxs3' class='vertical layout' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_home.immediate}} selected-attribute="checked" >
@@ -1025,10 +1041,42 @@
                             </template>
                           </paper-listbox>
                         </div>
+                      </div>-->
+                      <div class='vertical layout'>
+                        <span class='info-header center-text'>Sensors</span>
+                        <div class='horizontal layout' style='justify-content: space-between;'>
+                          <div class='vertical layout sensors-listbox' style='flex: 1 1 auto; margin-right: 10px;'>
+                            <div class='horizontal layout'>
+                              <span class='delayed'>Delayed</span>
+                              <span>[[arrayLengthAsOptionalString(alarm.attributes.states.armed_home.delayed, ':')]]</span>
+                            </div>
+                            <paper-dropdown-menu class='center-text'>
+                              <paper-listbox slot='dropdown-content' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_home.delayed}}>
+                                <template is='dom-repeat' items='[[sensors]]' as='sensor'>
+                                  <paper-item title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='delayed'>[[sensor]]</paper-item>
+                                </template>
+                              </paper-listbox>
+                            </paper-dropdown-menu>
+                          </div>
+
+                          <div class='vertical layout sensors-listbox' style='flex: 1 1 auto;'>
+                            <div class='horizontal layout'>
+                              <span class='override'>Override</span>
+                              <span>[[arrayLengthAsOptionalString(alarm.attributes.states.armed_home.override, ':')]]</span>
+                            </div>
+                            <paper-dropdown-menu class='center-text'>
+                              <paper-listbox slot='dropdown-content' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_home.override}}>
+                                <template is='dom-repeat' items='[[sensors]]' as='sensor'>
+                                  <paper-item title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='override'>[[sensor]]</paper-item>
+                                </template>
+                              </paper-listbox>
+                            </paper-dropdown-menu>
+                          </div>
+                        </div>
                       </div>
 
+                      <br>
                       <h1>Night (perimeter) Mode</h1>
-
                       <div class='setting-outer vertical layout'>
                         <div class='setting-inner horizontal layout'>
                           <span class='info-header'>Enable Night Mode: </span>
@@ -1070,32 +1118,36 @@
                         </div>
                       </div>
 
-                      <div class='horizontal layout'>
-                        <div class='vertical layout'>
-                          <h2>Immediate</h2>
-                          <paper-listbox id='sensors-checkboxs6' class='vertical layout' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_night.immediate}} selected-attribute="checked" >
-                            <template is='dom-repeat' items='{{sensors}}' as='sensor'>
-                              <checkbox type='checkbox' class='checkbox' title="{{sensor}}" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_night' data-group='immediate' >[[computeFriendlyName(sensor)]]</checkbox>
-                            </template>
-                          </paper-listbox>
-                        </div>
+                      <div class='vertical layout'>
+                        <span class='info-header center-text'>Sensors</span>
+                        <div class='horizontal layout' style='justify-content: space-between;'>
+                          <div class='vertical layout sensors-listbox' style='flex: 1 1 auto; margin-right: 10px;'>
+                            <div class='horizontal layout'>
+                              <span class='delayed'>Delayed</span>
+                              <span>[[arrayLengthAsOptionalString(alarm.attributes.states.armed_night.delayed, ':')]]</span>
+                            </div>
+                            <paper-dropdown-menu class='center-text' vertical-align="bottom">
+                              <paper-listbox slot='dropdown-content' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_night.delayed}}>
+                                <template is='dom-repeat' items='[[sensors]]' as='sensor'>
+                                  <paper-item title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='delayed'>[[sensor]]</paper-item>
+                                </template>
+                              </paper-listbox>
+                            </paper-dropdown-menu>
+                          </div>
 
-                        <div class='vertical layout'>
-                          <h2>Delayed</h2>
-                          <paper-listbox id='sensors-checkboxs7' class='vertical layout' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_night.delayed}} selected-attribute="checked" >
-                            <template is='dom-repeat' items='{{sensors}}' as='sensor'>
-                              <checkbox type='checkbox' class='checkbox' title="{{sensor}}" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_night' data-group='delayed' >[[computeFriendlyName(sensor)]]</checkbox>
-                            </template>
-                          </paper-listbox>
-                        </div>
-
-                        <div class='vertical layout'>
-                          <h2>Override</h2>
-                          <paper-listbox id='sensors-checkboxs8' class='vertical layout' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_night.override}} selected-attribute="checked" >
-                            <template is='dom-repeat' items='{{sensors}}' as='sensor'>
-                              <checkbox type='checkbox' class='checkbox' title="{{sensor}}" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_night' data-group='override' >[[computeFriendlyName(sensor)]]</checkbox>
-                            </template>
-                          </paper-listbox>
+                          <div class='vertical layout sensors-listbox' style='flex: 1 1 auto;'>
+                            <div class='horizontal layout'>
+                              <span class='override'>Override</span>
+                              <span>[[arrayLengthAsOptionalString(alarm.attributes.states.armed_night.override, ':')]]</span>
+                            </div>
+                            <paper-dropdown-menu class='center-text' vertical-align="bottom">
+                              <paper-listbox slot='dropdown-content' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_night.override}}>
+                                <template is='dom-repeat' items='[[sensors]]' as='sensor'>
+                                  <paper-item title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='override'>[[sensor]]</paper-item>
+                                </template>
+                              </paper-listbox>
+                            </paper-dropdown-menu>
+                          </div>
                         </div>
                       </div>
 
@@ -1423,8 +1475,8 @@
 
             sensors:              { type: Array, value: [] },
             // internal ones, here to have them created only once instead of on every function call
-            binary_sensors:       { type: Array, value: [] },
-            switches:             { type: Array, value: [] },
+            //binary_sensors:       { type: Array, value: [] },
+            //switches:             { type: Array, value: [] },
 
             errors:               { type: Array },
             version:              { type: String, value: _VERSION},
@@ -1899,8 +1951,8 @@
 
         loadSettings(){
           this.sensors = [];
-          this.binary_sensors = [];
-          this.switches = [];
+          //this.binary_sensors = [];
+          //this.switches = [];
 
           for (var state in this.hass.states) {
             if (state.split('.')[0] == 'camera'){ //find all cameras and add to array
@@ -1910,17 +1962,18 @@
               this.sensors.push(state);
             }
             else if (state.split('.')[0] == 'binary_sensor'){
-              this.binary_sensors.push(state);
+              this.sensors.push(state);
             }
             else if (state.split('.')[0] == 'switch'){
-              this.switches.push(state);
+              this.sensors.push(state);
             }
           }
-         this.binary_sensors.sort();
-         this.switches.sort();
+         //this.binary_sensors.sort();
+         //this.switches.sort();
          this.sensors.sort();
-         this.sensors.push.apply(this.sensors, this.binary_sensors);
-         this.sensors.push.apply(this.sensors, this.switches);
+         //this.sensors.push.apply(this.binary_sensors, this.sensors);
+         //this.sensors.push.apply(this.sensors, this.switches);
+         //this.sensors.sort();
         }
 
         computeLog(entry, type){
@@ -2605,14 +2658,17 @@
 
         //Get the friendly readable name of an entity
         computeFriendlyName(entity) {
-          //console.log("computeFriendlyName(%s)", entity)
-          if (this.hass.states[entity] == null) {
-            console.log("Unknown entity \"%s\"", entity);
+          var state_object = this.hass.states[entity];
+
+          if (state_object == null) {
+            console.error("computeFriendlyName: unknown entity \"%s\"", entity);
             return 'unknown';
           }
-          var attr = this.hass.states[entity].attributes;
-          //console.log("Friendly name: %s", attr.friendly_name);
-          return attr.friendly_name;
+
+          var name = entity.split('.', 1)[0] + '.' + state_object.attributes.friendly_name;
+          //console.log('entity %s: entity_id=%s, object_id=%s, name=%s', entity, state_object.entity_id, state_object.object_id, state_object.name);
+          //console.log("computeFriendlyName(%s) = %s", entity, name);
+          return name;
           }
 
         // Change color of button
@@ -2914,7 +2970,7 @@
 
         //Read the settings that are to be updated
         settingsSave(ev){
-          //var FNAME = '[settingsSave] ';
+          var FNAME = '[settingsSave] ';
           ev.stopPropagation();
 
           //Check the settings tab has been unlocked before commiting any changes
@@ -2942,7 +2998,7 @@
 
             switch (setting) {
               case 'panel':
-                //console.log(FNAME + 'attribute=' + attribute + ', type: ' + type);
+                console.log(FNAME + 'setting=' + setting + ', attribute=' + attribute + ', type: ' + type);
                 if (typeof ev.target.checked === 'boolean')
                   this.alarm.attributes.panel[attribute] = ev.target.checked;
                 else if (type == 'input_text')
@@ -3044,14 +3100,20 @@
               case 'sensor_select':
                 //check if the sensor already exists in the groups
                 var index = this.alarm.attributes.states[mode][sensor_group].indexOf(title);
+                //console.log(FNAME + setting + ': mode=' + mode + ', sensor_group=' + sensor_group + ', title=' + title + ', index=' + index);
 
                 //add sensor to group
-                if (typeof this.alarm.attributes.states[mode][sensor_group][index] === 'undefined')
-                  this.alarm.attributes.states[mode][sensor_group].push(title);
+                //if (typeof this.alarm.attributes.states[mode][sensor_group][index] === 'undefined') {
+                  //this.alarm.attributes.states[mode][sensor_group].push(title);
+                //  console.log(FNAME + 'add ' + title + ' to the array of ' + sensor_group + ' sensors');
+                //}
                 //remove sensor from group
-                else if (index >= 0)
-                  this.alarm.attributes.states[mode][sensor_group].splice(index, 1);
+                //else if (index >= 0) {
+                //  console.log(FNAME + 'remove ' + title + ' from the array of ' + sensor_group + ' sensors');
+                  //this.alarm.attributes.states[mode][sensor_group].splice(index, 1);
+                //}
 
+                //console.log(FNAME + 'reflect changes to the alarm object');
                 this.settingsUpdate('states', this.alarm.attributes.states);
                 return;
 
@@ -3184,6 +3246,13 @@
 
         hasAnyOpenSensors(allopensensors) {
           return (allopensensors != undefined) && (allopensensors.length > 0);
+        }
+
+        arrayLengthAsOptionalString(array, prefix) {
+          if (array == undefined)
+            return '';
+          var res = array.length;
+          return res? prefix + res: '';
         }
       }
 
