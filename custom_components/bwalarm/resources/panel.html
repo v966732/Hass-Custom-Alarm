@@ -1474,9 +1474,6 @@
             cameras:              { type: Array, value: [] },
 
             sensors:              { type: Array, value: [] },
-            // internal ones, here to have them created only once instead of on every function call
-            //binary_sensors:       { type: Array, value: [] },
-            //switches:             { type: Array, value: [] },
 
             errors:               { type: Array },
             version:              { type: String, value: _VERSION},
@@ -1949,31 +1946,26 @@
           }
         }
 
-        loadSettings(){
+        loadSettings() {
           this.sensors = [];
-          //this.binary_sensors = [];
-          //this.switches = [];
 
           for (var state in this.hass.states) {
-            if (state.split('.')[0] == 'camera'){ //find all cameras and add to array
-              this.cameras.push(state);
-            }
-            else if (state.split('.')[0] == 'sensor'){
-              this.sensors.push(state);
-            }
-            else if (state.split('.')[0] == 'binary_sensor'){
-              this.sensors.push(state);
-            }
-            else if (state.split('.')[0] == 'switch'){
-              this.sensors.push(state);
+            var domain = state.split('.', 1)[0];
+
+            switch(domain) {
+              case 'camera':
+                this.cameras.push(state);
+                break;
+
+              case 'sensor':
+              case 'binary_sensor':
+              case 'switch':
+                this.sensors.push(state);
+                break;
             }
           }
-         //this.binary_sensors.sort();
-         //this.switches.sort();
-         this.sensors.sort();
-         //this.sensors.push.apply(this.binary_sensors, this.sensors);
-         //this.sensors.push.apply(this.sensors, this.switches);
-         //this.sensors.sort();
+
+          this.sensors.sort();
         }
 
         computeLog(entry, type){
@@ -2665,7 +2657,8 @@
             return 'unknown';
           }
 
-          var name = entity.split('.', 1)[0] + '.' + state_object.attributes.friendly_name;
+          var name = state_object.attributes.friendly_name;
+          //var name = entity.split('.', 1)[0] + '.' + state_object.attributes.friendly_name;
           //console.log('entity %s: entity_id=%s, object_id=%s, name=%s', entity, state_object.entity_id, state_object.object_id, state_object.name);
           //console.log("computeFriendlyName(%s) = %s", entity, name);
           return name;

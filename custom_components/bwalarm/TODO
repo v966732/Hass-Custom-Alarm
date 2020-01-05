@@ -21,6 +21,7 @@ KNOWN POTENTIAL ISSUES
 
 panel.html
 ----------
+- add icon to Activity log: alarm has been tripped/triggered
 - move Enable sensors panel from Sensors to Design
 - settings' design (buttons/alignment/info-detail/paper-input's content color etc)
 - Empty Immediate Sensors and Inactive Sensors including open ones when armed and !hide_sensors
