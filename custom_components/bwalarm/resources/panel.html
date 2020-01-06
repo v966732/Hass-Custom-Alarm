@@ -383,8 +383,8 @@
                           <paper-icon-button icon='mdi:information-outline' title='Info' on-click='carouselClick' data-selection='settings-info'></paper-icon-button>
                           <div class='settings-nav-text'>About</div>
                         </div>
-                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-all", carouselMainSelected)]];'>
-                          <paper-icon-button icon='mdi:brush' title='Design' on-click='carouselClick' data-selection='settings-all'></paper-icon-button>
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-panel", carouselMainSelected)]];'>
+                          <paper-icon-button icon='mdi:brush' title='Panel' on-click='carouselClick' data-selection='settings-panel'></paper-icon-button>
                           <div class='settings-nav-text'>Panel</div>
                         </div>
                         <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-alarm", carouselMainSelected)]];'>
@@ -420,7 +420,7 @@
                       <paper-dropdown-menu class='xs dropdown-content' label="Settings">
                         <paper-listbox slot="dropdown-content" >
                           <paper-item on-click='carouselClick' data-selection='settings-info'><iron-icon icon='mdi:information-outline'></iron-icon>About</paper-item>
-                          <paper-item on-click='carouselClick' data-selection='settings-all'><iron-icon icon='mdi:brush'></iron-icon>Panel</paper-item>
+                          <paper-item on-click='carouselClick' data-selection='settings-panel'><iron-icon icon='mdi:brush'></iron-icon>Panel</paper-item>
                           <paper-item on-click='carouselClick' data-selection='settings-alarm'><iron-icon icon='mdi:dialpad'></iron-icon>Alarm</paper-item>
                           <paper-item on-click='carouselClick' data-selection='settings-sensors'><iron-icon icon='mdi:radio-tower'></iron-icon>Modes</paper-item>
                           <paper-item on-click='carouselClick' data-selection='settings-floorplan'><iron-icon icon='mdi:floor-plan'></iron-icon>Floorplan</paper-item>
@@ -513,175 +513,184 @@
                     </div>
 
                     <!-- ########################################################################### @PANEL ##################################################################################################### -->
-                    <div id='settings-all' class='carousel-cell remove'>
+                    <div id='settings-panel' class='carousel-cell remove'>
                       <div class='setting-outer horizontal layout'>
-                        <div class='setting-inner vertical layout'>
-                          <span class='info-header'>Admin Password: </span>
-                          <span class='info-detail'>Reset the password used to access this settings panel.</span>
-                          <div class='setting-input horizontal layout'>
-                            <paper-input id='admin_password' class='expand' type="password" placeholder='Admin Password'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='root' data-attribute='admin_password' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
-                          </div>
-                        </div>
-                      </div>
+                        <div class="vertical layout">
+                          <div>
+                            <h1>
+                              General
+                            </h1>
 
-                      <div class='setting-outer horizontal layout'>
-                        <div class='setting-inner vertical layout'>
-                          <span class='info-header'>Alarm Panel Title: </span>
-                          <span class='info-detail'>The text that shows on the header bar.<br>Default: Home Alarm</span>
-                          <div class='setting-input horizontal layout'>
-                            <paper-input id='panel_title' class='expand' value='{{alarm.attributes.panel.panel_title}}' placeholder='Panel Title'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='panel' data-attribute='panel_title' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class='setting-outer vertical layout'>
-                        <div class='setting-inner horizontal layout'>
-                          <span class='info-header'>Clock: </span>
-                          <ha-switch class='setting-toggle' checked$='{{isChecked(alarm.attributes.panel.enable_clock)}}' on-change='settingsSave' data-setting='panel' data-attribute='enable_clock'></ha-switch>
-                        </div>
-                        <span class='info-detail'>Enables the clock widget in this panel. A Time Sensor named: 'sensor.time' must exist within your Home Assistant setup</span>
-                      </div>
-
-                      <div class='setting-outer vertical layout'>
-                        <div class='setting-inner horizontal layout'>
-                          <span class='info-header'>Clock 12 Hour Mode?: </span>
-                          <ha-switch class='setting-toggle' checked='{{isChecked(alarm.attributes.panel.enable_clock_12hr)}}' on-change='settingsSave' data-setting='panel' data-attribute='enable_clock_12hr'></ha-switch>
-                        </div>
-                        <span class='info-detail'>Changes the clock to 12hour mode when enabled.<br>Default: Disabled (i.e 24hr mode)</span>
-                      </div>
-
-                      <div class='setting-outer vertical layout'>
-                        <div class='setting-inner horizontal layout'>
-                          <span class='info-header'>Weather: </span>
-                          <ha-switch class='setting-toggle' checked='{{isChecked(alarm.attributes.panel.enable_weather)}}' on-change='settingsSave' data-setting='panel' data-attribute='enable_weather'></ha-switch>
-                        </div>
-                        <span class='info-detail'>Enables the weather widget in this panel. A Weather Sensor named: 'sensor.weather_summary' or 'sensor.dark_sky_summary' must exist within your Home Assistant setup</span>
-                      </div>
-
-                      <div class='setting-outer vertical layout'>
-                        <div class='setting-inner horizontal layout'>
-                          <span class='info-header'>Display Fahrenheit: </span>
-                          <ha-switch class='setting-toggle' checked='{{isChecked(alarm.attributes.panel.enable_fahrenheit)}}' on-change='settingsSave' data-setting='panel' data-attribute='enable_fahrenheit'></ha-switch>
-                        </div>
-                        <span class='info-detail'>Enable this to display the temperaturein Fahrenheit</span>
-                      </div>
-
-                      <div class='setting-outer vertical layout'>
-                        <div class='setting-inner horizontal layout'>
-                          <span class='info-header'>Passcode Hidden: </span>
-                          <ha-switch class='setting-toggle' checked='{{isChecked(alarm.attributes.panel.hide_passcode)}}' on-change='settingsSave' data-setting='panel' data-attribute='hide_passcode'></ha-switch>
-                        </div>
-                        <span class='info-detail'>Masks the passcode within the panel input box when typing</span>
-                      </div>
-
-                      <div class='setting-outer vertical layout'>
-                        <div class='setting-inner horizontal layout'>
-                          <span class='info-header'>Hide HA Sidebar When Armed: </span>
-                          <ha-switch class='setting-toggle' checked='{{isChecked(alarm.attributes.panel.hide_sidebar)}}' on-change='settingsSave' data-setting='panel' data-attribute='hide_sidebar'></ha-switch>
-                        </div>
-                        <span class='info-detail'>When the alarm is armed the Home Assistant sidebar will be hidden if enabled. This prevents an intruder simply stopping Home Assistant from the configuration menu. For this to be truly effective use a browser which locks access to the URL function. Note: if your HA is v96.3 or newer, go to your Profile settings in HA and select “Always hide the sidebar” for this option to work correctly.</span>
-                      </div>
-
-                      <div class='setting-outer vertical layout'>
-                        <div class='setting-inner horizontal layout'>
-                          <span class='info-header'>Hide Sensors When Armed</span>
-                          <ha-switch class='setting-toggle' checked='{{isChecked(alarm.attributes.panel.hide_sensors)}}' on-change='settingsSave' data-setting='panel' data-attribute='hide_sensors'></ha-switch>
-                        </div>
-                        <span class='info-detail'>When the alarm is armed the sensors panel will be hidden.</span>
-                      </div>
-
-                      <div class='setting-outer vertical layout'>
-                        <div class='setting-inner horizontal layout settings-panel-buttons-shape'>
-                          <span class='info-header'>Buttons'&nbsp;shape</span>
-                          <paper-dropdown-menu class='center-text' style='top: -10px;'>
-                            <paper-listbox slot="dropdown-content" attr-for-selected='buttons-shape' selected='{{alarm.attributes.panel.buttons_shape}}'>
-                              <template is='dom-repeat' items='[[supportedButtonShapes]]' as='shape'>
-                                <paper-item buttons-shape='[[shape]]' on-click='settingsSave' data-setting='panel' data-attribute='buttons_shape'>[[shape]]</paper-item>
-                              </template>
-                            </paper-listbox>
-                          </paper-dropdown-menu>
-                        </div>
-                      </div>
-
-                      <div class='setting-outer vertical layout'>
-                        <div class='setting-inner horizontal layout'>
-                          <span class='info-header'>Open Sensors below Arm buttons: </span>
-                          <ha-switch class='setting-toggle' checked='{{isChecked(alarm.attributes.panel.open_sensors_below_arm_buttons)}}' on-change='settingsSave' data-setting='panel' data-attribute='open_sensors_below_arm_buttons'></ha-switch>
-                        </div>
-                        <span class='info-detail'>Choose whether open sensors will be shown below the arm buttons when the alarm is disarmed.</span>
-                      </div>
-
-                      <div class='setting-outer vertical layout'>
-                        <div class='setting-inner horizontal layout'>
-                          <span class='info-header'>Shadow Text Effect: </span>
-                          <ha-switch class='setting-toggle' checked='{{isChecked(alarm.attributes.panel.shadow_effect)}}' on-change='settingsSave' data-setting='panel' data-attribute='shadow_effect'></ha-switch>
-                        </div>
-                        <span class='info-detail'>Enables the shadow text effect in this panel.<br>Default: Disabled</span>
-                      </div>
-
-                      <div class='setting-outer vertical layout'>
-                        <div class='setting-inner horizontal layout'>
-                          <span class='info-header'>Serif Font: </span>
-                          <ha-switch class='setting-toggle' checked='{{isChecked(alarm.attributes.panel.enable_serif_font)}}' on-change='settingsSave' data-setting='panel' data-attribute='enable_serif_font'></ha-switch>
-                        </div>
-                        <span class='info-detail'>Enables the 'Lobster' serif font on the title, time and weather within this panel.<br>Default: Disabled</span>
-                      </div>
-
-                      <div>
-                        <h1>Themes</h1>
-                        <div class='info-detail'>Themes allow you to override the default Home Assistant colors.</div>
-
-                        <!-- Themes List [Buttons] {defineColors(themeName), unhide div}  -->
-                          <template is='dom-if' if='[[alarm.attributes.themes]]'>
-                            <!-- <span class='info-header' style='padding-top: 10px;'>Defined:</span> -->
-                            <paper-listbox id='themes-listbox' class='vertical layout'>
-                            <template is='dom-repeat' items='[[alarm.attributes.themes]]'>
-                              <div class='horizontal layout'>
-                                <paper-item on-click='defineColors' data-theme$='[[item.name]]' style='width: 75%;  text-transform: uppercase; text-transform: uppercase;'><iron-icon on-click='defineColors' data-theme$='[[item.name]]' icon='mdi:format-paint' style=' padding-right: 7px;'></iron-icon>[[item.name]]</paper-item>
-                                <ha-switch class='setting-toggle' checked$='[[isChecked(item.active)]]' on-change='settingsSave' data-type='boolean' name$='[[item.name]]' data-attribute='activated' data-setting='themes'>Activated?</ha-switch>
-                                <paper-icon-button on-click='settingsSave' data-setting='themes' name$='[[item.name]]' data-type='delete' icon='mdi:delete' style='margin-left: 20px; color: white;'></paper-icon-button>
+                            <div class='setting-middle vertical layout'>
+                              <div class='setting-inner horizontal layout' title='Password to access Settings panel'>
+                                <paper-input id='admin_password' class="expand" label='Admin Password' always-float-label></paper-input>
+                                <paper-icon-button data-type='input_text' data-setting='root' data-attribute='admin_password' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
                               </div>
-                            </template>
-                          </paper-listbox>
-                        </template>
-                        <button on-click='unhideDiv' data-div='#themeDetail' style='background: unset; text-transform: capitalize; color: var(--panel-text-color);'><iron-icon  on-click='unhideDiv' data-div='#themeDetail' icon='mdi:plus-circle-outline' style='padding-right: 7px;'></iron-icon>New</button>
-                      </div>
 
-                      <!-- /* Theme Name [Input] | Update [Button] | Delete [Button] */ -->
-                      <div id='themeDetail' class='remove'>
+                              <div class='setting-inner horizontal layout'>
+                                <span class="info-header">Use:</span>
 
-                        <h1>Update Theme</h1>
+                                <paper-checkbox class="settings-checkbox" checked='{{isChecked(alarm.attributes.panel.enable_serif_font)}}' on-change='settingsSave' data-setting='panel' data-attribute='enable_serif_font' title="Use the 'Lobster' serif font on the alarm status, time and weather">
+                                  <span class="checkbox-title">Serif Font</span>
+                                </paper-checkbox>
 
-                        <div class='setting-outer horizontal layout'>
-                          <div class='setting-inner vertical layout'>
-                            <span class='info-header'>Theme Name: </span>
-                            <span class='info-detail'>Name of the theme.</span>
-                            <div class='setting-input horizontal layout'>
-                              <paper-input id='theme-name' type="text" placeholder='Theme Name'></paper-input>
-                              <paper-icon-button id='theme-name-button' data-type='input_text' data-attribute='theme-name' data-setting='themes' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
+                                <paper-checkbox class="settings-checkbox" checked='{{isChecked(alarm.attributes.panel.shadow_effect)}}' on-change='settingsSave' data-setting='panel' data-attribute='shadow_effect' title="Enables the shadow text effect">
+                                  <span class="checkbox-title">Shadow Text Effect</span>
+                                </paper-checkbox>
+                              </div>
+
+                              <paper-dropdown-menu label="Buttons'&nbsp;shape" always-float-label>
+                                <paper-listbox class="buttons-shape-listbox" slot="dropdown-content" attr-for-selected='buttons-shape' selected='{{alarm.attributes.panel.buttons_shape}}'>
+                                  <template is='dom-repeat' items='[[supportedButtonShapes]]' as='shape'>
+                                    <paper-item buttons-shape='[[shape]]' on-click='settingsSave' data-setting='panel' data-attribute='buttons_shape'>[[shape]]</paper-item>
+                                  </template>
+                                </paper-listbox>
+                              </paper-dropdown-menu>
+
+                              <paper-checkbox class="settings-checkbox" checked='{{isChecked(alarm.attributes.panel.hide_sidebar)}}' on-change='settingsSave' data-setting='panel' data-attribute='hide_sidebar' title="When the alarm is armed the Home Assistant sidebar will be hidden if enabled">
+                                <span class="checkbox-title">Hide HA Sidebar when armed</span>
+                              </paper-checkbox>
+
+                            </div>
+                          </div>
+
+                          <div>
+                            <h1>
+                              Status Bar
+                            </h1>
+                            <div class='setting-middle vertical layout'>
+
+                              <div class='setting-inner horizontal layout' title='Text to prefix the alarm status with in the status bar'>
+                                <paper-input id='panel_title' class="expand" label='Title' always-float-label value='{{alarm.attributes.panel.panel_title}}'></paper-input>
+                                <paper-icon-button data-type='input_text' data-setting='panel' data-attribute='panel_title' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
+                              </div>
+
+                              <div class="setting-inner horizontal layout">
+                                <span class="info-header">Display:</span>
+
+                                <paper-checkbox class="settings-checkbox" checked$='{{isChecked(alarm.attributes.panel.enable_clock)}}' on-change='settingsSave' data-setting='panel' data-attribute='enable_clock' title="Displays the current time in the status bar">
+                                  <span class="checkbox-title">time</span>
+                                </paper-checkbox>
+
+                                <paper-checkbox class="settings-checkbox" checked='{{isChecked(alarm.attributes.panel.enable_weather)}}' on-change='settingsSave' data-setting='panel' data-attribute='enable_weather' title="Displays the weather summary in the status bar">
+                                  <span class="checkbox-title">weather</span>
+                                </paper-checkbox>
+                              </div>
+
+                              <div class$="[[invisibleIfDisabled(alarm.attributes.panel.enable_clock)]]">
+                                <paper-checkbox class="settings-checkbox" checked='{{isChecked(alarm.attributes.panel.enable_clock_12hr)}}' on-change='settingsSave' data-setting='panel' data-attribute='enable_clock_12hr' title="Displays current time in 12hour format">
+                                  <span class="checkbox-title">Time in 12 Hour Format</span>
+                                </paper-checkbox>
+                              </div>
+
+                              <div class$="[[invisibleIfDisabled(alarm.attributes.panel.enable_weather)]]">
+                                <paper-checkbox class="settings-checkbox" checked='{{isChecked(alarm.attributes.panel.enable_fahrenheit)}}' on-change='settingsSave' data-setting='panel' data-attribute='enable_fahrenheit' title="Displays the temperature in Fahrenheit rather than Celsius">
+                                  <span class="checkbox-title">Temperature in Fahrenheit</span>
+                                </paper-checkbox>
+                              </div>
+
+                              <paper-checkbox class="settings-checkbox" checked='{{isChecked(alarm.attributes.panel.hide_passcode)}}' on-change='settingsSave' data-setting='panel' data-attribute='hide_passcode' title="Masks the passcode within the panel input box when typing">
+                                <span class="checkbox-title">Mask passcodes</span>
+                              </paper-checkbox>
+
+                            </div>
+                          </div>
+
+                          <div>
+                            <h1>
+                              Content
+                            </h1>
+
+                            <div class='setting-middle vertical layout'>
+
+                              <paper-checkbox class="settings-checkbox" checked='{{isChecked(alarm.attributes.panel.open_sensors_below_arm_buttons)}}' on-change='settingsSave' data-setting='panel' data-attribute='open_sensors_below_arm_buttons' title="Choose whether open sensors will be displayed below the arm buttons when the alarm is disarmed">
+                                <span class="checkbox-title">Open Sensors below Arm buttons</span>
+                              </paper-checkbox>
+                            </div>
+                          </div>
+
+                          <div>
+                            <h1>
+                              Toolbar
+                            </h1>
+                            <div class='setting-middle vertical layout'>
+
+                              <div class='setting-inner horizontal layout'>
+                                <span class="info-header">Dispay:</span>
+
+                                <paper-checkbox class="settings-checkbox" checked='{{isChecked(alarm.attributes.panel.enable_sensors_panel)}}' on-change='settingsSave' data-setting='panel' data-attribute='enable_sensors_panel' title="Enabling this allows you to view your sensors groups in a panel">
+                                  <span class="checkbox-title">Sensors</span>
+                                </paper-checkbox>
+
+                              </div>
+
+                              <div class$="[[invisibleIfDisabled(alarm.attributes.panel.enable_sensors_panel)]]">
+                                <paper-checkbox class="settings-checkbox" checked='{{isChecked(alarm.attributes.panel.hide_sensors)}}' on-change='settingsSave' data-setting='panel' data-attribute='hide_sensors' title=">When the alarm is armed the sensors panel will be hidden">
+                                  <span class="checkbox-title">Hide Sensors when armed</span>
+                                </paper-checkbox>
+                              </div>
+
+                            </div>
+                          </div>
+
+                          <div>
+                            <h1 title="Themes allow you to override the default Home Assistant colors">
+                              Themes
+                            </h1>
+
+                            <div class='setting-middle vertical layout'>
+                              <div class='setting-inner vertical layout'>
+
+                                <!-- Themes List [Buttons] {defineColors(themeName), unhide div}  -->
+                                <template is='dom-if' if='[[alarm.attributes.themes]]'>
+                                    <!-- <span class='info-header' style='padding-top: 10px;'>Defined:</span> -->
+                                    <paper-listbox id='themes-listbox' class='vertical layout'>
+                                    <template is='dom-repeat' items='[[alarm.attributes.themes]]'>
+                                      <div class='horizontal layout'>
+                                        <paper-item on-click='defineColors' data-theme$='[[item.name]]' style='width: 75%;  text-transform: uppercase; text-transform: uppercase;'><iron-icon on-click='defineColors' data-theme$='[[item.name]]' icon='mdi:format-paint' style=' padding-right: 7px;'></iron-icon>[[item.name]]</paper-item>
+                                        <ha-switch class='setting-toggle' checked$='[[isChecked(item.active)]]' on-change='settingsSave' data-type='boolean' name$='[[item.name]]' data-attribute='activated' data-setting='themes'>Activated?</ha-switch>
+                                        <paper-icon-button on-click='settingsSave' data-setting='themes' name$='[[item.name]]' data-type='delete' icon='mdi:delete' style='margin-left: 20px; color: white;'></paper-icon-button>
+                                      </div>
+                                    </template>
+                                  </paper-listbox>
+                                </template>
+                                <button on-click='unhideDiv' data-div='#themeDetail' style='background: unset; text-transform: capitalize; color: var(--panel-text-color);'><iron-icon  on-click='unhideDiv' data-div='#themeDetail' icon='mdi:plus-circle-outline' style='padding-right: 7px;'></iron-icon>New</button>
+
+                                <!-- /* Theme Name [Input] | Update [Button] | Delete [Button] */ -->
+                                <div id='themeDetail' class='remove'>
+                                  <h1>Update Theme</h1>
+                                  <div class='setting-outer horizontal layout'>
+                                    <div class='setting-inner vertical layout'>
+                                      <span class='info-header'>Theme Name: </span>
+                                      <span class='info-detail'>Name of the theme.</span>
+                                      <div class='setting-input horizontal layout'>
+                                        <paper-input id='theme-name' type="text" placeholder='Theme Name'></paper-input>
+                                        <paper-icon-button id='theme-name-button' data-type='input_text' data-attribute='theme-name' data-setting='themes' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <!-- Time Based Settings [TODO] -->
+                                  <template is='dom-repeat' items='{{settingColors}}' as='color'>
+                                    <div class='setting-outer vertical layout'>
+                                      <div class='setting-inner horizontal layout' style='display: block;'>
+                                        <div style='float: left'>
+                                          <span class='info-header'>[[color.header]]: </span>
+                                        </div>
+                                        <div class='horizontal layout' style='float: right'>
+                                          <button class='deleteThemeColor' on-click='settingsSave' name$='[[color.theme]]' data-attribute$='[[color.name]]' data-type='clear' data-setting='themes' style='background: unset;'><iron-icon icon='mdi:delete'></iron-icon>Clear?</button>
+                                          <span class='colPicker' id$='[[color.name]]_span' value='[[color.color]]' style='margin: auto;'></span>
+                                          <paper-icon-button data-type='color' data-setting='themes' name$='[[color.theme]]' data-attribute$='[[color.name]]' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
+                                        </div>
+                                      </div>
+                                      <span class='info-detail'>[[color.description]]</span>
+                                    </div>
+                                  </template>
+                                </div>
+
+                              </div>
                             </div>
                           </div>
                         </div>
-
-                        <!-- Time Based Settings [TODO] -->
-
-                        <template is='dom-repeat' items='{{settingColors}}' as='color'>
-                          <div class='setting-outer vertical layout'>
-                            <div class='setting-inner horizontal layout' style='display: block;'>
-                              <div style='float: left'>
-                                <span class='info-header'>[[color.header]]: </span>
-                              </div>
-                              <div class='horizontal layout' style='float: right'>
-                                <button class='deleteThemeColor' on-click='settingsSave' name$='[[color.theme]]' data-attribute$='[[color.name]]' data-type='clear' data-setting='themes' style='background: unset;'><iron-icon icon='mdi:delete'></iron-icon>Clear?</button>
-                                <span class='colPicker' id$='[[color.name]]_span' value='[[color.color]]' style='margin: auto;'></span>
-                                <paper-icon-button data-type='color' data-setting='themes' name$='[[color.theme]]' data-attribute$='[[color.name]]' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
-                              </div>
-                            </div>
-                            <span class='info-detail'>[[color.description]]</span>
-                          </div>
-                        </template>
                       </div>
                     </div>
 
@@ -888,13 +897,7 @@
 
                     <!-- ########################################################################### @SENSORS ##################################################################################################### -->
                     <div id='settings-sensors' class='carousel-cell remove'>
-                      <div class='setting-outer vertical layout'>
-                        <div class='setting-inner horizontal layout'>
-                          <span class='info-header'>Enable Sensors Panel: </span>
-                          <ha-switch class='setting-toggle' checked='{{isChecked(alarm.attributes.panel.enable_sensors_panel)}}' on-change='settingsSave' data-setting='panel' data-attribute='enable_sensors_panel'></ha-switch>
-                        </div>
-                        <span class='info-detail'>Enabling this allows you to view your sensors groups in a panel</span>
-                      </div>
+
 
                       <div class='setting-outer vertical layout'>
                         <h1>Away Mode</h1>
@@ -925,7 +928,7 @@
                               </paper-listbox>
                             </paper-dropdown-menu>
 
-                            <paper-dropdown-menu class='sensors-listbox' label='Delayed sensors [[arrayLengthAsOptionalString(alarm.attributes.states.armed_away.delayed, ":")]]'  always-float-label>
+                            <paper-dropdown-menu class='sensors-listbox' label='Delayed sensors [[arrayLengthAsOptionalString(alarm.attributes.states.armed_away.delayed, ":")]]' always-float-label>
                               <paper-listbox slot='dropdown-content' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_away.delayed}}>
                                 <template is='dom-repeat' items='[[sensors]]' as='sensor'>
                                   <paper-item title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='delayed'>[[sensor]]</paper-item>
@@ -933,7 +936,7 @@
                               </paper-listbox>
                             </paper-dropdown-menu>
 
-                            <paper-dropdown-menu class='sensors-listbox no-right-margin' label='Override sensors[[arrayLengthAsOptionalString(alarm.attributes.states.armed_away.override, ":")]]'  always-float-label>
+                            <paper-dropdown-menu class='sensors-listbox no-right-margin' label='Override sensors[[arrayLengthAsOptionalString(alarm.attributes.states.armed_away.override, ":")]]' always-float-label>
                               <paper-listbox slot='dropdown-content' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_away.override}}>
                                 <template is='dom-repeat' items='[[sensors]]' as='sensor'>
                                   <paper-item title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='override'>[[sensor]]</paper-item>
@@ -2091,7 +2094,7 @@
 
         //Show the newly selected tab
         carouselChange(carouselCell){
-          var FNAME = '[carouselChange] '
+          //var FNAME = '[carouselChange] '
           if (typeof this.carouselMainSelected == 'undefined') {
             //console.log(FNAME, "carouselMainSelected in undefined, return");
             return;

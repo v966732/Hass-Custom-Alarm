@@ -21,6 +21,8 @@ KNOWN POTENTIAL ISSUES
 
 panel.html
 ----------
+- move admin_password from root settings to panel
+- replace ha-switch with paper-checkbox completely
 - validate input from paper-input
 - add icon to Activity log: alarm has been tripped/triggered
 - move Enable sensors panel from Sensors to Design

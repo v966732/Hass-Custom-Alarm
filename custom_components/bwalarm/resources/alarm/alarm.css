@@ -223,6 +223,27 @@ a:hover {
       font-size: large;
 }
 
+paper-checkbox.settings-checkbox {
+  --paper-checkbox-checked-color: var(--paper-blue-500);
+  --paper-checkbox-checked-ink-color: var(--paper-blue-500);
+  --paper-checkbox-unchecked-color: var(--paper-blue-900);
+  --paper-checkbox-unchecked-ink-color: var(--paper-blue-900);
+  --paper-checkbox-label-color: var(--paper-blue-700);
+  --paper-checkbox-label-checked-color: var(--paper-blue-900);
+}
+
+paper-checkbox span.checkbox-title {
+  font-size: large;
+}
+
+.group-of-checkboxes {
+  margin-top: 10px;
+}
+
+.group-of-checkboxes paper-checkbox.settings-checkbox {
+  margin-right: 10px;
+}
+
 .detail, .show, .hide:target {
   display: none;
 }
@@ -289,7 +310,7 @@ a:hover {
     padding-right: 20px;
 
 }
-#settings-alarm, #settings-all, #settings-info, #settings-sensors, #settings-cameras, #settings-floorplan, #settings-mqtt {
+#settings-alarm, #settings-interface, #settings-info, #settings-sensors, #settings-cameras, #settings-floorplan, #settings-mqtt {
   /* padding-bottom: 100px; */
 }
 .iron-selected {
@@ -484,9 +505,13 @@ paper-listbox {
   align-items: center;
 }
 
-.sensors-listbox paper-listbox, .settings-panel-buttons-shape paper-listbox {
+.sensors-listbox paper-listbox, paper-listbox.buttons-shape-listbox {
   color:      var(--sensors-listbox-color);
   background: var(--sensors-listbox-background-color);
+}
+
+.setting-inner div {
+  margin-bottom: 10px;
 }
 
 #content {
@@ -562,6 +587,12 @@ div.invisible {
   padding-top: 10px;
   padding-bottom: 10px;
 }
+
+.setting-middle {
+  width: 100%;
+  margin-left: 15px;
+}
+
 .setting-inner {
   padding-bottom: 5px;
   width: 100%;

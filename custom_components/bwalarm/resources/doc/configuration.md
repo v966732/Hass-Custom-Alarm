@@ -424,7 +424,7 @@
 <a id="panel-panel_title"></a>
 &nbsp;&nbsp;&nbsp; **panel_title**  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _(string) (Optional)_  
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;Prefix to show in front of alarm status in the status bar.    
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;Text to prefix the alarm status with in the status bar.    
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;Use empty string or remove the attribute completely to hide it from the screen.    
 &nbsp;  
 <a id="panel-enable_clock"></a>
@@ -439,7 +439,7 @@
 <a id="panel-enable_clock_12hr"></a>
 &nbsp;&nbsp;&nbsp; **enable_clock_12hr**  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _(boolean) (Optional)_  
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; If `true`, displays clock in 12hour mode.  
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; If `true`, displays clock in 12hour format.  
 &nbsp;  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _Default value:_  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; `false`  
