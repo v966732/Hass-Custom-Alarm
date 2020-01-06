@@ -436,9 +436,10 @@
 
                     <!-- ########################################################################### LOGIN ##################################################################################################### -->
                     <div id='set-login' class='carousel-cell remove'>
-                      <div class='title'>Settings</div>
-                      <!--<div class='info-detail'>Enter the admin password defined in your bwalarm.yaml to access this panel</div>-->
-                      <paper-input class="span11" id="passwordInput" type="password" placeholder="Enter admin password..." on-keyup='checkSettingsPassword' tabindex="0"></paper-input>
+                      <div class='vertical layout'>
+                        <h1 class='title'>Settings</h1>
+                        <paper-input class="span11" id="passwordInput" type="password" placeholder="Enter admin password" on-keyup='checkSettingsPassword' tabindex="0" style="display: flex; justify-content: center;"></paper-input>
+                      </div>
                     </div>
 
                     <!-- ########################################################################### INFO ##################################################################################################### -->
