@@ -518,7 +518,7 @@
                           <span class='info-header'>Admin Password: </span>
                           <span class='info-detail'>Reset the password used to access this settings panel.</span>
                           <div class='setting-input horizontal layout'>
-                            <paper-input id='admin_password' type="password" placeholder='Admin Password'></paper-input>
+                            <paper-input id='admin_password' class='expand' type="password" placeholder='Admin Password'></paper-input>
                             <paper-icon-button data-type='input_text' data-setting='root' data-attribute='admin_password' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
                           </div>
                         </div>
@@ -529,7 +529,7 @@
                           <span class='info-header'>Alarm Panel Title: </span>
                           <span class='info-detail'>The text that shows on the header bar.<br>Default: Home Alarm</span>
                           <div class='setting-input horizontal layout'>
-                            <paper-input id='panel_title' value='{{alarm.attributes.panel.panel_title}}' placeholder='Panel Title'></paper-input>
+                            <paper-input id='panel_title' class='expand' value='{{alarm.attributes.panel.panel_title}}' placeholder='Panel Title'></paper-input>
                             <paper-icon-button data-type='input_text' data-setting='panel' data-attribute='panel_title' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
                           </div>
                         </div>
@@ -883,7 +883,6 @@
                           <button on-click='resetUserDetail' style='background-color: unset; margin-bottom: 15px; color: var(--panel-text-color);'><iron-icon icon='mdi:cancel'></iron-icon>&nbsp;&nbsp;Cancel</button>
                         </div>
                       </div>
-
                     </div>
 
                     <!-- ########################################################################### @SENSORS ##################################################################################################### -->
@@ -896,79 +895,44 @@
                         <span class='info-detail'>Enabling this allows you to view your sensors groups in a panel</span>
                       </div>
 
-                      <h1>Away Mode</h1>
-
-                      <div class='setting-outer horizontal layout'>
-                        <div class='setting-inner vertical layout'>
-                          <span class='info-header'>Pending (Exit) Time: </span>
-                          <span class='info-detail'>Grace time in seconds before the alarm is armed. Any sensor tripped within this time period will not trigger the alarm. Also known as 'Exit Time'.<br>Default: 25 seconds</span>
-                          <div class='setting-input horizontal layout'>
-                            <paper-input id='armed_away-pending_time' value='[[alarm.attributes.states.armed_away.pending_time]]' placeholder='Pending Time'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_away' data-attribute='pending_time' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
+                      <div class='setting-outer vertical layout'>
+                        <h1>Away Mode</h1>
+                        <div class='setting-inner horizontal layout'>
+                          <div class='horizontal layout setting-input' title='Grace time (also known as Exit time) in seconds before the alarm is armed. Any sensor tripped within this time period will not trigger the alarm'>
+                            <paper-input id='armed_away-pending_time' class='expand' label='Pending Time' always-float-label type='number' value='[[alarm.attributes.states.armed_away.pending_time]]' required auto-validate error-message='Enter number'></paper-input>
+                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_away' data-attribute='pending_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
                           </div>
-                        </div>
-                      </div>
 
-                      <div class='setting-outer horizontal layout'>
-                        <div class='setting-inner vertical layout'>
-                          <span class='info-header'>Warning (Entry) Time: </span>
-                          <span class='info-detail'>Grace time in seconds before the alarm is triggered. Any sensor tripped within this time period will not trigger the alarm. Also known as 'Entry Time'.<br>Default: 25 seconds</span>
-                          <div class='setting-input horizontal layout'>
-                            <paper-input id='armed_away-warning_time' value='[[alarm.attributes.states.armed_away.warning_time]]' placeholder='Warning Time'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_away' data-attribute='warning_time' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
+                          <div class='horizontal layout setting-input' title='Grace time (also known as Entry time) in seconds before the alarm is triggered. Any sensor tripped within this time period will not trigger the alarm'>
+                            <paper-input id='armed_away-warning_time' class='expand' label='Warning Time' always-float-label type='number' value='[[alarm.attributes.states.armed_away.warning_time]]' required auto-validate error-message='Enter number'></paper-input>
+                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_away' data-attribute='warning_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
                           </div>
-                        </div>
-                      </div>
 
-                      <div class='setting-outer horizontal layout'>
-                        <div class='setting-inner vertical layout'>
-                          <span class='info-header'>Trigger Time: </span>
-                          <span class='info-detail'>The amount of time in seconds the alarm stays triggered before returning to its previous state.<br>Default: 300 seconds</span>
-                          <div class='setting-input horizontal layout'>
-                            <paper-input id='armed_away-trigger_time' value='[[alarm.attributes.states.armed_away.trigger_time]]' placeholder='Trigger Time'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_away' data-attribute='trigger_time' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
+                          <div class='horizontal layout setting-input no-right-margin' title='The amount of time in seconds the alarm stays triggered before returning to its previous state'>
+                            <paper-input id='armed_away-trigger_time' class='expand' label='Trigger Time' always-float-label type='number' value='[[alarm.attributes.states.armed_away.trigger_time]]' required auto-validate error-message='Enter number'></paper-input>
+                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_away' data-attribute='trigger_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
                           </div>
                         </div>
 
-                      </div>
-
-                      <div class='vertical layout'>
-                        <span class='info-header center-text'>Sensors</span>
-                        <div class='horizontal layout' style='justify-content: space-between;'>
-                          <div class='vertical layout sensors-listbox' style='flex: 1 1 auto;'>
-                            <div class='horizontal layout'>
-                              <span class='immediate'>Immediate</span>
-                              <span>[[arrayLengthAsOptionalString(alarm.attributes.states.armed_away.immediate, ':')]]</span>
-                            </div>
-                            <paper-dropdown-menu class='center-text'>
+                        <div class='setting-inner vertical layout'>
+                          <div class='horizontal layout' style='justify-content: space-between;'>
+                            <paper-dropdown-menu class='sensors-listbox' label='Immediate sensors [[arrayLengthAsOptionalString(alarm.attributes.states.armed_away.immediate, ":")]]' always-float-label>
                               <paper-listbox slot='dropdown-content' attr-for-selected='title' multi selected-values='{{alarm.attributes.states.armed_away.immediate}}'>
                                 <template is='dom-repeat' items='[[sensors]]' as='sensor'>
                                   <paper-item  title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='immediate'>[[sensor]]</paper-item>
                                 </template>
                               </paper-listbox>
                             </paper-dropdown-menu>
-                          </div>
 
-                          <div class='vertical layout sensors-listbox' style='flex: 1 1 auto; margin: 0px 10px;'>
-                            <div class='horizontal layout'>
-                              <span class='delayed'>Delayed</span>
-                              <span>[[arrayLengthAsOptionalString(alarm.attributes.states.armed_away.delayed, ':')]]</span>
-                            </div>
-                            <paper-dropdown-menu class='center-text'>
+                            <paper-dropdown-menu class='sensors-listbox' label='Delayed sensors [[arrayLengthAsOptionalString(alarm.attributes.states.armed_away.delayed, ":")]]'  always-float-label>
                               <paper-listbox slot='dropdown-content' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_away.delayed}}>
                                 <template is='dom-repeat' items='[[sensors]]' as='sensor'>
                                   <paper-item title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='delayed'>[[sensor]]</paper-item>
                                 </template>
                               </paper-listbox>
                             </paper-dropdown-menu>
-                          </div>
 
-                          <div class='vertical layout sensors-listbox' style='flex: 1 1 auto;'>
-                            <div class='horizontal layout'>
-                              <span class='override'>Override</span>
-                              <span>[[arrayLengthAsOptionalString(alarm.attributes.states.armed_away.override, ':')]]</span>
-                            </div>
-                            <paper-dropdown-menu class='center-text'>
+                            <paper-dropdown-menu class='sensors-listbox no-right-margin' label='Override sensors[[arrayLengthAsOptionalString(alarm.attributes.states.armed_away.override, ":")]]'  always-float-label>
                               <paper-listbox slot='dropdown-content' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_away.override}}>
                                 <template is='dom-repeat' items='[[sensors]]' as='sensor'>
                                   <paper-item title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='override'>[[sensor]]</paper-item>
@@ -979,95 +943,39 @@
                         </div>
                       </div>
 
-                      <br>
-                      <h1>Home Mode</h1>
-                      <div class='setting-outer horizontal layout'>
-                        <div class='setting-inner vertical layout'>
-                          <span class='info-header'>Pending (Exit) Time: </span>
-                          <span class='info-detail'>Grace time in seconds before the alarm is armed. Any sensor tripped within this time period will not trigger the alarm. Also known as 'Exit Time'.<br>Default: 25 seconds</span>
-                          <div class='setting-input horizontal layout'>
-                            <paper-input id='armed_home-pending_time' value='[[alarm.attributes.states.armed_home.pending_time]]' placeholder='Pending Time'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_home' data-attribute='pending_time' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
+                      <div class='setting-outer vertical layout'>
+                        <h1>Home Mode</h1>
+                        <div class='setting-inner horizontal layout'>
+                          <div class='horizontal layout setting-input' title='Grace time (also known as Exit time) in seconds before the alarm is armed. Any sensor tripped within this time period will not trigger the alarm'>
+                            <paper-input id='armed_home-pending_time' class='expand' label='Pending Time' always-float-label type='number' value='[[alarm.attributes.states.armed_home.pending_time]]' required auto-validate error-message='Enter number'></paper-input>
+                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_home' data-attribute='pending_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
+                          </div>
+
+                          <div class='horizontal layout setting-input' title='Grace time (also known as Entry time) in seconds before the alarm is triggered. Any sensor tripped within this time period will not trigger the alarm'>
+                            <paper-input id='armed_home-warning_time' class='expand' label='Warning Time' always-float-label type='number' value='[[alarm.attributes.states.armed_home.warning_time]]' required auto-validate error-message='Enter number'></paper-input>
+                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_home' data-attribute='warning_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
+                          </div>
+
+                          <div class='horizontal layout setting-input no-right-margin' title='The amount of time in seconds the alarm stays triggered before returning to its previous state'>
+                            <paper-input id='armed_home-trigger_time' class='expand' label='Trigger Time' always-float-label type='number' value='[[alarm.attributes.states.armed_home.trigger_time]]' required auto-validate error-message='Enter number'></paper-input>
+                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_home' data-attribute='trigger_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
                           </div>
                         </div>
-                      </div>
 
-                      <div class='setting-outer horizontal layout'>
                         <div class='setting-inner vertical layout'>
-                          <span class='info-header'>Warning (Entry) Time: </span>
-                          <span class='info-detail'>Grace time in seconds before the alarm is triggered. Any sensor tripped within this time period will not trigger the alarm. Also known as 'Entry Time'.<br>Default: 25 seconds</span>
-                          <div class='setting-input horizontal layout'>
-                            <paper-input id='armed_home-warning_time' value='[[alarm.attributes.states.armed_home.warning_time]]' placeholder='Warning Time'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_home' data-attribute='warning_time' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class='setting-outer horizontal layout'>
-                        <div class='setting-inner vertical layout'>
-                          <span class='info-header'>Trigger Time: </span>
-                          <span class='info-detail'>The amount of time in seconds the alarm stays triggered before returning to its previous state.<br>Default: 300 seconds</span>
-                          <div class='setting-input horizontal layout'>
-                            <paper-input id='armed_home-trigger_time' value='[[alarm.attributes.states.armed_home.trigger_time]]' placeholder='Trigger Time'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_home' data-attribute='trigger_time' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <!--<div class='horizontal layout'>
-                        <div class='vertical layout'>
-                          <h2>Immediate</h2>
-                          <paper-listbox id='sensors-checkboxs3' class='vertical layout' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_home.immediate}} selected-attribute="checked" >
-                            <template is='dom-repeat' items='{{sensors}}' as='sensor'>
-                              <checkbox type='checkbox' class='checkbox' title="{{sensor}}" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_home' data-group='immediate' >[[computeFriendlyName(sensor)]]</checkbox>
-                            </template>
-                          </paper-listbox>
-                        </div>
-
-                        <div class='vertical layout'>
-                          <h2>Delayed</h2>
-                          <paper-listbox id='sensors-checkboxs4' class='vertical layout' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_home.delayed}} selected-attribute="checked" >
-                            <template is='dom-repeat' items='{{sensors}}' as='sensor'>
-                              <checkbox type='checkbox' class='checkbox' title="{{sensor}}" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_home' data-group='delayed' >[[computeFriendlyName(sensor)]]</checkbox>
-                            </template>
-                          </paper-listbox>
-                        </div>
-
-                        <div class='vertical layout'>
-                          <h2>Override</h2>
-                          <paper-listbox id='sensors-checkboxs5' class='vertical layout' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_home.override}} selected-attribute="checked" >
-                            <template is='dom-repeat' items='{{sensors}}' as='sensor'>
-                              <checkbox type='checkbox' class='checkbox' title="{{sensor}}" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_home' data-group='override' >[[computeFriendlyName(sensor)]]</checkbox>
-                            </template>
-                          </paper-listbox>
-                        </div>
-                      </div>-->
-                      <div class='vertical layout'>
-                        <span class='info-header center-text'>Sensors</span>
-                        <div class='horizontal layout' style='justify-content: space-between;'>
-                          <div class='vertical layout sensors-listbox' style='flex: 1 1 auto; margin-right: 10px;'>
-                            <div class='horizontal layout'>
-                              <span class='delayed'>Delayed</span>
-                              <span>[[arrayLengthAsOptionalString(alarm.attributes.states.armed_home.delayed, ':')]]</span>
-                            </div>
-                            <paper-dropdown-menu class='center-text'>
+                          <div class='horizontal layout' style='justify-content: space-between;'>
+                            <paper-dropdown-menu class='sensors-listbox' label='Delayed sensors [[arrayLengthAsOptionalString(alarm.attributes.states.armed_home.delayed, ":")]]' always-float-label>
                               <paper-listbox slot='dropdown-content' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_home.delayed}}>
                                 <template is='dom-repeat' items='[[sensors]]' as='sensor'>
-                                  <paper-item title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='delayed'>[[sensor]]</paper-item>
+                                  <paper-item title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_home' data-group='delayed'>[[sensor]]</paper-item>
                                 </template>
                               </paper-listbox>
                             </paper-dropdown-menu>
-                          </div>
 
-                          <div class='vertical layout sensors-listbox' style='flex: 1 1 auto;'>
-                            <div class='horizontal layout'>
-                              <span class='override'>Override</span>
-                              <span>[[arrayLengthAsOptionalString(alarm.attributes.states.armed_home.override, ':')]]</span>
-                            </div>
-                            <paper-dropdown-menu class='center-text'>
+                            <paper-dropdown-menu class='sensors-listbox no-right-margin' label='Override sensors[[arrayLengthAsOptionalString(alarm.attributes.states.armed_home.override, ":")]]' always-float-label>
                               <paper-listbox slot='dropdown-content' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_home.override}}>
                                 <template is='dom-repeat' items='[[sensors]]' as='sensor'>
-                                  <paper-item title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='override'>[[sensor]]</paper-item>
+                                  <paper-item title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_home' data-group='override'>[[sensor]]</paper-item>
                                 </template>
                               </paper-listbox>
                             </paper-dropdown-menu>
@@ -1075,82 +983,52 @@
                         </div>
                       </div>
 
-                      <br>
-                      <h1>Night (perimeter) Mode</h1>
                       <div class='setting-outer vertical layout'>
                         <div class='setting-inner horizontal layout'>
-                          <span class='info-header'>Enable Night Mode: </span>
-                          <ha-switch class='setting-toggle' checked='{{isChecked(alarm.attributes.enable_night_mode)}}' on-change='settingsSave' data-setting='root' data-attribute='enable_night_mode'></ha-switch>
+                          <span class='info-header'>Enable Night Mode</span>
+                          <ha-switch class='setting-toggle' checked='[[isChecked(alarm.attributes.enable_night_mode)]]' on-change='settingsSave' data-setting='root' data-attribute='enable_night_mode'></ha-switch>
                         </div>
-                        <span class='info-detail'>Enable night mode.<br>Default: Disabled</span>
                       </div>
 
-                      <div class='setting-outer horizontal layout'>
-                        <div class='setting-inner vertical layout'>
-                          <span class='info-header'>Pending (Exit) Time: </span>
-                          <span class='info-detail'>Grace time in seconds before the alarm is armed. Any sensor tripped within this time period will not trigger the alarm. Also known as 'Exit Time'.<br>Default: 25 seconds</span>
-                          <div class='setting-input horizontal layout'>
-                            <paper-input id='armed_night-pending_time' value='[[alarm.attributes.states.armed_night.pending_time]]' placeholder='Pending Time'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_night' data-attribute='pending_time' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
+                      <div class$='setting-outer vertical layout [[invisibleIfDisabled(alarm.attributes.enable_night_mode)]]'>
+                        <h1 title='Also known as Perimeter Mode'>Night Mode</h1>
+                        <div class='setting-inner horizontal layout'>
+                          <div class='horizontal layout setting-input' title='Grace time (also known as Exit time) in seconds before the alarm is armed. Any sensor tripped within this time period will not trigger the alarm'>
+                            <paper-input id='armed_night-pending_time' class='expand' label='Pending Time' always-float-label type='number' value='[[alarm.attributes.states.armed_night.pending_time]]' required auto-validate error-message='Enter number'></paper-input>
+                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_night' data-attribute='pending_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
+                          </div>
+
+                          <div class='horizontal layout setting-input' title='Grace time (also known as Entry time) in seconds before the alarm is triggered. Any sensor tripped within this time period will not trigger the alarm'>
+                            <paper-input id='armed_night-warning_time' class='expand' label='Warning Time' always-float-label type='number' value='[[alarm.attributes.states.armed_night.warning_time]]' required auto-validate error-message='Enter number'></paper-input>
+                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_night' data-attribute='warning_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
+                          </div>
+
+                          <div class='horizontal layout setting-input no-right-margin' title='The amount of time in seconds the alarm stays triggered before returning to its previous state'>
+                            <paper-input id='armed_night-trigger_time' class='expand' label='Trigger Time' always-float-label type='number' value='[[alarm.attributes.states.armed_night.trigger_time]]' required auto-validate error-message='Enter number'></paper-input>
+                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_night' data-attribute='trigger_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
                           </div>
                         </div>
-                      </div>
 
-                      <div class='setting-outer horizontal layout'>
                         <div class='setting-inner vertical layout'>
-                          <span class='info-header'>Warning (Entry) Time: </span>
-                          <span class='info-detail'>Grace time in seconds before the alarm is triggered. Any sensor tripped within this time period will not trigger the alarm. Also known as 'Entry Time'.<br>Default: 25 seconds</span>
-                          <div class='setting-input horizontal layout'>
-                            <paper-input id='armed_night-warning_time' value='[[alarm.attributes.states.armed_night.warning_time]]' placeholder='Warning Time'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_night' data-attribute='warning_time' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class='setting-outer horizontal layout'>
-                        <div class='setting-inner vertical layout'>
-                          <span class='info-header'>Trigger Time: </span>
-                          <span class='info-detail'>The amount of time in seconds the alarm stays triggered before returning to its previous state.<br>Default: 300 seconds</span>
-                          <div class='setting-input horizontal layout'>
-                            <paper-input id='armed_night-trigger_time' value='[[alarm.attributes.states.armed_night.trigger_time]]' placeholder='Trigger Time'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_night' data-attribute='trigger_time' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class='vertical layout'>
-                        <span class='info-header center-text'>Sensors</span>
-                        <div class='horizontal layout' style='justify-content: space-between;'>
-                          <div class='vertical layout sensors-listbox' style='flex: 1 1 auto; margin-right: 10px;'>
-                            <div class='horizontal layout'>
-                              <span class='delayed'>Delayed</span>
-                              <span>[[arrayLengthAsOptionalString(alarm.attributes.states.armed_night.delayed, ':')]]</span>
-                            </div>
-                            <paper-dropdown-menu class='center-text' vertical-align="bottom">
+                          <div class='horizontal layout' style='justify-content: space-between;'>
+                            <paper-dropdown-menu class='sensors-listbox' label='Delayed sensors [[arrayLengthAsOptionalString(alarm.attributes.states.armed_night.delayed, ":")]]' always-float-label vertical-align="bottom">
                               <paper-listbox slot='dropdown-content' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_night.delayed}}>
                                 <template is='dom-repeat' items='[[sensors]]' as='sensor'>
-                                  <paper-item title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='delayed'>[[sensor]]</paper-item>
+                                  <paper-item title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_night' data-group='delayed'>[[sensor]]</paper-item>
                                 </template>
                               </paper-listbox>
                             </paper-dropdown-menu>
-                          </div>
 
-                          <div class='vertical layout sensors-listbox' style='flex: 1 1 auto;'>
-                            <div class='horizontal layout'>
-                              <span class='override'>Override</span>
-                              <span>[[arrayLengthAsOptionalString(alarm.attributes.states.armed_night.override, ':')]]</span>
-                            </div>
-                            <paper-dropdown-menu class='center-text' vertical-align="bottom">
+                            <paper-dropdown-menu class='sensors-listbox no-right-margin' label='Override sensors[[arrayLengthAsOptionalString(alarm.attributes.states.armed_night.override, ":")]]' always-float-label vertical-align="bottom">
                               <paper-listbox slot='dropdown-content' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_night.override}}>
                                 <template is='dom-repeat' items='[[sensors]]' as='sensor'>
-                                  <paper-item title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='override'>[[sensor]]</paper-item>
+                                  <paper-item title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_night' data-group='override'>[[sensor]]</paper-item>
                                 </template>
                               </paper-listbox>
                             </paper-dropdown-menu>
                           </div>
                         </div>
                       </div>
-
                     </div>
 
                     <!-- ########################################################################### @FLOORPLAN ##################################################################################################### -->
@@ -3071,7 +2949,7 @@
 
               case 'states':
                 if (type == 'input_text')
-                    this.alarm.attributes.states[mode][attribute] = this.shadowRoot.querySelector('#' + mode + '-' + attribute).value;
+                  this.alarm.attributes.states[mode][attribute] = this.shadowRoot.querySelector('#' + mode + '-' + attribute).value;
 
                 this.settingsUpdate(setting, this.alarm.attributes.states);
                 return;
@@ -3204,6 +3082,10 @@
 
         invisibleIfDisarmed(alarm) {
           return this.isDisarmed(alarm)? 'invisible' : '';
+        }
+
+        invisibleIfDisabled(option) {
+          return this.isChecked(option)? '' : 'invisible';
         }
 
         bothFalse(arg_1, arg_2) {

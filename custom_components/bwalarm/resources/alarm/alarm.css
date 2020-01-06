@@ -489,11 +489,6 @@ paper-listbox {
   background: var(--sensors-listbox-background-color);
 }
 
-.sensors-listbox paper-listbox {
-  color:      var(--sensors-listbox-color);
-  background: var(--sensors-listbox-background-color);
-}
-
 #content {
   display: flex;
   flex-direction: column;
@@ -545,27 +540,24 @@ h1 {
   padding-right: 5px;
 }
 
-.sensors-listbox div {
-  justify-content: center;
+.sensors-listbox {
+  flex: 1 1 auto;
+  margin-right: 10px;
 }
 
-.sensors-listbox span {
-  font-size: medium;
-  padding-top: 5px;
-  margin-right: 2px;
+.no-right-margin {
+  margin-right: 0px;
 }
 
-.sensors-listbox span.immediate {
-  color: var(--immediate-sensors-listbox-header-color);
+.expand {
+  flex: 1 1 auto;
 }
 
-.sensors-listbox span.delayed {
-  color: var(--delayed-sensors-listbox-header-color);
+/* to hide divs */
+div.invisible {
+  display: none !important;
 }
 
-.sensors-listbox span.override {
-  color: var(--override-sensors-listbox-header-color);
-}
 .setting-outer {
   padding-top: 10px;
   padding-bottom: 10px;
@@ -577,17 +569,21 @@ h1 {
   justify-content: space-between;
 }
 
-.setting-input > paper-input{
-  flex-grow: 3;
+.setting-input {
+  flex: 1 1 auto;
+  margin-right: 10px;
+  justify-content: space-between;
 }
-.setting-input > paper-icon-button{
-  /*flex-grow: 1;*/
+
+.setting-input > paper-icon-button {
   width: 50px;
   height: 50px;
 }
+
 .setting-toggle {
   align-items: center;
 }
+
 #info-panel-selection {
   color: var(--info-panel-buttons-color);
   background: var(--panel-outer-background-color);

@@ -21,6 +21,7 @@ KNOWN POTENTIAL ISSUES
 
 panel.html
 ----------
+- validate input from paper-input
 - add icon to Activity log: alarm has been tripped/triggered
 - move Enable sensors panel from Sensors to Design
 - settings' design (buttons/alignment/info-detail/paper-input's content color etc)
