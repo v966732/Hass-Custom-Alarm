@@ -709,7 +709,7 @@ class BWAlarm(alarm.AlarmControlPanel):
         # affects Lovelace keypad presence (None means no keypad)
     #        return None if self._code is None else '.+'
         FNAME = '[code_format]'
-        res = None if (self._code is None or (self._state == STATE_ALARM_DISARMED and not self.code_arm_required)) else alarm.FORMAT_NUMBER
+        res = None if (not self._code or (self._state == STATE_ALARM_DISARMED and not self.code_arm_required)) else alarm.FORMAT_NUMBER
         _LOGGER.debug("{} self._code: {}, self._state: {}, code_arm_required: {}, returning {}".format(FNAME, self._code, self._state, self.code_arm_required, res))
         return res
 
@@ -1411,7 +1411,7 @@ class BWAlarm(alarm.AlarmControlPanel):
         FNAME = '[_validate_code]'
 
         if ((int(self._passcode_attempt_allowed) == -1) or (self._passcodeAttemptNo <= int(self._passcode_attempt_allowed))):
-            check = self._code is None or code == self._code or self._validate_user_codes(code)
+            check = not self._code or code == self._code or self._validate_user_codes(code)
             if code == self._code:
                 self._update_log(None, LOG.DISARMED)
             return self._validate_code_attempts(check)

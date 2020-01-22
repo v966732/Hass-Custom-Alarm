@@ -5,7 +5,7 @@
     const _NAME = 'Alarm Panel';
     const _URL = 'https://github.com/akasma74/Hass-Custom-Alarm';
     // don't forget to change HaPanelAlarm.version below!
-    var _VERSION = 'v1.11.2pre1';
+    var _VERSION = 'v1.11.2pre2';
     var __button_shape__circle    = 'circle';
     var __button_shape__rectangle = 'rectangle';
     var __button_shape__square    ='square';
@@ -105,7 +105,7 @@
                   <template is='dom-if' if='[[showCodePanelWhenBothFalse(alarm, attemptedArm, attemptedArmWithoutCode)]]'>
                     <div id='codepanel' class='horizontal layout center-justified'>
                       <div style='width: 100%'>
-                        <!-- 1 2 3 {CLEAR if code to arm required or in Landscape orientation} -->
+                        <!-- 1 2 3 {CLEAR if code to arm required or in Landscape orientation/DISARM if armed} -->
                         <div class='horizontal layout controls-justify-content'>
                           <div class$=[[mwc_button_wrapper_class()]]>
                             <button class$="[[mwc_button__outlined()]]" on-click='callcode' data-digit=1>1</button>
@@ -118,8 +118,14 @@
                           </div>
                           <template is='dom-if' if='[[needHorizontalCodepanel(orientationLandscape, alarm.attributes.code_arm_required)]]'>
                             <div class$=[[mwc_button_wrapper_class()]]>
-                              <!-- insert transparent button to make the layout neat -->
-                              <button class$="[[mwc_button__outlined()]] clear" on-click='callAlarmService' data-call='clear'>clear</button>
+                              <!-- in code_arm_required case display CLEAR here -->
+                              <template is='dom-if' if='[[isDisarmed(alarm)]]'>
+                                <button class$="[[mwc_button__outlined()]] clear" on-click='callAlarmService' data-call='clear'>clear</button>
+                              </template>
+                              <!-- but when alarm is armed, display DISARM -->
+                              <template is='dom-if' if='[[!isDisarmed(alarm)]]'>
+                                <button class$="[[mwc_button__raised()]] disarm" on-click='callAlarmService' data-call='disarm'>disarm</button>
+                              </template>
                             </div>
                           </template>
                         </div>
@@ -140,7 +146,7 @@
                             </div>
                           </template>
                         </div>
-                        <!-- 7 8 9 {DISARM if code to arm required or in Landscape orientation}-->
+                        <!-- 7 8 9 {DISARM if code to arm required or in Landscape orientation}/CLEAR if not armed -->
                         <div class='horizontal layout controls-justify-content'>
                           <div class$=[[mwc_button_wrapper_class()]]>
                             <button class$="[[mwc_button__outlined()]]" on-click='callcode' data-digit=7>
@@ -159,8 +165,14 @@
                           </div>
                           <template is='dom-if' if='[[needHorizontalCodepanel(orientationLandscape, alarm.attributes.code_arm_required)]]'>
                             <div class$=[[mwc_button_wrapper_class()]]>
-                              <!-- insert transparent button to make the layout neat -->
-                              <button class$="[[mwc_button__raised()]] disarm [[invisibleIfDisarmed(alarm)]]" disabled$=[[isDisarmed(alarm)]] on-click='callAlarmService' data-call='disarm'>disarm</button>
+                              <template is='dom-if' if='[[isDisarmed(alarm)]]'>
+                                <!-- in code_arm_required case insert transparent button here to make the layout neat -->
+                                <button class$="[[mwc_button__raised()]] disarm invisible">disarm</button>
+                              </template>
+                              <!-- but when alarm is armed, display CLEAR -->
+                              <template is='dom-if' if='[[!isDisarmed(alarm)]]'>
+                                <button class$="[[mwc_button__outlined()]] clear" on-click='callAlarmService' data-call='clear'>clear</button>
+                              </template>
                             </div>
                           </template>
                         </div>
@@ -236,7 +248,7 @@
                           </div>
                         </div>
 
-                        <template is='dom-if' if='[[needOpenSensorsBelowArmButtons(alarm.attributes.panel.open_sensors_below_arm_buttons, allopensensors, alarm.attributes.code_arm_required)]]'>
+                        <template is='dom-if' if='[[needOpenSensorsOnArmingPage(alarm.attributes.panel.open_sensors_on_arming_page, allopensensors, alarm.attributes.code_arm_required)]]'>
                           <div class='vertical layout open-sensors-above-arm-buttons-box'>
                             <div style='text-align: center;'>
                               <h1>Open Sensors</h1>
@@ -432,6 +444,7 @@
                     </div>
                   </template>
 
+                  <!-- ########################################################################### @SETTINGS ##################################################################################################### -->
                   <div id='carousel_settings'>
 
                     <!-- ########################################################################### LOGIN ##################################################################################################### -->
@@ -442,7 +455,7 @@
                       </div>
                     </div>
 
-                    <!-- ########################################################################### INFO ##################################################################################################### -->
+                    <!-- ########################################################################### @ABOUT ##################################################################################################### -->
                     <div id='settings-info' class='carousel-cell remove'>
                       <div>
                         <p><span class='info-header'>This integration: </span><span class='info-detail'>[[version]]</span></p>
@@ -523,7 +536,7 @@
 
                             <div class='setting-middle vertical layout'>
                               <div class='setting-inner horizontal layout' title='Password to access Settings panel'>
-                                <paper-input id='admin_password' class="expand" label='Admin Password' always-float-label></paper-input>
+                                <paper-input id='admin_password' class="expand" type="password" label='Admin Password' always-float-label></paper-input>
                                 <paper-icon-button data-type='input_text' data-setting='root' data-attribute='admin_password' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
                               </div>
 
@@ -603,7 +616,7 @@
 
                             <div class='setting-middle vertical layout'>
 
-                              <paper-checkbox class="settings-checkbox" checked='{{isChecked(alarm.attributes.panel.open_sensors_below_arm_buttons)}}' on-change='settingsSave' data-setting='panel' data-attribute='open_sensors_below_arm_buttons' title="Choose whether open sensors will be displayed below the arm buttons when the alarm is disarmed">
+                              <paper-checkbox class="settings-checkbox" checked='{{isChecked(alarm.attributes.panel.open_sensors_on_arming_page)}}' on-change='settingsSave' data-setting='panel' data-attribute='open_sensors_on_arming_page' title="Choose whether open sensors will be displayed below the arm buttons when the alarm is disarmed">
                                 <span class="checkbox-title">Open Sensors below Arm buttons</span>
                               </paper-checkbox>
                             </div>
@@ -697,200 +710,121 @@
                     <!-- ########################################################################### @ALARM ##################################################################################################### -->
                     <div id='settings-alarm' class='carousel-cell remove'>
                       <div class='setting-outer vertical layout'>
-                        <div class='setting-inner horizontal layout'>
-                          <span class='info-header'>Alarm Persistence: </span>
-                          <ha-switch class='setting-toggle' checked='{{isChecked(alarm.attributes.enable_persistence)}}' on-change='settingsSave' data-setting='root' data-attribute='enable_persistence'></ha-switch>
-                        </div>
-                        <span class='info-detail'>When enabled, the alarm state is persistently saved when either Home Assistant or the underlying host is restarted. This is useful in the event of power loss.<br>Default: Disabled</span>
-                      </div>
 
-                      <div class='setting-outer horizontal layout'>
-                        <div class='setting-inner vertical layout'>
-                          <span class='info-header'>Master Passcode: </span>
-                          <span class='info-detail'>Set the master passcode to arm/disarm your alarm</span>
-                          <div class='setting-input horizontal layout'>
-                            <paper-input id='code' type="password" placeholder='Master Passcode'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='root' data-attribute='code' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
+                        <div class='setting-middle vertical layout'>
+
+                          <div class='horizontal layout setting-row' title='Master passcode to set/disarm the alarm'>
+                            <paper-input id='code' type="password" label="Master Passcode" always-float-label></paper-input>
+                            <paper-icon-button data-type='input_text' data-setting='root' data-attribute='code' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
                           </div>
-                        </div>
-                      </div>
 
-                      <div class='setting-outer horizontal layout'>
-                        <div class='setting-inner vertical layout'>
-                          <span class='info-header'>Panic Code: </span>
-                          <span class='info-detail'>Set the panic code to arm/disarm your alarm. This is a special code which disarms the alarm when used yet sets a panic state within HA. It can therefore be used in conjunction with automations for example notifiying the authorities or someone who is able to help. To the intruder the alarm appears to have disarmed as normal.</span>
-                          <div class='setting-input horizontal layout'>
-                            <paper-input id='panic_code' type="password" placeholder='Panic Code'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='root' data-attribute='panic_code' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
+                          <div class='horizontal layout setting-row' title="Panic code to disarm the alarm">
+                            <paper-input id='panic_code' type="password" label='Panic code' always-float-label></paper-input>
+                            <paper-icon-button data-type='input_text' data-setting='root' data-attribute='panic_code' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
                           </div>
-                        </div>
-                      </div>
 
-                      <div class='setting-outer vertical layout'>
-                        <div class='setting-inner horizontal layout'>
-                          <span class='info-header'>Require a passcode to set the alarm: </span>
-                          <ha-switch class='setting-toggle' checked='{{alarm.attributes.code_arm_required}}' on-change='settingsSave' data-setting='root' data-attribute='code_to_arm'></ha-switch>
-                        </div>
-                        <span class='info-detail'>When enabled, a valid master/user passcode is required to arm the alarm. If 'override' is used as a passcode, set the alarm immediately (ignores appropriate Pending Time) regardless of this setting</span>
-                      </div>
+                          <span class="info-header">On arming</span>
+                          <div class='vertical layout settings-group'>
+                            <paper-checkbox class="settings-checkbox setting-row" checked='{{alarm.attributes.code_arm_required}}' on-change='settingsSave' data-setting='root' data-attribute='code_to_arm' title="Master/user passcode is required to set the alarm via panel/MQTT command/service call">
+                              <span class="checkbox-title">Ask for Passcode</span>
+                            </paper-checkbox>
 
-                      <div class='setting-outer vertical layout'>
-                        <div class='setting-inner horizontal layout'>
-                          <span class='info-header'>Ignore Open Sensors on Arm: </span>
-                          <ha-switch class='setting-toggle' checked='{{isChecked(alarm.attributes.ignore_open_sensors)}}' on-change='settingsSave' data-setting='root' data-attribute='ignore_open_sensors'></ha-switch>
-                        </div>
-                        <span class='info-detail'>When Disabled, set alarm only if there is no active sensors detected (safe), otherwise always set. <br>Default: Disabled</span>
-                      </div>
-
-                      <div class='setting-outer horizontal layout'>
-                        <div class='setting-inner vertical layout'>
-                          <span class='info-header'>Disarm Attempts: </span>
-                          <span class='info-detail'>Amount of allowed disarm attempts before the panel locks out.<br>Default: -1 (no limit)</span>
-                          <div class='setting-input horizontal layout'>
-                            <paper-input id='passcode_attempts' value='{{alarm.attributes.passcode_attempts}}' placeholder='Passcode Attempts'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='root' data-attribute='passcode_attempts' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
+                            <paper-checkbox class="settings-checkbox setting-row" checked='{{isChecked(alarm.attributes.ignore_open_sensors)}}' on-change='settingsSave' data-setting='root' data-attribute='ignore_open_sensors'>
+                              <span class="checkbox-title">Ignore Open Sensors</span>
+                            </paper-checkbox>
                           </div>
-                        </div>
-                      </div>
 
-                      <div class='setting-outer horizontal layout'>
-                        <div class='setting-inner vertical layout'>
-                          <span class='info-header'>Disarm Attempts Timeout: </span>
-                          <span class='info-detail'>Amount of time in seconds after the panel is locked before a user is allowed to try again.<br>Default: 15 minutes</span>
-                          <div class='setting-input horizontal layout'>
-                            <paper-input id='passcode_attempts_timeout' value='{{alarm.attributes.passcode_attempts_timeout}}' placeholder='Passcode Attempts Timeout'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='root' data-attribute='passcode_attempts_timeout' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
+                          <span class="info-header">On disarming</span>
+                          <div class='vertical layout settings-group'>
+                            <div class='horizontal layout setting-row' title="The alarm will only allow the set amount of attempts before timing out, `-1` allows for unlimited number of attempts">
+                              <paper-input id='passcode_attempts' value='{{alarm.attributes.passcode_attempts}}' label='No. of attempts' always-float-label></paper-input>
+                              <paper-icon-button data-type='input_text' data-setting='root' data-attribute='passcode_attempts' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
+                            </div>
+
+                            <div class='horizontal layout setting-row' title="Amount of time the panel will be locked after permitted no. of failed attempts">
+                              <paper-input id='passcode_attempts_timeout' value='{{alarm.attributes.passcode_attempts_timeout}}' label='Timeout (sec)' always-float-label></paper-input>
+                              <paper-icon-button data-type='input_text' data-setting='root' data-attribute='passcode_attempts_timeout' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
+                            </div>
                           </div>
-                        </div>
-                      </div>
 
-                      <div class='setting-outer vertical layout'>
-                        <div class='setting-inner horizontal layout'>
-                          <span class='info-header'>Enable Log: </span>
-                          <ha-switch class='setting-toggle' checked='{{isChecked(alarm.attributes.enable_log)}}' on-change='settingsSave' data-setting='root' data-attribute='enable_log'></ha-switch>
-                        </div>
-                        <span class='info-detail'>When enabled the alarm records a log, permissions must be granted to HA to allow the log file to be saved in the configuration directory as alarm_log.json.<br>Default: Disabled</span>
-                      </div>
+                          <paper-checkbox class="settings-checkbox setting-row" checked='{{isChecked(alarm.attributes.enable_persistence)}}' on-change='settingsSave' data-setting='root' data-attribute='enable_persistence' title="Allows the alarm to save its state to file and then reinstate it in the event of power loss">
+                            <span class="checkbox-title">Persistence</span>
+                          </paper-checkbox>
 
-                      <div class='setting-outer horizontal layout'>
-                        <div class='setting-inner vertical layout'>
-                          <span class='info-header'>log Size: </span>
-                          <span class='info-detail'>Amount of records which can be saved and displayed.<br>Default: 10 records</span>
-                          <div class='setting-input horizontal layout'>
-                            <paper-input id='log_size' value='{{alarm.attributes.log_size}}' placeholder='Log Size'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='root' data-attribute='log_size' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
+                          <paper-checkbox class="settings-checkbox setting-row" checked='{{isChecked(alarm.attributes.enable_log)}}' on-change='settingsSave' data-setting='root' data-attribute='enable_log' title="The alarm will log its activity available at the appropriate toolbar section">
+                            <span class="checkbox-title">Log Activity</span>
+                          </paper-checkbox>
+
+                          <div class$="[[invisibleIfDisabled(alarm.attributes.enable_log)]]">
+                            <div class='horizontal layout settings-group setting-row' title="Maximum number of the newest log entries to keep in the log file">
+                              <paper-input id='log_size' value='{{alarm.attributes.log_size}}' label='Max. entries to keep' always-float-label></paper-input>
+                              <paper-icon-button data-type='input_text' data-setting='root' data-attribute='log_size' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
+                            </div>
                           </div>
-                        </div>
-                      </div>
 
-                      <!-- ########################################################################### @USERS ##################################################################################################### -->
-                      <h1>User Specific Codes</h1>
+                          <h1 title="This setting provides the ability to configure user specific accounts that are able to control your alarm">Users</h1>
+                          <div class="settings-group">
 
-                      <div class='setting-outer vertical layout'>
-                        <span class='info-detail'>This setting provides the ability to configure user specific accounts that are able to control your alarm. If logging is enabled then these users will be captured as part of the log. Home Assistant users using the new authentication system introduced in v0.70 will be automatically imported.</span>
-                      </div>
+                            <div class='vertical layout'>
+                              <template is='dom-repeat' items='[[alarm.attributes.users]]' as='user'>
+                                <div class='horizontal layout setting-row' style="align-items: baseline;">
+                                  <!--<button data-type='button' style='background-color: unset; border: 0px; color: var(--panel-text-color);'>
+                                    <div class='horizontal layout'>-->
+                                      <paper-checkbox class="settings-checkbox" checked='{{isChecked(user.enabled)}}' data-userid$='[[user.id]]' on-change='toggleUser' title="Active user can control the alarm"></paper-checkbox>
+                                      <button data-type='button' data-userid$='[[user.id]]' on-click='editUser' style='background-color: unset; border: 0px; color: var(--panel-text-color);'>
+                                        <state-badge style$='background-image: url({{computeImage(user.picture)}});' ></state-badge>
+                                        <span>[[user.name]]</span>
+                                      </button>
+                                    <!--<div style='margin-left: 5px; margin-right: 10px; padding-left: 15px;' data-userid$='[[user.id]]' on-click='editUser'>
+                                      <state-badge style$='background-image: url({{computeImage(user.picture)}});' data-userid$='[[user.id]]' on-click='editUser'></state-badge>
+                                    </div>-->
+                                      <!--<div style='margin-top: auto; margin-bottom: auto; font-size: large;' data-userid$='[[user.id]]' on-click='editUser'>
+                                        <state-badge style$='background-image: url({{computeImage(user.picture)}});' data-userid$='[[user.id]]' on-click='editUser'></state-badge>
+                                        <span data-userid$='[[user.id]]' on-click='editUser'>[[user.name]]</span>
+                                      </div>
+                                </div>
+                                  <!--</button>-->
 
-                      <template is='dom-repeat' items='[[alarm.attributes.users]]' as='user'>
+                                  <paper-icon-button data-userid$='[[user.id]]' on-click='deleteUser' icon='mdi:delete' title='Delete user'></paper-icon-button>
 
-                        <div class='setting-outer vertical layout'>
-                          <div class='setting-inner horizontal layout'>
-                            <button data-type='button' style='background-color: unset; width: 40%; border: 0px; color: var(--panel-text-color);' data-userid$='{{user.id}}' on-click='editUser'>
-                              <div style='margin-left: 5px; margin-right: 10px; padding-left: 15px;' data-userid$='[[user.id]]' on-click='editUser'>
-                                <state-badge style$='background-image: url({{computeImage(user.picture)}});' data-userid$='[[user.id]]' on-click='editUser'></state-badge>
+                                  <!--<div style='margin-top: auto; margin-bottom: auto;'>
+                                    <button  data-userid$='[[user.id]]' on-click='deleteUser' style='color: white; background-color: unset;'><iron-icon icon='mdi:delete'></iron-icon>&nbsp;&nbsp;Delete</button>
+                                  </div>-->
+                                </div>
+                              </template>
+                            </div>
+
+                            <paper-icon-button id='user-add' class="setting-row" data-type='button' on-click='unhideDiv' data-div='#userDetail' icon='mdi:account-plus' title="Add new user"></paper-icon-button>
+
+                            <div id='userDetail' class='remove'>
+                              <h1>Update User</h1>
+                              <div class='vertical layout settings-group'>
+
+                                <paper-input id='user-name' class="setting-row" required auto-validate error-message="Required." label='Name of user' always-float-label></paper-input>
+
+                                <div class="setting-row" title="Set a new passcode for your user">
+                                  <paper-input id='user-passcode' type="password" required auto-validate error-message="Required - Minimum of 4 digits/characters" char-counter minlength='4' label="Passcode" always-float-label></paper-input>
+                                </div>
+
+                                <div class='horizontal layout setting-row' title="User badge">
+                                  <paper-input id='user-picture' on-input="loadPreviewImage" label='filename' always-float-label></paper-input>
+                                  <state-badge id='user-badge' style='background-image: url("[[default_icon_path]]"); margin-top: auto; margin-bottom: auto; margin-right: 15px;'></state-badge>
+                                </div>
+
+                                <div class='setting-row' title="Active users can control the alarm">
+                                  <paper-checkbox class="settings-checkbox" id='user-enabled' checked='true'>Active</paper-checkbox>
+                                </div>
+
+                                <div class='horizontal layout setting-row'>
+                                  <paper-icon-button id='user-save' data-type='button' on-click='saveUser' icon='mdi:content-save' title="Save user data">Save</paper-icon-button>
+                                  <paper-icon-button on-click='resetUserDetail' icon='mdi:cancel'>Cancel</paper-icon-button>
+                                </div>
+
                               </div>
-                              <div style='margin-top: auto; margin-bottom: auto; font-size: large;' data-userid$='[[user.id]]' on-click='editUser'>
-                                [[user.name]]
-                              </div>
-                            </button>
-
-                            <div style='margin-top: auto; margin-bottom: auto; margin-left: 15px;'>
-                              <ha-switch class='setting-toggle' checked='{{isChecked(user.enabled)}}' data-userid$='[[user.id]]' on-change='toggleUser'>Enabled</ha-switch>
                             </div>
 
-                            <div style='margin-top: auto; margin-bottom: auto;'>
-                              <button  data-userid$='[[user.id]]' on-click='deleteUser' style='color: white; background-color: unset;'><iron-icon icon='mdi:delete'></iron-icon>&nbsp;&nbsp;Delete</button>
-                            </div>
                           </div>
-                        </div>
-                      </template>
 
-                      <button id='user-add' data-type='button' on-click='unhideDiv' data-div='#userDetail' style='background-color: unset; margin-bottom: 15px; color: var(--panel-text-color);'><iron-icon icon='mdi:account-plus'></iron-icon>&nbsp;&nbsp;Add new user</button>
-
-                      <div id='userDetail' class='remove'>
-                        <h1>Update User</h1>
-                        <div class='setting-outer horizontal layout'>
-                          <div class='setting-inner vertical layout'>
-                            <span class='info-header'>Name: </span>
-                            <span class='info-detail'>Set a name for your user.</span>
-                            <div class='setting-input horizontal layout'>
-                              <paper-input id='user-name' placeholder='Name of user' required auto-validate error-message="Required." ></paper-input>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class='setting-outer vertical layout'>
-                          <div class='setting-inner horizontal layout'>
-                            <span class='info-header'>Enable User: </span>
-                            <ha-switch id='user-enabled' checked='true'></ha-switch>
-                          </div>
-                          <span class='info-detail'>Enable this user to control the alarm?</span>
-                        </div>
-
-                        <div class='setting-outer horizontal layout'>
-                          <div class='setting-inner vertical layout'>
-                            <span class='info-header'>Passcode: </span>
-                            <span class='info-detail'>Set a new passcode for your user.</span>
-                            <div class='setting-input horizontal layout'>
-                              <paper-input id='user-passcode' placeholder='User passcode' type="password" required auto-validate error-message="Required - Minimum of 4 digits/characters" char-counter minlength='4'></paper-input>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class='setting-outer horizontal layout'>
-                          <div class='setting-inner vertical layout'>
-                            <span class='info-header'>Badge: </span>
-                            <span class='info-detail'>Filename of your picture. You can use standard pictures from [[alarm.attributes.default_images_path]] or your own ones from [[alarm.attributes.override_images_path]]</span>
-                            <div class='setting-input horizontal layout'>
-                              <state-badge id='user-badge' style='background-image: url("[[default_icon_path]]"); margin-top: auto; margin-bottom: auto; margin-right: 15px;'></state-badge>
-                              <paper-input id='user-picture' placeholder='Icon name i.e. myimage.jpg' on-input="loadPreviewImage" ></paper-input>
-                            </div>
-                          </div>
-                        </div>
-
-                        <!-- <div class='setting-outer vertical layout'>
-                          <div class='setting-inner horizontal layout'>
-                            <span class='info-header'>Disable Animations: </span>
-                            <ha-switch id='user-disable_animations' checked='false'></ha-switch>
-                          </div>
-                          <span class='info-detail'>If enabled, the animations in the panel will be disabled for this user to help with performance on older devices.</span>
-                        </div> -->
-
-                        <!-- <h1>Permissions Based Settings</h1>
-                        <span class='info-detail'>Customise which areas of the alarm you want to allow your user to control. By default the user can control all areas.</span>
-
-                        <div class='setting-outer vertical layout'>
-                          <div class='setting-inner horizontal layout'>
-                            <span class='info-header'>Home: </span>
-                            <ha-switch id='user-home-permission' checked='true' class='setting-toggle'></ha-switch>
-                          </div>
-                        </div>
-
-                        <div class='setting-outer vertical layout'>
-                          <div class='setting-inner horizontal layout'>
-                            <span class='info-header'>Away: </span>
-                            <ha-switch id='user-away-permission' checked='true' class='setting-toggle'></ha-switch>
-                          </div>
-                        </div>
-
-                        <div class='setting-outer vertical layout'>
-                          <div class='setting-inner horizontal layout'>
-                            <span class='info-header'>Perimeter: </span>
-                            <ha-switch id='user-perimeter-permission' checked='true' class='setting-toggle'></ha-switch>
-                          </div>
-                        </div> -->
-                        <div class='setting-inner horizontal layout'>
-                          <button id='user-save' data-type='button' on-click='saveUser' style='background-color: unset; margin-bottom: 15px; color: var(--panel-text-color);'><iron-icon icon='mdi:content-save'></iron-icon>&nbsp;&nbsp;Save</button>
-                          <button on-click='resetUserDetail' style='background-color: unset; margin-bottom: 15px; color: var(--panel-text-color);'><iron-icon icon='mdi:cancel'></iron-icon>&nbsp;&nbsp;Cancel</button>
                         </div>
                       </div>
                     </div>
@@ -1214,30 +1148,30 @@
 
         <!-- ###########################################SELECTION BAR############################################### -->
         <div id='info-panel-selection'>
-          <paper-icon-button icon='mdi:dialpad' title='Keypad' on-click='carouselClick' data-selection='controls' style$='border-bottom: [[computeInfoPanelButtonBorderBottomStyle("controls", carouselMainSelected)]];'></paper-icon-button>
+          <paper-icon-button icon='mdi:dialpad' title='Keypad' on-click='carouselClick' data-selection='controls' style$='filter: [[computeInfoPanelButtonFilter("controls", carouselMainSelected)]];'></paper-icon-button>
 
           <template is='dom-if' if='[[isChecked(alarm.attributes.panel.enable_floorplan_panel)]]' >
-            <paper-icon-button icon='mdi:floor-plan' title='Floorplan' on-click='carouselClick' data-selection='floorplan' style$='border-bottom: [[computeInfoPanelButtonBorderBottomStyle("floorplan", carouselMainSelected)]];'></paper-icon-button>
+            <paper-icon-button icon='mdi:floor-plan' title='Floorplan' on-click='carouselClick' data-selection='floorplan' style$='filter: [[computeInfoPanelButtonFilter("floorplan", carouselMainSelected)]];'></paper-icon-button>
           </template>
 
           <template is='dom-if' if='[[needSensorsPanel(alarm)]]'>
-            <paper-icon-button icon='mdi:radio-tower' title='Sensors' on-click='carouselClick' data-selection='sensors' style$='color: [[computeButtonColor(allopensensors)]]; border-bottom: [[computeInfoPanelButtonBorderBottomStyle("sensors", carouselMainSelected)]];'></paper-icon-button>
+            <paper-icon-button icon='mdi:radio-tower' title='Sensors' on-click='carouselClick' data-selection='sensors' style$='color: [[computeButtonColor(allopensensors)]]; filter: [[computeInfoPanelButtonFilter("sensors", carouselMainSelected)]];'></paper-icon-button>
           </template>
 
           <template is='dom-if' if='[[isChecked(alarm.attributes.panel.enable_camera_panel)]]' >
-            <paper-icon-button icon='mdi:cctv' title='Cameras' on-click='carouselClick' data-selection='cameras' style$='border-bottom: [[computeInfoPanelButtonBorderBottomStyle("cameras", carouselMainSelected)]];'></paper-icon-button>
+            <paper-icon-button icon='mdi:cctv' title='Cameras' on-click='carouselClick' data-selection='cameras' style$='filter: [[computeInfoPanelButtonFilter("cameras", carouselMainSelected)]];'></paper-icon-button>
           </template>
 
           <template is='dom-if' if='[[needLogPanel(alarm)]]' >
-            <paper-icon-button icon='mdi:view-headline' title='Activity log' on-click='carouselClick' data-selection='log' style$='border-bottom: [[computeInfoPanelButtonBorderBottomStyle("log", carouselMainSelected)]];'></paper-icon-button>
+            <paper-icon-button icon='mdi:view-headline' title='Activity log' on-click='carouselClick' data-selection='log' style$='filter: [[computeInfoPanelButtonFilter("log", carouselMainSelected)]];'></paper-icon-button>
           </template>
 
           <template is='dom-if' if='[[isChecked(alarm.attributes.panel.enable_custom_panel)]]' >
-            <paper-icon-button icon='mdi:atom' title='Custom Panel' on-click='carouselClick' data-selection='custom' style$='border-bottom: [[computeInfoPanelButtonBorderBottomStyle("custom", carouselMainSelected)]];'></paper-icon-button>
+            <paper-icon-button icon='mdi:atom' title='Custom Panel' on-click='carouselClick' data-selection='custom' style$='filter: [[computeInfoPanelButtonFilter("custom", carouselMainSelected)]];'></paper-icon-button>
           </template>
 
           <template is='dom-if' if='[[isDisarmed(alarm)]]' >
-            <paper-icon-button icon='mdi:tune' title='Settings' on-click='carouselClick' data-selection='set-login' style$='border-bottom: [[computeInfoPanelButtonBorderBottomStyle("set-login", carouselMainSelected)]];'></paper-icon-button>
+            <paper-icon-button icon='mdi:tune' title='Settings' on-click='carouselClick' data-selection='set-login' style$='filter: [[computeInfoPanelButtonFilter("set-login", carouselMainSelected)]];'></paper-icon-button>
           </template>
         </div>
 
@@ -1953,14 +1887,14 @@
 
           // if buttons_shape is undefined, init it from round_buttons
           if (this.alarm.attributes.panel.buttons_shape == undefined) {
-            var shape = ((this.alarm.attributes.panel.round_buttons == undefined) || !this.alarm.attributes.panel.round_buttons)? __button_shape__rectangle : __button_shape__circle;
-            this.alarm.attributes.panel.buttons_shape = shape;
-            //console.log(FNAME + 'buttons_shape is undefned, set it to ' + shape);
+            var shape = this.isChecked(this.alarm.attributes.panel.round_buttons)? __button_shape__circle : __button_shape__rectangle;
+            this.set('alarm.attributes.panel.buttons_shape', shape)
+            //console.log(FNAME + 'buttons_shape is undefned (attributes.panel.round_buttons=' + this.alarm.attributes.panel.round_buttons + '), set it to ' + shape);
           }
           else
             //console.log(FNAME + 'buttons_shape=' + this.alarm.attributes.panel.buttons_shape);
 
-          this.alarm.attributes.panel.round_buttons = undefined;
+          this.set('alarm.attributes.panel.round_buttons', undefined);
           //console.log(FNAME + 'set alarm.attributes.panel.round_buttons=undefned');
 
           this._updateButtonsStyles();
@@ -2555,7 +2489,9 @@
           return (this.shadowRoot.querySelector('#' + selection) == this.carouselMainSelected)? 'var(--dark-orange)' : 'var(--panel-text-color)';
         }
 
-        computeInfoPanelButtonBorderBottomStyle(selection, carouselMainSelected) {
+        // return 'drop-shadow(2px 4px 6px)' if selected or 'none' (unchanged)
+        // to highlight the selected button
+        computeInfoPanelButtonFilter(selection, carouselMainSelected) {
           //var FNAME = '[computeInfoPanelButtonBorderBottomStyle] ';
           var is_active;
 
@@ -2569,7 +2505,7 @@
             //console.log(FNAME + 'page id=' + carouselMainSelected.id + ', is_active=' + is_active);
           }
 
-          return is_active? 'thin dashed var(--panel-text-color)' : 'none';
+          return is_active? 'drop-shadow(0px 0px 10px)' : 'none';
         }
 
         // Gets an image from the username
@@ -3117,10 +3053,11 @@
           return this.isChecked(alarm.attributes.enable_log) && this.isDisarmed(alarm);
         }
 
-        // only show open sensors info below arm buttons when open_sensors_below_arm_buttons, !code_arm-required (as there is no space then) and there are open sensors
-        needOpenSensorsBelowArmButtons(open_sensors_below_arm_buttons, allopensensors, code_arm_required) {
-          //console.log('needOpenSensorsBelowArmButtons: allopensensors.length=' + allopensensors.length + ', code_arm_required=' + code_arm_required);
-          return open_sensors_below_arm_buttons && (allopensensors.length > 0) && !this.isChecked(code_arm_required);
+        // only show open sensors info below arm buttons when open_sensors_on_arming_page, !code_arm-required (as there is no space then) and there are open sensors
+        needOpenSensorsOnArmingPage(open_sensors_on_arming_page, allopensensors, code_arm_required) {
+          //var res = this.isChecked(open_sensors_on_arming_page) && (allopensensors.length > 0) && !this.isChecked(code_arm_required);
+          //console.log('needOpenSensorsOnArmingPage: open_sensors_on_arming_page=' + open_sensors_on_arming_page + ', allopensensors.length=' + allopensensors.length + ', code_arm_required=' + code_arm_required + ", returning " + res);
+          return this.isChecked(open_sensors_on_arming_page) && (allopensensors.length > 0) && !this.isChecked(code_arm_required);
         }
 
         hasAnyOpenSensors(allopensensors) {

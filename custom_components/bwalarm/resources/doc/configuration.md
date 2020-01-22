@@ -57,7 +57,7 @@
 <a id="passcode_attempts"></a>
 **passcode_attempts**  
 &nbsp;&nbsp;&nbsp; _(number) (Optional)_  
-&nbsp;&nbsp;&nbsp; If greater than 0, the system will only allow the set amount of password attempts before timing out.  
+&nbsp;&nbsp;&nbsp; If greater than 0, the alarm will only allow the set amount of password attempts before timing out.  
 &nbsp;&nbsp;&nbsp; `-1` allows for unlimited number of attempts.  
 &nbsp;  
 &nbsp;&nbsp;&nbsp; _Default value:_  
@@ -114,7 +114,7 @@
 <a id="log_size"></a>
 **log_size**  
 &nbsp;&nbsp;&nbsp; _(number) (Optional)_  
-&nbsp;&nbsp;&nbsp; Maximum number of the last events to display in the log file.  
+&nbsp;&nbsp;&nbsp; Maximum number of the last events to store in the log file.  
 &nbsp;  
 &nbsp;&nbsp;&nbsp; _Default value:_  
 &nbsp;&nbsp;&nbsp; 10  
@@ -506,8 +506,8 @@
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _Default value:_  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; `rectangle`  
 &nbsp;  
-<a id="panel-open_sensors_below_arm_buttons"></a>
-&nbsp;&nbsp;&nbsp; **open_sensors_below_arm_buttons**  
+<a id="panel-open_sensors_on_arming_page"></a>
+&nbsp;&nbsp;&nbsp; **open_sensors_on_arming_page**  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _(boolean) (Optional)_  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Choose whether open sensors will be shown below the arm buttons when the alarm is disarmed.  
 &nbsp;  
