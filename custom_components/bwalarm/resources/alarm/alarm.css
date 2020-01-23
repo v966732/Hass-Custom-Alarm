@@ -509,7 +509,7 @@ paper-listbox {
   align-items: center;
 }
 
-.sensors-listbox paper-listbox, paper-listbox.buttons-shape-listbox {
+.sensors-listbox paper-listbox, paper-listbox.buttons-shape-listbox, paper-listbox.arm-buttons-listbox {
   color:      var(--sensors-listbox-color);
   background: var(--sensors-listbox-background-color);
 }

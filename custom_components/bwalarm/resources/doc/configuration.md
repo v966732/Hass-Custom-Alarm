@@ -274,8 +274,9 @@
 
 <a id="enable_night_mode"></a>
 **enable_night_mode**  
-&nbsp;&nbsp;&nbsp; _(boolean) (Optional)_  
+&nbsp;&nbsp;&nbsp; _(boolean) (Optional)_ **obsolete**  
 &nbsp;&nbsp;&nbsp; If `true`, adds `NIGHT` button to the panel and allows setting the alarm to Night mode via MQTT/service call.  
+&nbsp;&nbsp;&nbsp; Use `panel.arm_buttons` instead.  
 &nbsp;  
 &nbsp;&nbsp;&nbsp; _Default value:_  
 &nbsp;&nbsp;&nbsp; `false`  
@@ -502,6 +503,16 @@
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _(string) (Optional)_  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Choose whether the alarm buttons should be `circle`, `rectangular` or `square`.  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Replaces obsolete `round_buttons`.  
+&nbsp;  
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _Default value:_  
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; `rectangle`  
+&nbsp;  
+<a id="panel-arm_buttons"></a>
+&nbsp;&nbsp;&nbsp; **arm_buttons**  
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _(list) (Optional)_  
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Choose which arm buttons to display on the arming page.  
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Supported values are `night`, `home` or `away`.  
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Replaces obsolete `enable_night_mode`.  
 &nbsp;  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _Default value:_  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; `rectangle`  

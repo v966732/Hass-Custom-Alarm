@@ -1,5 +1,10 @@
-enhancementalarm_control_panel.py
+enhancement
+
+alarm_control_panel.py
 ----------------------
+- PLATFORM_SCHEMA:CONF_CODE optional: make it Required or change property code_format (when there are users but no master password); is it a good idea at all?
+- bwalarm.yaml: enable_night_mode obsolete, move to panel.arm_buttons (list) (and change Settings appropriately)
+- trim/tolower some panel attributes' values(like arm_button, button_shape etc) on yaml.load (to make them case-insensitive and tolerant to user input errors)
 - take into account endity_id from service calls (what to do in MQTT case?)
 - check how it works if HA restarts in triggered state (will it resume triggering? _lasttrigger?)
 - Enable MQTT without HA restart/(WIP)

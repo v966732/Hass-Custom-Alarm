@@ -6,9 +6,6 @@
     const _URL = 'https://github.com/akasma74/Hass-Custom-Alarm';
     // don't forget to change HaPanelAlarm.version below!
     var _VERSION = 'v1.11.2pre2';
-    var __button_shape__circle    = 'circle';
-    var __button_shape__rectangle = 'rectangle';
-    var __button_shape__square    ='square';
 
     if (!window.CUSTOM_UI_LIST) window.CUSTOM_UI_LIST = [];
     window.CUSTOM_UI_LIST.push({
@@ -235,16 +232,15 @@
                       <!-- show Arm buttons if there is no errors/sensors to show -->
                       <template is='dom-if' if='[[bothFalse(attemptedArm, attemptedArmWithoutCode)]]'>
                         <div class='horizontal layout arm controls-justify-content'>
-                          <template is='dom-if' if='[[isChecked(alarm.attributes.enable_night_mode)]]'>
-                            <div class$=[[mwc_button_wrapper_class()]]>
-                              <button class$="[[mwc_button__raised()]]" on-click='callAlarmService' data-call='arm' data-arm='alarm_arm_night_from_panel'>night</button>
-                            </div>
-                          </template>
-                          <div class$=[[mwc_button_wrapper_class()]]>
-                            <button class$="[[mwc_button__raised()]]" on-click='callAlarmService' data-call='arm' data-arm='alarm_arm_home_from_panel'>home</button>
+                          <!-- show buttons if they are in the buttons' list -->
+                          <div class$=[[mwc_button_wrapper_class()]] style$="[[invisibleIfNotListedIn(armButtonNight, alarm.attributes.panel.arm_buttons)]]">
+                            <button class$="[[mwc_button__raised()]]" on-click='callAlarmService' data-call='arm' data-arm='alarm_arm_night_from_panel'>[[armButtonNight]]</button>
                           </div>
-                          <div class$=[[mwc_button_wrapper_class()]]>
-                            <button class$="[[mwc_button__raised()]]" on-click='callAlarmService' data-call='arm' data-arm='alarm_arm_away_from_panel'>away</button>
+                          <div class$=[[mwc_button_wrapper_class()]] style$="[[invisibleIfNotListedIn(armButtonHome, alarm.attributes.panel.arm_buttons)]]">
+                            <button class$="[[mwc_button__raised()]]" on-click='callAlarmService' data-call='arm' data-arm='alarm_arm_home_from_panel'>[[armButtonHome]]</button>
+                          </div>
+                          <div class$=[[mwc_button_wrapper_class()]] style$="[[invisibleIfNotListedIn(armButtonAway, alarm.attributes.panel.arm_buttons)]]">
+                            <button class$="[[mwc_button__raised()]]" on-click='callAlarmService' data-call='arm' data-arm='alarm_arm_away_from_panel'>[[armButtonAway]]</button>
                           </div>
                         </div>
 
@@ -553,9 +549,17 @@
                               </div>
 
                               <paper-dropdown-menu label="Buttons'&nbsp;shape" always-float-label>
-                                <paper-listbox class="buttons-shape-listbox" slot="dropdown-content" attr-for-selected='buttons-shape' selected='{{alarm.attributes.panel.buttons_shape}}'>
-                                  <template is='dom-repeat' items='[[supportedButtonShapes]]' as='shape'>
-                                    <paper-item buttons-shape='[[shape]]' on-click='settingsSave' data-setting='panel' data-attribute='buttons_shape'>[[shape]]</paper-item>
+                                <paper-listbox class="buttons-shape-listbox" slot="dropdown-content" attr-for-selected='text-content' selected='{{alarm.attributes.panel.buttons_shape}}'>
+                                  <template is='dom-repeat' items='[[supportedButtonShapes]]' as='title'>
+                                    <paper-item on-click='settingsSave' data-setting='panel' data-attribute='buttons_shape'>[[title]]</paper-item>
+                                  </template>
+                                </paper-listbox>
+                              </paper-dropdown-menu>
+
+                              <paper-dropdown-menu label='Display arm buttons' always-float-label>
+                                <paper-listbox class='arm-buttons-listbox' slot='dropdown-content' attr-for-selected='text-content' multi selected-values={{alarm.attributes.panel.arm_buttons}}>
+                                  <template is='dom-repeat' items=[[supportedArmButtons]] as='title'>
+                                    <paper-item on-click='settingsSave' data-setting='panel' data-attribute='arm_buttons'>[[title]]</paper-item>
                                   </template>
                                 </paper-listbox>
                               </paper-dropdown-menu>
@@ -833,7 +837,7 @@
                     <div id='settings-sensors' class='carousel-cell remove'>
 
 
-                      <div class='setting-outer vertical layout'>
+                      <div class='setting-outer vertical layout' style$='[[invisibleIfNotListedIn(armButtonAway, alarm.attributes.panel.arm_buttons)]]'>
                         <h1>Away Mode</h1>
                         <div class='setting-inner horizontal layout'>
                           <div class='horizontal layout setting-input' title='Grace time (also known as Exit time) in seconds before the alarm is armed. Any sensor tripped within this time period will not trigger the alarm'>
@@ -881,7 +885,7 @@
                         </div>
                       </div>
 
-                      <div class='setting-outer vertical layout'>
+                      <div class='setting-outer vertical layout' style$='[[invisibleIfNotListedIn(armButtonHome, alarm.attributes.panel.arm_buttons)]]'>
                         <h1>Home Mode</h1>
                         <div class='setting-inner horizontal layout'>
                           <div class='horizontal layout setting-input' title='Grace time (also known as Exit time) in seconds before the alarm is armed. Any sensor tripped within this time period will not trigger the alarm'>
@@ -921,14 +925,14 @@
                         </div>
                       </div>
 
-                      <div class='setting-outer vertical layout'>
+                      <!--<div class='setting-outer vertical layout'>
                         <div class='setting-inner horizontal layout'>
                           <span class='info-header'>Enable Night Mode</span>
                           <ha-switch class='setting-toggle' checked='[[isChecked(alarm.attributes.enable_night_mode)]]' on-change='settingsSave' data-setting='root' data-attribute='enable_night_mode'></ha-switch>
                         </div>
-                      </div>
+                      </div>-->
 
-                      <div class$='setting-outer vertical layout [[invisibleIfDisabled(alarm.attributes.enable_night_mode)]]'>
+                      <div class$='setting-outer vertical layout' style$='[[invisibleIfNotListedIn(armButtonNight, alarm.attributes.panel.arm_buttons)]]'>
                         <h1 title='Also known as Perimeter Mode'>Night Mode</h1>
                         <div class='setting-inner horizontal layout'>
                           <div class='horizontal layout setting-input' title='Grace time (also known as Exit time) in seconds before the alarm is armed. Any sensor tripped within this time period will not trigger the alarm'>
@@ -1309,7 +1313,14 @@
             // viewport orientation
             orientationLandscape:       { type: Boolean },
 
-            supportedButtonShapes:      { type: Array, value: [__button_shape__circle, __button_shape__rectangle, __button_shape__square] },
+            supportedButtonShapes:      { type: Array },
+
+            armButtonNight:             String,
+            armButtonHome:              String,
+            armButtonAway:              String,
+            supportedArmButtons:        Array,
+
+            // these react to other properties' changes automatically
             buttonsShape:               { type: String, computed: '_computeButtonsShape(alarm.attributes.panel.buttons_shape)' },
             buttonWidthToHeightRatio:   { type: Number, computed: '_computeButtonWidthToHeightRatio(buttonsShape)' },
 
@@ -1324,26 +1335,31 @@
           }
         }
 
+        // return const values
+        get buttonsShapeCircle()    { return 'circle'; }
+        get buttonsShapeRectangle() { return 'rectangle'; }
+        get buttonsShapeSquare()    { return 'square'; }
+
         _computeButtonsShape(buttons_shape) {
           return buttons_shape;
         }
 
-        _computeButtonWidthToHeightRatio(buttonsShape) {
-          if (buttonsShape == undefined) {
-            console.error('_computeButtonWidthToHeightRatio: buttonsShape undefined, returning 0');
+        _computeButtonWidthToHeightRatio(shape) {
+          if (shape == undefined) {
+            console.error('_computeButtonWidthToHeightRatio: shape undefined, returning 0');
             return 0;
           }
 
-          switch(buttonsShape) {
-            case __button_shape__circle:
-            case __button_shape__square:
+          switch(shape) {
+            case this.buttonsShapeCircle:
+            case this.buttonsShapeSquare:
               return 1;
 
-            case __button_shape__rectangle:
+            case this.buttonsShapeRectangle:
               return 2;
 
             default:
-              console.error('_computeButtonWidthToHeightRatio: invalid parameter ' + buttonsShape + ', returning 0');
+              console.error('_computeButtonWidthToHeightRatio: invalid parameter ' + shape + ', returning 0');
               return 0;
           }
         }
@@ -1406,6 +1422,22 @@
             this.controls = this.$.controls;
 
             if (this.isChecked(this.alarm.attributes.hide_sidebar))  this.closeSidebar();
+
+            // set default values of the properties
+            this.supportedButtonShapes = [
+              this.buttonsShapeCircle,
+              this.buttonsShapeRectangle,
+              this.buttonsShapeSquare
+            ]
+
+            this.armButtonNight = 'night';
+            this.armButtonHome = 'home';
+            this.armButtonAway = 'away';
+            this.supportedArmButtons = [
+              this.armButtonNight,
+              this.armButtonHome,
+              this.armButtonAway
+            ]
 
             //Determine screensize and set appropriate controls
             this.setupUI();
@@ -1875,9 +1907,6 @@
 
         //Determine the screen size then set the appropriate UI
         setupUI(){
-          //var FNAME = '[setupUI] '
-          //console.log(FNAME);
-
           this._getViewportProperties();
 
           if (this.alarm.attributes.panel == null) {
@@ -1887,15 +1916,23 @@
 
           // if buttons_shape is undefined, init it from round_buttons
           if (this.alarm.attributes.panel.buttons_shape == undefined) {
-            var shape = this.isChecked(this.alarm.attributes.panel.round_buttons)? __button_shape__circle : __button_shape__rectangle;
+            var shape = this.isChecked(this.alarm.attributes.panel.round_buttons)? this.buttonsShapeCircle : this.buttonsShapeRectangle;
             this.set('alarm.attributes.panel.buttons_shape', shape)
-            //console.log(FNAME + 'buttons_shape is undefned (attributes.panel.round_buttons=' + this.alarm.attributes.panel.round_buttons + '), set it to ' + shape);
           }
-          else
-            //console.log(FNAME + 'buttons_shape=' + this.alarm.attributes.panel.buttons_shape);
 
+          // make this obsolete parameter undefined so it won't be stored in config
           this.set('alarm.attributes.panel.round_buttons', undefined);
-          //console.log(FNAME + 'set alarm.attributes.panel.round_buttons=undefned');
+
+          // init new parameter from the current ones if omitted in config
+          if (this.alarm.attributes.panel.arm_buttons == undefined) {
+            this.alarm.attributes.panel.arm_buttons = [this.armButtonHome, this.armButtonAway]
+
+            if (this.isChecked(this.alarm.attributes.enable_night_mode))
+              this.alarm.attributes.panel.arm_buttons.push(this.armButtonNight)
+          }
+
+          // make this obsolete parameter undefined so it won't be stored in config
+          this.set('alarm.attributes.enable_night_mode', undefined);
 
           this._updateButtonsStyles();
 
@@ -2193,12 +2230,12 @@
 
           var min_dimension = Math.min(this.viewport_width, this.viewport_height);
           var code_arm_required = this.isChecked(this.alarm.attributes.code_arm_required);
-          var night_mode_enabled = this.alarm.attributes.enable_night_mode;
+          var night_mode_enabled = this.isChecked(this.alarm.attributes.enable_night_mode);
           var width_to_height_ratio = this.buttonWidthToHeightRatio;
           //console.log('_updateButtonsStyles: code_arm_required=' + code_arm_required + ', night_mode_enabled=' + night_mode_enabled + 'buttonsShape=' + this.buttonsShape);
 
-          var button_shape = (this.buttonsShape == __button_shape__circle)? '50%' : '4px';
-          var symmetric_button = (this.buttonsShape == __button_shape__rectangle)? false : true;
+          var button_shape = (this.buttonsShape == this.buttonsShapeCircle)? '50%' : '4px';
+          var symmetric_button = this.buttonsShape != this.buttonsShapeRectangle;
 
           var horizontalCodepanel = this.needHorizontalCodepanel(this.orientationLandscape, code_arm_required);
           var buttons_in_row = horizontalCodepanel? 4 : 3;
@@ -2781,12 +2818,10 @@
 
         //Read the settings that are to be updated
         settingsSave(ev){
-          var FNAME = '[settingsSave] ';
           ev.stopPropagation();
 
           //Check the settings tab has been unlocked before commiting any changes
           if (this.settingsUnlock == false){
-            //console.log("settingsSave disabled, no data saved");
             return;
           }
 
@@ -2805,17 +2840,13 @@
 
             var value = null;
 
-            //console.log(FNAME + 'setting=' + setting);
-
             switch (setting) {
               case 'panel':
-                console.log(FNAME + 'setting=' + setting + ', attribute=' + attribute + ', type: ' + type);
                 if (typeof ev.target.checked === 'boolean')
                   this.alarm.attributes.panel[attribute] = ev.target.checked;
                 else if (type == 'input_text')
                   this.alarm.attributes.panel[attribute] = this.shadowRoot.querySelector('#' + attribute).value;
                 //else if (type == 'listbox') {
-                  //console.log(FNAME + 'selected=' + Object.keys(ev.target));
                   //this.alarm.attributes.panel[attribute] = ev.target.value;
                 //}
                 this.settingsUpdate(setting, this.alarm.attributes.panel);
@@ -2909,22 +2940,6 @@
                 return;
 
               case 'sensor_select':
-                //check if the sensor already exists in the groups
-                var index = this.alarm.attributes.states[mode][sensor_group].indexOf(title);
-                //console.log(FNAME + setting + ': mode=' + mode + ', sensor_group=' + sensor_group + ', title=' + title + ', index=' + index);
-
-                //add sensor to group
-                //if (typeof this.alarm.attributes.states[mode][sensor_group][index] === 'undefined') {
-                  //this.alarm.attributes.states[mode][sensor_group].push(title);
-                //  console.log(FNAME + 'add ' + title + ' to the array of ' + sensor_group + ' sensors');
-                //}
-                //remove sensor from group
-                //else if (index >= 0) {
-                //  console.log(FNAME + 'remove ' + title + ' from the array of ' + sensor_group + ' sensors');
-                  //this.alarm.attributes.states[mode][sensor_group].splice(index, 1);
-                //}
-
-                //console.log(FNAME + 'reflect changes to the alarm object');
                 this.settingsUpdate('states', this.alarm.attributes.states);
                 return;
 
@@ -3026,6 +3041,18 @@
 
         invisibleIfDisabled(option) {
           return this.isChecked(option)? '' : 'invisible';
+        }
+
+        notListedIn(item, array) {
+          if ((array == undefined) || (item == undefined))
+            return true;
+
+          return array.indexOf(item) == -1;
+        }
+
+        invisibleIfNotListedIn(item, array) {
+          var style = this.notListedIn(item, array)? 'display: none;' : '';
+          return style;
         }
 
         bothFalse(arg_1, arg_2) {
