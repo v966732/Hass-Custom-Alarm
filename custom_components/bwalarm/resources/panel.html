@@ -1239,14 +1239,14 @@
 
         static get properties(){
           return {
-            hass:                 { type: Object },
+            hass:                 Object,
             alarm:                { type: Object, observer: 'monitorAlarm' },
             platform:             { type: String, value: 'bwalarm' },
-            resources_prefix:     { type: String },
-            image_path:           { type: String },
-            default_icon_name:    { type: String },
-            default_icon_path:    { type: String },
-            panel:                { type: Object },
+            resources_prefix:     String,
+            image_path:           String,
+            default_icon_name:    String,
+            default_icon_path:    String,
+            panel:                Object,
             narrow:               { type: Boolean, value: false },
             showMenu:             { type: Boolean, value: false },
 
@@ -1255,9 +1255,9 @@
             alarm_state:          { type: String, value: 'Disarmed'},
             panel_title:          { type: String, value: ''},
 
-            carouselMainSelected: { type: Object },
-            carouselSettings:     { type: Object },
-            controls:             { type: Object },
+            carouselMainSelected: Object,
+            carouselSettings:     Object,
+            controls:             Object,
             controlsLoaded:       { type: Boolean, value: false },
 
             attemptArmMode:       { type: String, value: ''},
@@ -1270,16 +1270,16 @@
 
             allopensensors:       { type: Array, computed: 'getOpenSensors(alarm.attributes.supported_statuses_on, allsensors)'},
 
-            time:                 { type: Object },
-            weather:              { type: Object },
-            temp:                 { type: String },
+            time:                 Object,
+            weather:              Object,
+            temp:                 String,
 
             code:                 { type: String, value: '' },
             display_code:         { type: String, value: '' },
 
-            timeoutID:            { type: Number },
+            timeoutID:            Number,
 
-            sidebarTimerId:       { type: Number },
+            sidebarTimerId:       Number,
 
             cleanup:              { type: Array, value: [] },
             attemptedArm:         { type: Boolean, value: false },
@@ -1289,13 +1289,13 @@
 
             panel_locked:         { type: Boolean, value: false },
 
-            cameraFeedSrc:        { type: String },
-            camera_time:          { type: String },
+            cameraFeedSrc:        String,
+            camera_time:          String ,
             cameras:              { type: Array, value: [] },
 
             sensors:              { type: Array, value: [] },
 
-            errors:               { type: Array },
+            errors:               Array,
             version:              { type: String, value: _VERSION},
 
             camera_update_interval: { type: Number, value: 5000 }, // ms
@@ -1311,9 +1311,9 @@
             viewport_height:      Number,
 
             // viewport orientation
-            orientationLandscape:       { type: Boolean },
+            orientationLandscape:       Boolean,
 
-            supportedButtonShapes:      { type: Array },
+            supportedButtonShapes:      Array,
 
             armButtonNight:             String,
             armButtonHome:              String,
