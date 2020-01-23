@@ -515,7 +515,7 @@
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Replaces obsolete `enable_night_mode`.  
 &nbsp;  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _Default value:_  
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; `rectangle`  
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; [`home`, `away`]  
 &nbsp;  
 <a id="panel-open_sensors_on_arming_page"></a>
 &nbsp;&nbsp;&nbsp; **open_sensors_on_arming_page**  
