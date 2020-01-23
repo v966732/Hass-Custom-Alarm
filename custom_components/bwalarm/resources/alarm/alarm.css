@@ -548,7 +548,7 @@ h1 {
 
 #settings-nav {
   color: var(--primary-text-color);
-  justify-content: center;
+  justify-content: space-evenly;
   text-align: center;
   padding-top: 10px;
 }

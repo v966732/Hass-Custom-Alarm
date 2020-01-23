@@ -147,8 +147,10 @@ CONF_ALARM                         = 'alarm'
 CONF_WARNING                       = 'warning'
 
 #//----------------------OPTIONAL MODES------------------------------
-OBSOLETE_CONF_ENABLE_PERIMETER_MODE         = 'enable_perimeter_mode'    # OBSOLETE, DELETE
-CONF_ENABLE_NIGHT_MODE             = 'enable_night_mode'
+## obsolete ##
+OBSOLETE_CONF_ENABLE_PERIMETER_MODE         = 'enable_perimeter_mode'
+OBSOLETE_CONF_ENABLE_NIGHT_MODE             = 'enable_night_mode'
+
 CONF_ENABLE_PERSISTENCE            = 'enable_persistence'
 
 #//----------------------PANEL RELATED------------------------------
@@ -158,6 +160,7 @@ CONF_ColorS                        = 'colors'
 CONF_THEMES                        = 'themes'
 CONF_ADMIN_PASSWORD                = 'admin_password'
 CONF_DISABLE_ANIMATIONS            = 'disable_animations'
+CONF_PANEL_ARM_BUTTONS             = 'arm_buttons'
 
 #//-----------------------ColorS------------------------------------
 CONF_WARNING_Color                = 'warning_color'
@@ -267,8 +270,25 @@ def _state_schema():
     schema[vol.Optional(CONF_OVERRIDE,     default=[])]                   = cv.entity_ids # sensors that can be ignored if open when trying to set alarm
     return vol.Schema(schema)
 
+VAL_ARM_NIGHT = 'night'
+VAL_ARM_HOME = 'home'
+VAL_ARM_AWAY = 'away'
+
+ARM_BUTTONS_LIST = [
+    VAL_ARM_NIGHT,
+    VAL_ARM_HOME,
+    VAL_ARM_AWAY
+]
+
+DEFAULT_ARM_BUTTONS_LIST = [
+    VAL_ARM_HOME,
+    VAL_ARM_AWAY
+]
+
 PANEL_SCHEMA = vol.Schema({
 	vol.Optional(CONF_CAMERAS):                                   cv.entity_ids,
+#    vol.Optional(CONF_PANEL_ARM_BUTTONS, default=DEFAULT_ARM_BUTTONS_LIST):                         vol.All(cv.ensure_list, [vol.In(ARM_BUTTONS_LIST)]),
+    vol.Optional(CONF_PANEL_ARM_BUTTONS):                         vol.All(cv.ensure_list, [vol.In(ARM_BUTTONS_LIST)]),
     vol.Optional(cv.slug):                                        cv.string,
 })
 
@@ -328,8 +348,10 @@ PLATFORM_SCHEMA = vol.Schema(vol.All({
     vol.Optional(CONF_LOGS):                                       vol.Schema([cv.string]),
     #---------------------------LOG RELATED------------------------------
 
-    vol.Optional(OBSOLETE_CONF_ENABLE_PERIMETER_MODE, default=False):       cv.boolean,    # Enable perimeter mode?  # OBSOLETE, DELETE!
-    vol.Optional(CONF_ENABLE_NIGHT_MODE, default=False):           cv.boolean,    # Enable perimeter mode?
+    ## obsolete ##
+    vol.Optional(OBSOLETE_CONF_ENABLE_PERIMETER_MODE, default=False):       cv.boolean,    # Enable perimeter mode
+    vol.Optional(OBSOLETE_CONF_ENABLE_NIGHT_MODE, default=False):           cv.boolean,    # Enable night mode
+
     vol.Optional(CONF_ENABLE_PERSISTENCE, default=False):          cv.boolean,    # Enables persistence for alarm state
     vol.Optional(CONF_IGNORE_OPEN_SENSORS, default=False):         cv.boolean,    # False: Set alarm only if there is no active sensors, True: Always
     vol.Optional(CONF_CODE_TO_ARM, default=False):                 cv.boolean,    # Require code to arm alarm?
@@ -584,11 +606,10 @@ class BWAlarm(alarm.AlarmControlPanel):
         if OBSOLETE_CONF_ENABLE_PERIMETER_MODE in self._config.keys():
             # import value only if it's True (False it will be anyway as default)
             if self._config[OBSOLETE_CONF_ENABLE_PERIMETER_MODE]:
-                _LOGGER.debug("{} core: attribute {} is obsolete, set {} to {} and delete the former".format(FNAME, OBSOLETE_CONF_ENABLE_PERIMETER_MODE, CONF_ENABLE_NIGHT_MODE, self._config[OBSOLETE_CONF_ENABLE_PERIMETER_MODE]))
-                self._config[CONF_ENABLE_NIGHT_MODE] = copy.deepcopy(self._config[OBSOLETE_CONF_ENABLE_PERIMETER_MODE])
+                _LOGGER.debug("{} core: attribute {} is obsolete, set {} to {} and delete the former".format(FNAME, OBSOLETE_CONF_ENABLE_PERIMETER_MODE, OBSOLETE_CONF_ENABLE_NIGHT_MODE, self._config[OBSOLETE_CONF_ENABLE_PERIMETER_MODE]))
+                self._config[OBSOLETE_CONF_ENABLE_NIGHT_MODE] = copy.deepcopy(self._config[OBSOLETE_CONF_ENABLE_PERIMETER_MODE])
             del self._config[OBSOLETE_CONF_ENABLE_PERIMETER_MODE]
 
-        self._enable_night_mode      = self._config[CONF_ENABLE_NIGHT_MODE]
         self._panic_mode             = 'deactivated'
         self._lasttrigger            = ""
         self._timeoutat              = None
@@ -742,8 +763,9 @@ class BWAlarm(alarm.AlarmControlPanel):
 
             'arm_state':                self._armstate,
 
-            #'enable_perimeter_mode':    self._config[CONF_ENABLE_NIGHT_MODE],   # OBSOLETE, CAN WE REMOVE IT?
-            'enable_night_mode':        self._config[CONF_ENABLE_NIGHT_MODE],
+            ## obsolete ##
+            'enable_night_mode':        self._config[OBSOLETE_CONF_ENABLE_NIGHT_MODE],
+
             'enable_persistence':       self._config[CONF_ENABLE_PERSISTENCE],
 
             'enable_log':               self._config[CONF_ENABLE_LOG],
@@ -974,17 +996,17 @@ class BWAlarm(alarm.AlarmControlPanel):
 
         FNAME = '[_replace_obsolete_settings]'
 
-        # if CONF_ENABLE_NIGHT_MODE attibute is not in yaml, add it
-        if CONF_ENABLE_NIGHT_MODE in current_settings.keys() and CONF_ENABLE_NIGHT_MODE not in loaded_settings.keys():
-            _LOGGER.debug("{} add core attribute {}: {}".format(FNAME, CONF_ENABLE_NIGHT_MODE, current_settings[CONF_ENABLE_NIGHT_MODE]))
-            loaded_settings[CONF_ENABLE_NIGHT_MODE] = copy.deepcopy(current_settings[CONF_ENABLE_NIGHT_MODE])
-
+        ## ADD NEW PARAMETERS ##
         # if STATE_ALARM_ARMED_NIGHT state is not in yaml, add it
         if CONF_STATES in current_settings.keys() and STATE_ALARM_ARMED_NIGHT in current_settings[CONF_STATES].keys() and CONF_STATES in loaded_settings.keys() and STATE_ALARM_ARMED_NIGHT not in loaded_settings[CONF_STATES].keys():
             _LOGGER.debug("{} add state {}".format(FNAME, STATE_ALARM_ARMED_NIGHT))
             loaded_settings[CONF_STATES][STATE_ALARM_ARMED_NIGHT] = copy.deepcopy(current_settings[CONF_STATES][STATE_ALARM_ARMED_NIGHT])
 
-        # delete obsolete records
+        ## DELETE OBSOLETE PARAMETERS ##
+        if OBSOLETE_CONF_ENABLE_NIGHT_MODE in loaded_settings.keys():
+            _LOGGER.debug("{} delete obsolete core attribute {}: {}".format(FNAME, OBSOLETE_CONF_ENABLE_NIGHT_MODE, loaded_settings[OBSOLETE_CONF_ENABLE_NIGHT_MODE]))
+            del loaded_settings[OBSOLETE_CONF_ENABLE_NIGHT_MODE]
+
         if OBSOLETE_CONF_ENABLE_PERIMETER_MODE in loaded_settings.keys():
             _LOGGER.debug("{} delete obsolete core attribute {}: {}".format(FNAME, OBSOLETE_CONF_ENABLE_PERIMETER_MODE, loaded_settings[OBSOLETE_CONF_ENABLE_PERIMETER_MODE]))
             del loaded_settings[OBSOLETE_CONF_ENABLE_PERIMETER_MODE]
@@ -1198,12 +1220,7 @@ class BWAlarm(alarm.AlarmControlPanel):
 
     def alarm_arm_night(self, code=None):
         """Wrapper for standard service calls"""
-        if self._enable_night_mode:
-            return self.alarm_arm(Events.ArmNight, code, self._ignore_open_sensors)
-        else:
-            FNAME='[alarm_arm_night]'
-            _LOGGER.error("{} {} disabled".format(FNAME, SERVICE_ALARM_ARM_NIGHT))
-            return False
+        return self.alarm_arm(Events.ArmNight, code, self._ignore_open_sensors)
 
     ## need these for Arm from panel (it checks open sensors itself hence True) ##
     def alarm_arm_home_from_panel(self, code=None):
@@ -1213,12 +1230,7 @@ class BWAlarm(alarm.AlarmControlPanel):
         return self.alarm_arm(Events.ArmAway, code, True)
 
     def alarm_arm_night_from_panel(self, code=None):
-        if self._enable_night_mode:
-            return self.alarm_arm(Events.ArmNight, code, True)
-        else:
-            FNAME='[alarm_arm_night_from_panel]'
-            _LOGGER.error("{} {} disabled".format(FNAME, SERVICE_ALARM_ARM_NIGHT))
-            return False
+        return self.alarm_arm(Events.ArmNight, code, True)
 
     def alarm_trigger(self, code=None):
         self.process_event(Events.Trigger)
@@ -1588,11 +1600,7 @@ class BWAlarm(alarm.AlarmControlPanel):
             elif command == self._payload_arm_away:
                 self.async_alarm_arm_away(code)
             elif command == self._payload_arm_night:
-                if self._enable_night_mode:
-                    self.async_alarm_arm_night(code)
-                else:
-                    _LOGGER.error("{} {} disabled".format(FNAME, command))
-                    return
+                self.async_alarm_arm_night(code)
             elif command == self._payload_disarm:
                 # True if master/user code required to disarm the alarm
                 code_to_disarm = not self._override_code

@@ -226,7 +226,6 @@
 &nbsp;&nbsp;&nbsp; **armed_night**  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _(map) (Optional)_  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Configuration variables for the `Night` mode.  
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Check [`enable_night_mode`](#enable_night_mode) variable description for details.  
 &nbsp;  
 <a id="states-armed_night-immediate"></a>
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; **immediate**  
@@ -271,15 +270,6 @@
 &nbsp;  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _Default value:_  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; [appropriate top-level value](#trigger_time)  
-
-<a id="enable_night_mode"></a>
-**enable_night_mode**  
-&nbsp;&nbsp;&nbsp; _(boolean) (Optional)_ **obsolete**  
-&nbsp;&nbsp;&nbsp; If `true`, adds `NIGHT` button to the panel and allows setting the alarm to Night mode via MQTT/service call.  
-&nbsp;&nbsp;&nbsp; Use `panel.arm_buttons` instead.  
-&nbsp;  
-&nbsp;&nbsp;&nbsp; _Default value:_  
-&nbsp;&nbsp;&nbsp; `false`  
 
 <a id="enable_persistence"></a>
 **enable_persistence**  

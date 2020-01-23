@@ -1909,41 +1909,52 @@
         setupUI(){
           this._getViewportProperties();
 
+          var update_panel = false;
+
           if (this.alarm.attributes.panel == null) {
             this.alarm.attributes.panel = {};
-            this.settingsUpdate('panel', {});
+            update_panel = true;
           }
 
           // if buttons_shape is undefined, init it from round_buttons
-          if (this.alarm.attributes.panel.buttons_shape == undefined) {
-            var shape = this.isChecked(this.alarm.attributes.panel.round_buttons)? this.buttonsShapeCircle : this.buttonsShapeRectangle;
-            this.set('alarm.attributes.panel.buttons_shape', shape)
+          if (this.alarm.attributes.panel.buttons_shape == null) {
+            this.alarm.attributes.panel.buttons_shape = this.isChecked(this.alarm.attributes.panel.round_buttons)? this.buttonsShapeCircle : this.buttonsShapeRectangle;
+            update_panel = true;
           }
 
-          // make this obsolete parameter undefined so it won't be stored in config
-          this.set('alarm.attributes.panel.round_buttons', undefined);
+          // delete this obsolete parameter and request config update
+          if (this.alarm.attributes.panel.round_buttons != null) {
+            delete this.alarm.attributes.panel.round_buttons;
+            update_panel = true;
+          }
 
           // init new parameter from the current ones if omitted in config
-          if (this.alarm.attributes.panel.arm_buttons == undefined) {
+          if (this.alarm.attributes.panel.arm_buttons == null) {
             this.alarm.attributes.panel.arm_buttons = [this.armButtonHome, this.armButtonAway]
-
 
             if (this.isChecked(this.alarm.attributes.enable_night_mode))
               this.alarm.attributes.panel.arm_buttons.push(this.armButtonNight);
 
-            this.notifyPath('alarm.attributes.panel.arm_buttons');
+            update_panel = true;
           }
 
-          // make this obsolete parameter undefined so it won't be stored in config
-          this.set('alarm.attributes.enable_night_mode', undefined);
+          // delete this obsolete parameter and request config update
+          if (this.alarm.attributes.enable_night_mode != null) {
+            delete this.alarm.attributes.enable_night_mode;
+            update_panel = true;
+          }
 
           this._updateButtonsStyles();
 
           if (this.alarm.attributes.panel.cameras == null) {
-            var panel = this.alarm.attributes.panel;
-            panel.cameras = [];
-            this.settingsUpdate('panel', panel);
+            this.alarm.attributes.panel.cameras = [];
+            update_panel = true;
           }
+
+          if (update_panel)
+            // this makes the alarm save modified settings to yaml and then reload them
+            // which triggers updates to this panel
+            this.settingsUpdate('panel', this.alarm.attributes.panel);
 
           if (this.alarm.attributes.states == null) {
             var states = {
@@ -2843,7 +2854,6 @@
             var sensor_group = ev.target.getAttribute('data-group');
 
             var checked = ev.target.checked;
-
             var value = null;
 
             switch (setting) {
@@ -2852,9 +2862,7 @@
                   this.alarm.attributes.panel[attribute] = ev.target.checked;
                 else if (type == 'input_text')
                   this.alarm.attributes.panel[attribute] = this.shadowRoot.querySelector('#' + attribute).value;
-                //else if (type == 'listbox') {
-                  //this.alarm.attributes.panel[attribute] = ev.target.value;
-                //}
+
                 this.settingsUpdate(setting, this.alarm.attributes.panel);
                 return;
 
