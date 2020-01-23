@@ -491,7 +491,7 @@
 <a id="panel-buttons_shape"></a>
 &nbsp;&nbsp;&nbsp; **buttons_shape**  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _(string) (Optional)_  
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Choose whether the alarm buttons should be `circle`, `rectangular` or `square`.  
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Choose whether the alarm buttons should be `circle`, `rectangle` or `square`.  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Replaces obsolete `round_buttons`.  
 &nbsp;  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _Default value:_  
@@ -501,7 +501,7 @@
 &nbsp;&nbsp;&nbsp; **arm_buttons**  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _(list) (Optional)_  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Choose which arm buttons to display on the arming page.  
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Supported values are `night`, `home` or `away`.  
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Supported values are `night`, `home` and `away`.  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Replaces obsolete `enable_night_mode`.  
 &nbsp;  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _Default value:_  
@@ -510,7 +510,7 @@
 <a id="panel-open_sensors_on_arming_page"></a>
 &nbsp;&nbsp;&nbsp; **open_sensors_on_arming_page**  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _(boolean) (Optional)_  
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Choose whether open sensors will be shown below the arm buttons when the alarm is disarmed.  
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Choose whether open sensors will be shown on the arming page when the alarm is disarmed.  
 &nbsp;  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; _Default value:_  
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; `false`  
@@ -751,7 +751,7 @@ All service calls use domain `alarm_control_panel` and accept the `entity_id` pa
 **entity_id**  
 &nbsp;&nbsp;&nbsp; _(string) (Optional)_  
 &nbsp;&nbsp;&nbsp; Full name _(domain.object\_id)_ of the alarm integration entity to control.  
-&nbsp;&nbsp;&nbsp; If no such variable used, the service call will applicable to all entities of this integration.  
+&nbsp;&nbsp;&nbsp; If no such variable used, the service call will be applicable to all entities of this integration.  
 
 **ARM PASSCODE REQUIREMENTS**  
 Service calls `alarm_arm_home`, `alarm_arm_away` and `alarm_arm_night` accept optional `code` parameter that has extended specification compared to [passcode requirements](#passcode_requirements) by allowing a special code "override".  
