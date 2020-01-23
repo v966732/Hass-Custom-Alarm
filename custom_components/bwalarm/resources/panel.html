@@ -1346,7 +1346,7 @@
 
         _computeButtonWidthToHeightRatio(shape) {
           if (shape == undefined) {
-            console.error('_computeButtonWidthToHeightRatio: shape undefined, returning 0');
+            console.warn('_computeButtonWidthToHeightRatio: shape undefined, returning 0');
             return 0;
           }
 
@@ -1927,8 +1927,11 @@
           if (this.alarm.attributes.panel.arm_buttons == undefined) {
             this.alarm.attributes.panel.arm_buttons = [this.armButtonHome, this.armButtonAway]
 
+
             if (this.isChecked(this.alarm.attributes.enable_night_mode))
-              this.alarm.attributes.panel.arm_buttons.push(this.armButtonNight)
+              this.alarm.attributes.panel.arm_buttons.push(this.armButtonNight);
+
+            this.notifyPath('alarm.attributes.panel.arm_buttons');
           }
 
           // make this obsolete parameter undefined so it won't be stored in config
