@@ -2028,6 +2028,9 @@
 
           //Get the selection
           var selection = ev.target.getAttribute('data-selection');
+          // sometimes it's null
+          if (selection == null)
+            return;
           //console.log("carouselClick: " + selection);
 
           // deal with special tabs like set-login/logout to show/hide settings and prevent entering password every time
