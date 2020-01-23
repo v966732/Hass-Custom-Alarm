@@ -385,41 +385,41 @@
                   <!-- ###########################################SETTINGS SELECTION BAR############################################### -->
 
                   <template is='dom-if' if='[[settingsUnlock]]' >
-                    <div id='settings-nav' class='horizontal layout'>
+                    <div id='settings-nav' class='horizontal layout' style='width: 100%;'>
                       <div class='sm horizontal layout'>
-                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-info", carouselMainSelected)]];'>
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-info", carouselMainSelected)]]; flex: 1 1 auto;'>
                           <paper-icon-button icon='mdi:information-outline' title='Info' on-click='carouselClick' data-selection='settings-info'></paper-icon-button>
                           <div class='settings-nav-text'>About</div>
                         </div>
-                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-panel", carouselMainSelected)]];'>
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-panel", carouselMainSelected)]]; flex: 1 1 auto;'>
                           <paper-icon-button icon='mdi:brush' title='Panel' on-click='carouselClick' data-selection='settings-panel'></paper-icon-button>
                           <div class='settings-nav-text'>Panel</div>
                         </div>
-                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-alarm", carouselMainSelected)]];'>
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-alarm", carouselMainSelected)]]; flex: 1 1 auto;'>
                           <paper-icon-button icon='mdi:dialpad' title='Alarm' on-click='carouselClick' data-selection='settings-alarm'></paper-icon-button>
                           <div class='settings-nav-text'>Alarm</div>
                         </div>
-                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-sensors", carouselMainSelected)]];'>
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-sensors", carouselMainSelected)]]; flex: 1 1 auto;'>
                           <paper-icon-button id='btn-alarm-sensors' icon='mdi:radio-tower' title='Alarm Sensors' on-click='carouselClick' data-selection='settings-sensors'></paper-icon-button>
                           <div class='settings-nav-text'>Modes</div>
                         </div>
-                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-floorplan", carouselMainSelected)]];'>
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-floorplan", carouselMainSelected)]]; flex: 1 1 auto;'>
                           <paper-icon-button icon='mdi:floor-plan' title='Floorplan' on-click='carouselClick' data-selection='settings-floorplan'></paper-icon-button>
                           <div class='settings-nav-text'>Floorplan</div>
                         </div>
-                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-cameras", carouselMainSelected)]];'>
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-cameras", carouselMainSelected)]]; flex: 1 1 auto;'>
                           <paper-icon-button icon='mdi:cctv' title='Camera' on-click='carouselClick' data-selection='settings-cameras'></paper-icon-button>
                           <div class='settings-nav-text'>Cameras</div>
                         </div>
-                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-mqtt", carouselMainSelected)]];'>
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-mqtt", carouselMainSelected)]]; flex: 1 1 auto;'>
                           <paper-icon-button icon='mdi:access-point' title='MQTT' on-click='carouselClick' data-selection='settings-mqtt'></paper-icon-button>
                           <div class='settings-nav-text'>MQTT</div>
                         </div>
-                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-custom", carouselMainSelected)]];'>
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-custom", carouselMainSelected)]]; flex: 1 1 auto;'>
                           <paper-icon-button icon='mdi:atom' title='Custom Panel' on-click='carouselClick' data-selection='settings-custom'></paper-icon-button>
                           <div class='settings-nav-text'>Custom</div>
                         </div>
-                        <div class='settings-nav-inner vertical layout'>
+                        <div class='settings-nav-inner vertical layout' style='flex: 1 1 auto;'>
                           <paper-icon-button icon='mdi:logout' title='Logout' on-click='carouselClick' data-selection='set-logout'></paper-icon-button>
                           <div class='settings-nav-text'>Logout</div>
                         </div>
@@ -550,16 +550,16 @@
 
                               <paper-dropdown-menu label="Buttons'&nbsp;shape" always-float-label>
                                 <paper-listbox class="buttons-shape-listbox" slot="dropdown-content" attr-for-selected='text-content' selected='{{alarm.attributes.panel.buttons_shape}}'>
-                                  <template is='dom-repeat' items='[[supportedButtonShapes]]' as='title'>
-                                    <paper-item on-click='settingsSave' data-setting='panel' data-attribute='buttons_shape'>[[title]]</paper-item>
+                                  <template is='dom-repeat' items='[[supportedButtonShapes]]'>
+                                    <paper-item on-click='settingsSave' data-setting='panel' data-attribute='buttons_shape'>[[item]]</paper-item>
                                   </template>
                                 </paper-listbox>
                               </paper-dropdown-menu>
 
                               <paper-dropdown-menu label='Display arm buttons' always-float-label>
-                                <paper-listbox class='arm-buttons-listbox' slot='dropdown-content' attr-for-selected='text-content' multi selected-values={{alarm.attributes.panel.arm_buttons}}>
-                                  <template is='dom-repeat' items=[[supportedArmButtons]] as='title'>
-                                    <paper-item on-click='settingsSave' data-setting='panel' data-attribute='arm_buttons'>[[title]]</paper-item>
+                                <paper-listbox class='arm-buttons-listbox' slot='dropdown-content' attr-for-selected='text-content' multi selected-values='{{alarm.attributes.panel.arm_buttons}}'>
+                                  <template is='dom-repeat' items='[[supportedArmButtons]]'>
+                                    <paper-item on-click='settingsSave' data-setting='panel' data-attribute='arm_buttons'>[[item]]</paper-item>
                                   </template>
                                 </paper-listbox>
                               </paper-dropdown-menu>
@@ -859,25 +859,25 @@
                         <div class='setting-inner vertical layout'>
                           <div class='horizontal layout' style='justify-content: space-between;'>
                             <paper-dropdown-menu class='sensors-listbox' label='Immediate sensors [[arrayLengthAsOptionalString(alarm.attributes.states.armed_away.immediate, ":")]]' always-float-label>
-                              <paper-listbox slot='dropdown-content' attr-for-selected='title' multi selected-values='{{alarm.attributes.states.armed_away.immediate}}'>
+                              <paper-listbox slot='dropdown-content' attr-for-selected='text-content' multi selected-values='{{alarm.attributes.states.armed_away.immediate}}'>
                                 <template is='dom-repeat' items='[[sensors]]' as='sensor'>
-                                  <paper-item  title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='immediate'>[[sensor]]</paper-item>
+                                  <paper-item on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='immediate'>[[sensor]]</paper-item>
                                 </template>
                               </paper-listbox>
                             </paper-dropdown-menu>
 
                             <paper-dropdown-menu class='sensors-listbox' label='Delayed sensors [[arrayLengthAsOptionalString(alarm.attributes.states.armed_away.delayed, ":")]]' always-float-label>
-                              <paper-listbox slot='dropdown-content' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_away.delayed}}>
+                              <paper-listbox slot='dropdown-content' attr-for-selected="text-content" multi selected-values={{alarm.attributes.states.armed_away.delayed}}>
                                 <template is='dom-repeat' items='[[sensors]]' as='sensor'>
-                                  <paper-item title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='delayed'>[[sensor]]</paper-item>
+                                  <paper-item on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='delayed'>[[sensor]]</paper-item>
                                 </template>
                               </paper-listbox>
                             </paper-dropdown-menu>
 
                             <paper-dropdown-menu class='sensors-listbox no-right-margin' label='Override sensors[[arrayLengthAsOptionalString(alarm.attributes.states.armed_away.override, ":")]]' always-float-label>
-                              <paper-listbox slot='dropdown-content' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_away.override}}>
+                              <paper-listbox slot='dropdown-content' attr-for-selected="text-content" multi selected-values={{alarm.attributes.states.armed_away.override}}>
                                 <template is='dom-repeat' items='[[sensors]]' as='sensor'>
-                                  <paper-item title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='override'>[[sensor]]</paper-item>
+                                  <paper-item on-click='settingsSave' data-setting='sensor_select' data-mode='armed_away' data-group='override'>[[sensor]]</paper-item>
                                 </template>
                               </paper-listbox>
                             </paper-dropdown-menu>
@@ -907,17 +907,17 @@
                         <div class='setting-inner vertical layout'>
                           <div class='horizontal layout' style='justify-content: space-between;'>
                             <paper-dropdown-menu class='sensors-listbox' label='Delayed sensors [[arrayLengthAsOptionalString(alarm.attributes.states.armed_home.delayed, ":")]]' always-float-label>
-                              <paper-listbox slot='dropdown-content' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_home.delayed}}>
+                              <paper-listbox slot='dropdown-content' attr-for-selected="text-content" multi selected-values={{alarm.attributes.states.armed_home.delayed}}>
                                 <template is='dom-repeat' items='[[sensors]]' as='sensor'>
-                                  <paper-item title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_home' data-group='delayed'>[[sensor]]</paper-item>
+                                  <paper-item on-click='settingsSave' data-setting='sensor_select' data-mode='armed_home' data-group='delayed'>[[sensor]]</paper-item>
                                 </template>
                               </paper-listbox>
                             </paper-dropdown-menu>
 
                             <paper-dropdown-menu class='sensors-listbox no-right-margin' label='Override sensors[[arrayLengthAsOptionalString(alarm.attributes.states.armed_home.override, ":")]]' always-float-label>
-                              <paper-listbox slot='dropdown-content' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_home.override}}>
+                              <paper-listbox slot='dropdown-content' attr-for-selected="text-content" multi selected-values={{alarm.attributes.states.armed_home.override}}>
                                 <template is='dom-repeat' items='[[sensors]]' as='sensor'>
-                                  <paper-item title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_home' data-group='override'>[[sensor]]</paper-item>
+                                  <paper-item on-click='settingsSave' data-setting='sensor_select' data-mode='armed_home' data-group='override'>[[sensor]]</paper-item>
                                 </template>
                               </paper-listbox>
                             </paper-dropdown-menu>
@@ -954,17 +954,17 @@
                         <div class='setting-inner vertical layout'>
                           <div class='horizontal layout' style='justify-content: space-between;'>
                             <paper-dropdown-menu class='sensors-listbox' label='Delayed sensors [[arrayLengthAsOptionalString(alarm.attributes.states.armed_night.delayed, ":")]]' always-float-label vertical-align="bottom">
-                              <paper-listbox slot='dropdown-content' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_night.delayed}}>
+                              <paper-listbox slot='dropdown-content' attr-for-selected="text-content" multi selected-values={{alarm.attributes.states.armed_night.delayed}}>
                                 <template is='dom-repeat' items='[[sensors]]' as='sensor'>
-                                  <paper-item title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_night' data-group='delayed'>[[sensor]]</paper-item>
+                                  <paper-item on-click='settingsSave' data-setting='sensor_select' data-mode='armed_night' data-group='delayed'>[[sensor]]</paper-item>
                                 </template>
                               </paper-listbox>
                             </paper-dropdown-menu>
 
                             <paper-dropdown-menu class='sensors-listbox no-right-margin' label='Override sensors[[arrayLengthAsOptionalString(alarm.attributes.states.armed_night.override, ":")]]' always-float-label vertical-align="bottom">
-                              <paper-listbox slot='dropdown-content' attr-for-selected="title" multi selected-values={{alarm.attributes.states.armed_night.override}}>
+                              <paper-listbox slot='dropdown-content' attr-for-selected="text-content" multi selected-values={{alarm.attributes.states.armed_night.override}}>
                                 <template is='dom-repeat' items='[[sensors]]' as='sensor'>
-                                  <paper-item title="[[sensor]]" on-click='settingsSave' data-setting='sensor_select' data-mode='armed_night' data-group='override'>[[sensor]]</paper-item>
+                                  <paper-item on-click='settingsSave' data-setting='sensor_select' data-mode='armed_night' data-group='override'>[[sensor]]</paper-item>
                                 </template>
                               </paper-listbox>
                             </paper-dropdown-menu>
