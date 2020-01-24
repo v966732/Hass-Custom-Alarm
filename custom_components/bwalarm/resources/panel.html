@@ -2793,6 +2793,11 @@
 
         async _loadData() {
           try {
+            // only admins can get HA users' list
+            // for others the call below will generate 'Unauthorized' error in HA log
+            if (!this.hass.user.is_admin)
+              return;
+
             this._users = await this.hass.callWS({
               type: 'config/auth/list',
             });

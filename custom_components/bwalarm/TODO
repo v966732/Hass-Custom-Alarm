@@ -2,6 +2,8 @@ enhancement
 
 alarm_control_panel.py
 ----------------------
+- don't call _loadData on the panel start, add a  "Import (users) from HA" button to Settings -> Panel instead
+- make master code obsolete (if it exists and no more users defined, create a user)
 - PLATFORM_SCHEMA:CONF_CODE optional: make it Required or change property code_format (when there are users but no master password); is it a good idea at all?
 - (in a while, not now): add default to CONF_PANEL_ARM_BUTTONS
 - trim/tolower some panel attributes' values(like arm_button, button_shape etc) on yaml.load (to make them case-insensitive and tolerant to user input errors)
