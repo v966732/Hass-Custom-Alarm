@@ -1345,9 +1345,9 @@
         }
 
         _computeButtonWidthToHeightRatio(shape) {
-          // shape == undefined || null
+          // shape == undefined || null || empty string || 0 || false
           if (!shape) {
-            console.warn('_computeButtonWidthToHeightRatio: shape undefined, returning 0');
+            console.warn('_computeButtonWidthToHeightRatio: shape is falsy, returning 0');
             return 0;
           }
 
@@ -1733,10 +1733,10 @@
 
         // init internal this.panel_title only when this.alarm.attributes.panel.panel_title is defined
         getPanelTitle(){
-          if (this.alarm != null &&
-              this.alarm.attributes != null &&
-              this.alarm.attributes.panel != null &&
-              this.alarm.attributes.panel.panel_title != null
+          if (this.alarm != undefined &&
+              this.alarm.attributes != undefined &&
+              this.alarm.attributes.panel != undefined &&
+              this.alarm.attributes.panel.panel_title != undefined
           )
             this.panel_title = this.alarm.attributes.panel.panel_title.trim();
         }
@@ -1917,25 +1917,25 @@
 
           var update_panel = false;
 
-          if (this.alarm.attributes.panel == null) {
+          if (this.alarm.attributes.panel == undefined) {
             this.alarm.attributes.panel = {};
             update_panel = true;
           }
 
           // if buttons_shape is undefined, init it from round_buttons
-          if (this.alarm.attributes.panel.buttons_shape == null) {
+          if (this.alarm.attributes.panel.buttons_shape == undefined) {
             this.alarm.attributes.panel.buttons_shape = this.isChecked(this.alarm.attributes.panel.round_buttons)? this.buttonsShapeCircle : this.buttonsShapeRectangle;
             update_panel = true;
           }
 
           // delete this obsolete parameter and request config update
-          if (this.alarm.attributes.panel.round_buttons != null) {
+          if (this.alarm.attributes.panel.round_buttons != undefined) {
             delete this.alarm.attributes.panel.round_buttons;
             update_panel = true;
           }
 
           // init new parameter from the current ones if omitted in config
-          if (this.alarm.attributes.panel.arm_buttons == null) {
+          if (this.alarm.attributes.panel.arm_buttons == undefined) {
             this.alarm.attributes.panel.arm_buttons = [this.armButtonHome, this.armButtonAway]
 
             if (this.isChecked(this.alarm.attributes.enable_night_mode))
@@ -1945,14 +1945,14 @@
           }
 
           // delete this obsolete parameter and request config update
-          if (this.alarm.attributes.enable_night_mode != null) {
+          if (this.alarm.attributes.enable_night_mode != undefined) {
             delete this.alarm.attributes.enable_night_mode;
             update_panel = true;
           }
 
           this._updateButtonsStyles();
 
-          if (this.alarm.attributes.panel.cameras == null) {
+          if (this.alarm.attributes.panel.cameras == undefined) {
             this.alarm.attributes.panel.cameras = [];
             update_panel = true;
           }
@@ -1962,7 +1962,7 @@
             // which triggers updates to this panel
             this.settingsUpdate('panel', this.alarm.attributes.panel);
 
-          if (this.alarm.attributes.states == null) {
+          if (this.alarm.attributes.states == undefined) {
             var states = {
               'armed_away' : {'immediate':[], 'delayed':[], 'override':[], 'pending_time': 0, 'warning_time': 0, 'trigger_time': 600},
               'armed_home' : {'immediate':[], 'delayed':[], 'override':[], 'pending_time': 0, 'warning_time': 0, 'trigger_time': 600},
@@ -2236,6 +2236,16 @@
 
         // calculate and set buttons' width and height according to screen size and options enabled
         _updateButtonsStyles() {
+          if (this.alarm == undefined || this.alarm.attributes == undefined || this.alarm.attributes.panel == undefined) {
+            //console.log('_updateButtonsStyles: alarm not initialized, returning');
+            return;
+          }
+
+          var arm_buttons = this.alarm.attributes.panel.arm_buttons.length;
+          if (!arm_buttons)
+            // should be at least one button
+            return;
+
           if (this.buttonsShape === undefined) {
             //console.log('_updateButtonsStyles: buttonsShape undefined, returning');
             return;
@@ -2246,16 +2256,9 @@
             return;
           }
 
-          if (this.alarm === undefined) {
-            //console.log('_updateButtonsStyles: alarm not initialized, returning');
-            return;
-          }
-
           var min_dimension = Math.min(this.viewport_width, this.viewport_height);
           var code_arm_required = this.isChecked(this.alarm.attributes.code_arm_required);
-          var night_mode_enabled = this.isChecked(this.alarm.attributes.enable_night_mode);
           var width_to_height_ratio = this.buttonWidthToHeightRatio;
-          //console.log('_updateButtonsStyles: code_arm_required=' + code_arm_required + ', night_mode_enabled=' + night_mode_enabled + 'buttonsShape=' + this.buttonsShape);
 
           var button_shape = (this.buttonsShape == this.buttonsShapeCircle)? '50%' : '4px';
           var symmetric_button = this.buttonsShape != this.buttonsShapeRectangle;
@@ -2263,8 +2266,6 @@
           var horizontalCodepanel = this.needHorizontalCodepanel(this.orientationLandscape, code_arm_required);
           var buttons_in_row = horizontalCodepanel? 4 : 3;
           var buttons_in_column = horizontalCodepanel? 3 : 4;
-
-          var arm_buttons = this.isChecked(night_mode_enabled)? 3 : 2;
 
           // vh of arm buttons depending on code_arm_required (as we have less space on disarmed screen when code required)
           var arm_button_width_percentage = code_arm_required? 18 : 30;
@@ -2355,7 +2356,7 @@
           styles['--message-button-margin'] = '20px';
 
           // set codepanel's justify-content value
-          styles['--controls-justify-content'] = code_arm_required? 'space-between' : 'space-evenly'; // if code_arm_required, change justification so arm buttons are to the edges and look better together with codepanel
+          styles['--controls-justify-content'] = (code_arm_required && arm_buttons>1)? 'space-between' : 'space-evenly'; // if code_arm_required, change justification so arm buttons are to the edges and look better together with codepanel
 
           this.updateStyles(styles);
         }
@@ -2470,7 +2471,7 @@
 
         // Return a list of open sensors built from sensors
         getOpenSensors(supported_statuses_on, sensors) {
-          if ((sensors == null) || (supported_statuses_on == null))
+          if ((sensors == null) || (supported_statuses_on == undefined))
             return [];
 
           return sensors.filter(function (e){ return supported_statuses_on.indexOf(e.state.toLowerCase()) > -1; });
@@ -2487,7 +2488,7 @@
 
         // retuns array of closed sensors
         getClosedSensors(supported_statuses_off, sensors) {
-          if ((sensors == null) || (supported_statuses_off == null))
+          if ((sensors == null) || (supported_statuses_off == undefined))
             return [];
 
           return sensors.filter(function (e){ return supported_statuses_off.indexOf(e.state.toLowerCase()) > -1; });
@@ -2633,7 +2634,7 @@
 
         //If you require a code to arm the system then force it here
         showCodePanel(alarm){
-          if (alarm === null || alarm === undefined)
+          if (alarm == undefined || alarm.attributes == undefined)
             return false;
           return this.isChecked(alarm.attributes.code_arm_required) || !this.isDisarmed(alarm);
         }
@@ -3092,7 +3093,7 @@
         // show sensors panel only if enable_sensors_panel and
         // it's disarmed OR (armed && !hide_sensors)
         needSensorsPanel(alarm_state, panel_attributes) {
-          if (this.isChecked(panel_attributes.enable_sensors_panel))
+          if (panel_attributes != undefined && this.isChecked(panel_attributes.enable_sensors_panel))
             return (alarm_state == 'disarmed')? true : !this.isChecked(panel_attributes.hide_sensors);
           else
             return false;
