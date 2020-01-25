@@ -1345,7 +1345,7 @@
         }
 
         _computeButtonWidthToHeightRatio(shape) {
-          if (shape == undefined) {
+          if (shape == null) {
             console.warn('_computeButtonWidthToHeightRatio: shape undefined, returning 0');
             return 0;
           }
@@ -2464,7 +2464,7 @@
 
         // Return a list of open sensors built from sensors
         getOpenSensors(supported_statuses_on, sensors) {
-          if ((supported_statuses_on == undefined) || (sensors == undefined))
+          if ((sensors == null) || (supported_statuses_on == null))
             return [];
 
           return sensors.filter(function (e){ return supported_statuses_on.indexOf(e.state.toLowerCase()) > -1; });
@@ -2481,7 +2481,7 @@
 
         // retuns array of closed sensors
         getClosedSensors(supported_statuses_off, sensors) {
-          if ((supported_statuses_off == undefined) || (sensors == undefined))
+          if ((sensors == null) || (supported_statuses_off == null))
             return [];
 
           return sensors.filter(function (e){ return supported_statuses_off.indexOf(e.state.toLowerCase()) > -1; });
@@ -2489,11 +2489,11 @@
 
         // determine whether a sensor is in a particular group
         computeSensors(hass, ids){
-          if (ids == undefined){
+          if (ids == null){
           // Control the exception when this.alarm is not ready
             return false;
           } else
-            return ids.map(function (key){ return hass.states[key]; }).filter(function (e){ return e != undefined; });
+            return ids.map(function (key){ return hass.states[key]; }).filter(function (e){ return e != null; });
         }
 
         // Determine if array is empty
@@ -3063,7 +3063,7 @@
         }
 
         notListedIn(item, array) {
-          if ((array == undefined) || (item == undefined))
+          if (array == undefined || item == undefined)
             return true;
 
           return array.indexOf(item) == -1;
@@ -3086,6 +3086,9 @@
         // show sensors panel only if enable_sensors_panel and
         // it's disarmed OR (armed && !hide_sensors)
         needSensorsPanel(alarm) {
+          // if it's null, just return false, it's not ready yet
+          if ((alarm == null) || (alarm.attributes == null) || (alarm.attributes.panel == null))
+            return false;
           //var FNAME = '[needSensorsPanel] ';
           //console.log(FNAME + 'enable_sensors_panel=' + this.isChecked(alarm.attributes.panel.enable_sensors_panel) + ', isDisarmed=' + this.isDisarmed(alarm) + ', hide_sensors=' + this.isChecked(alarm.attributes.panel.hide_sensors));
           if (this.isChecked(alarm.attributes.panel.enable_sensors_panel))
