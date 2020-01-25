@@ -1158,7 +1158,7 @@
             <paper-icon-button icon='mdi:floor-plan' title='Floorplan' on-click='carouselClick' data-selection='floorplan' style$='filter: [[computeInfoPanelButtonFilter("floorplan", carouselMainSelected)]];'></paper-icon-button>
           </template>
 
-          <template is='dom-if' if='[[needSensorsPanel(alarm)]]'>
+          <template is='dom-if' if='[[needSensorsPanel(alarm.state, alarm.attributes.panel)]]'>
             <paper-icon-button icon='mdi:radio-tower' title='Sensors' on-click='carouselClick' data-selection='sensors' style$='color: [[computeButtonColor(allopensensors)]]; filter: [[computeInfoPanelButtonFilter("sensors", carouselMainSelected)]];'></paper-icon-button>
           </template>
 
@@ -1345,7 +1345,8 @@
         }
 
         _computeButtonWidthToHeightRatio(shape) {
-          if (shape == null) {
+          // shape == undefined || null
+          if (!shape) {
             console.warn('_computeButtonWidthToHeightRatio: shape undefined, returning 0');
             return 0;
           }
@@ -1730,8 +1731,13 @@
           return this.hass.states[entity];
         }
 
+        // init internal this.panel_title only when this.alarm.attributes.panel.panel_title is defined
         getPanelTitle(){
-          if (this.alarm && this.alarm.attributes.panel && this.alarm.attributes.panel.panel_title != null )
+          if (this.alarm != null &&
+              this.alarm.attributes != null &&
+              this.alarm.attributes.panel != null &&
+              this.alarm.attributes.panel.panel_title != null
+          )
             this.panel_title = this.alarm.attributes.panel.panel_title.trim();
         }
 
@@ -3085,14 +3091,9 @@
 
         // show sensors panel only if enable_sensors_panel and
         // it's disarmed OR (armed && !hide_sensors)
-        needSensorsPanel(alarm) {
-          // if it's null, just return false, it's not ready yet
-          if ((alarm == null) || (alarm.attributes == null) || (alarm.attributes.panel == null))
-            return false;
-          //var FNAME = '[needSensorsPanel] ';
-          //console.log(FNAME + 'enable_sensors_panel=' + this.isChecked(alarm.attributes.panel.enable_sensors_panel) + ', isDisarmed=' + this.isDisarmed(alarm) + ', hide_sensors=' + this.isChecked(alarm.attributes.panel.hide_sensors));
-          if (this.isChecked(alarm.attributes.panel.enable_sensors_panel))
-            return this.isDisarmed(alarm)? true : !this.isChecked(alarm.attributes.panel.hide_sensors);
+        needSensorsPanel(alarm_state, panel_attributes) {
+          if (this.isChecked(panel_attributes.enable_sensors_panel))
+            return (alarm_state == 'disarmed')? true : !this.isChecked(panel_attributes.hide_sensors);
           else
             return false;
         }
