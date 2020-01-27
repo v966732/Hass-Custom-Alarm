@@ -556,7 +556,8 @@ h1 {
   text-align: center;
 }
 .settings-nav-inner {
-/*  max-width: 40px;*/
+  flex: 1 1 auto;
+  align-items: center;
   padding: 3px;
 }
 /*.settings-nav-text {

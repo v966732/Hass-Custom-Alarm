@@ -385,41 +385,41 @@
                   <!-- ###########################################SETTINGS SELECTION BAR############################################### -->
 
                   <template is='dom-if' if='[[settingsUnlock]]' >
-                    <div id='settings-nav' class='horizontal layout' style='width: 100%;'>
-                      <div class='sm horizontal layout'>
-                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-info", carouselMainSelected)]]; flex: 1 1 auto;'>
+                    <div id='settings-nav' class='horizontal layout'>
+                      <div class='sm horizontal layout' style='width: 100%;'>
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-info", carouselMainSelected)]];'>
                           <paper-icon-button icon='mdi:information-outline' title='Info' on-click='carouselClick' data-selection='settings-info'></paper-icon-button>
                           <div class='settings-nav-text'>About</div>
                         </div>
-                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-panel", carouselMainSelected)]]; flex: 1 1 auto;'>
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-panel", carouselMainSelected)]];'>
                           <paper-icon-button icon='mdi:brush' title='Panel' on-click='carouselClick' data-selection='settings-panel'></paper-icon-button>
                           <div class='settings-nav-text'>Panel</div>
                         </div>
-                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-alarm", carouselMainSelected)]]; flex: 1 1 auto;'>
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-alarm", carouselMainSelected)]];'>
                           <paper-icon-button icon='mdi:dialpad' title='Alarm' on-click='carouselClick' data-selection='settings-alarm'></paper-icon-button>
                           <div class='settings-nav-text'>Alarm</div>
                         </div>
-                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-sensors", carouselMainSelected)]]; flex: 1 1 auto;'>
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-sensors", carouselMainSelected)]];'>
                           <paper-icon-button id='btn-alarm-sensors' icon='mdi:radio-tower' title='Alarm Sensors' on-click='carouselClick' data-selection='settings-sensors'></paper-icon-button>
                           <div class='settings-nav-text'>Modes</div>
                         </div>
-                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-floorplan", carouselMainSelected)]]; flex: 1 1 auto;'>
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-floorplan", carouselMainSelected)]];'>
                           <paper-icon-button icon='mdi:floor-plan' title='Floorplan' on-click='carouselClick' data-selection='settings-floorplan'></paper-icon-button>
                           <div class='settings-nav-text'>Floorplan</div>
                         </div>
-                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-cameras", carouselMainSelected)]]; flex: 1 1 auto;'>
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-cameras", carouselMainSelected)]];'>
                           <paper-icon-button icon='mdi:cctv' title='Camera' on-click='carouselClick' data-selection='settings-cameras'></paper-icon-button>
                           <div class='settings-nav-text'>Cameras</div>
                         </div>
-                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-mqtt", carouselMainSelected)]]; flex: 1 1 auto;'>
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-mqtt", carouselMainSelected)]];'>
                           <paper-icon-button icon='mdi:access-point' title='MQTT' on-click='carouselClick' data-selection='settings-mqtt'></paper-icon-button>
                           <div class='settings-nav-text'>MQTT</div>
                         </div>
-                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-custom", carouselMainSelected)]]; flex: 1 1 auto;'>
+                        <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-custom", carouselMainSelected)]];'>
                           <paper-icon-button icon='mdi:atom' title='Custom Panel' on-click='carouselClick' data-selection='settings-custom'></paper-icon-button>
                           <div class='settings-nav-text'>Custom</div>
                         </div>
-                        <div class='settings-nav-inner vertical layout' style='flex: 1 1 auto;'>
+                        <div class='settings-nav-inner vertical layout'>
                           <paper-icon-button icon='mdi:logout' title='Logout' on-click='carouselClick' data-selection='set-logout'></paper-icon-button>
                           <div class='settings-nav-text'>Logout</div>
                         </div>
