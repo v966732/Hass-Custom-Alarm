@@ -2,6 +2,7 @@ enhancement
 
 alarm_control_panel.py
 ----------------------
+- https://github.com/gazoscalvertos/Hass-Custom-Alarm/pull/89
 - don't call _loadData on the panel start, add a  "Import (users) from HA" button to Settings -> Panel instead
 - make master code obsolete (if it exists and no more users defined, create a user)
 - PLATFORM_SCHEMA:CONF_CODE optional: make it Required or change property code_format (when there are users but no master password); is it a good idea at all?
@@ -28,6 +29,7 @@ KNOWN POTENTIAL ISSUES
 
 panel.html
 ----------
+- empty filenames in Update user lead to issue #79(IsADirectoryError: [Errno 21] Is a directory: '/config/resources/bwalarm/images')
 - move admin_password from root settings to panel
 - replace ha-switch with paper-checkbox completely
 - validate input from paper-input
