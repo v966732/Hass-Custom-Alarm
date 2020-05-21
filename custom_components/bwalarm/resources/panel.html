@@ -4,8 +4,7 @@
     // show the version of your custom UI in the HA dev info panel (HA 0.66.0+):
     const _NAME = 'Alarm Panel';
     const _URL = 'https://github.com/akasma74/Hass-Custom-Alarm';
-    // don't forget to change HaPanelAlarm.version below!
-    var _VERSION = 'v1.13.0pre1';
+    var _VERSION = 'dev';
 
     if (!window.CUSTOM_UI_LIST) window.CUSTOM_UI_LIST = [];
     window.CUSTOM_UI_LIST.push({
@@ -16,6 +15,12 @@
 
     if (!customElements.get("ha-switch") && customElements.get("paper-toggle-button")) {
       customElements.define("ha-switch", class extends customElements.get("paper-toggle-button") {})
+    }
+    if (!customElements.get("ha-icon-button") && customElements.get("paper-icon-button")) {
+      customElements.define("ha-icon-button", class extends customElements.get("paper-icon-button") {})
+    }
+    if (!customElements.get("ha-icon") && customElements.get("iron-icon")) {
+      customElements.define("ha-icon", class extends customElements.get("iron-icon") {})
     }
   }
   </script>
@@ -388,53 +393,53 @@
                     <div id='settings-nav' class='horizontal layout'>
                       <div class='sm horizontal layout' style='width: 100%;'>
                         <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-info", carouselMainSelected)]];'>
-                          <paper-icon-button icon='mdi:information-outline' title='Info' on-click='carouselClick' data-selection='settings-info'></paper-icon-button>
+                          <ha-icon-button icon='mdi:information-outline' title='Info' on-click='carouselClick' data-selection='settings-info'></ha-icon-button>
                           <div class='settings-nav-text'>About</div>
                         </div>
                         <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-panel", carouselMainSelected)]];'>
-                          <paper-icon-button icon='mdi:brush' title='Panel' on-click='carouselClick' data-selection='settings-panel'></paper-icon-button>
+                          <ha-icon-button icon='mdi:brush' title='Panel' on-click='carouselClick' data-selection='settings-panel'></ha-icon-button>
                           <div class='settings-nav-text'>Panel</div>
                         </div>
                         <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-alarm", carouselMainSelected)]];'>
-                          <paper-icon-button icon='mdi:dialpad' title='Alarm' on-click='carouselClick' data-selection='settings-alarm'></paper-icon-button>
+                          <ha-icon-button icon='mdi:dialpad' title='Alarm' on-click='carouselClick' data-selection='settings-alarm'></ha-icon-button>
                           <div class='settings-nav-text'>Alarm</div>
                         </div>
                         <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-sensors", carouselMainSelected)]];'>
-                          <paper-icon-button id='btn-alarm-sensors' icon='mdi:radio-tower' title='Alarm Sensors' on-click='carouselClick' data-selection='settings-sensors'></paper-icon-button>
+                          <ha-icon-button id='btn-alarm-sensors' icon='mdi:radio-tower' title='Alarm Sensors' on-click='carouselClick' data-selection='settings-sensors'></ha-icon-button>
                           <div class='settings-nav-text'>Modes</div>
                         </div>
                         <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-floorplan", carouselMainSelected)]];'>
-                          <paper-icon-button icon='mdi:floor-plan' title='Floorplan' on-click='carouselClick' data-selection='settings-floorplan'></paper-icon-button>
+                          <ha-icon-button icon='mdi:floor-plan' title='Floorplan' on-click='carouselClick' data-selection='settings-floorplan'></ha-icon-button>
                           <div class='settings-nav-text'>Floorplan</div>
                         </div>
                         <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-cameras", carouselMainSelected)]];'>
-                          <paper-icon-button icon='mdi:cctv' title='Camera' on-click='carouselClick' data-selection='settings-cameras'></paper-icon-button>
+                          <ha-icon-button icon='mdi:cctv' title='Camera' on-click='carouselClick' data-selection='settings-cameras'></ha-icon-button>
                           <div class='settings-nav-text'>Cameras</div>
                         </div>
                         <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-mqtt", carouselMainSelected)]];'>
-                          <paper-icon-button icon='mdi:access-point' title='MQTT' on-click='carouselClick' data-selection='settings-mqtt'></paper-icon-button>
+                          <ha-icon-button icon='mdi:access-point' title='MQTT' on-click='carouselClick' data-selection='settings-mqtt'></ha-icon-button>
                           <div class='settings-nav-text'>MQTT</div>
                         </div>
                         <div class='settings-nav-inner vertical layout' style$='color: [[computeCarouselSettingsIconColor("settings-custom", carouselMainSelected)]];'>
-                          <paper-icon-button icon='mdi:atom' title='Custom Panel' on-click='carouselClick' data-selection='settings-custom'></paper-icon-button>
+                          <ha-icon-button icon='mdi:atom' title='Custom Panel' on-click='carouselClick' data-selection='settings-custom'></ha-icon-button>
                           <div class='settings-nav-text'>Custom</div>
                         </div>
                         <div class='settings-nav-inner vertical layout'>
-                          <paper-icon-button icon='mdi:logout' title='Logout' on-click='carouselClick' data-selection='set-logout'></paper-icon-button>
+                          <ha-icon-button icon='mdi:logout' title='Logout' on-click='carouselClick' data-selection='set-logout'></ha-icon-button>
                           <div class='settings-nav-text'>Logout</div>
                         </div>
                       </div>
 
                       <paper-dropdown-menu class='xs dropdown-content' label="Settings">
                         <paper-listbox slot="dropdown-content" >
-                          <paper-item on-click='carouselClick' data-selection='settings-info'><iron-icon icon='mdi:information-outline'></iron-icon>About</paper-item>
-                          <paper-item on-click='carouselClick' data-selection='settings-panel'><iron-icon icon='mdi:brush'></iron-icon>Panel</paper-item>
-                          <paper-item on-click='carouselClick' data-selection='settings-alarm'><iron-icon icon='mdi:dialpad'></iron-icon>Alarm</paper-item>
-                          <paper-item on-click='carouselClick' data-selection='settings-sensors'><iron-icon icon='mdi:radio-tower'></iron-icon>Modes</paper-item>
-                          <paper-item on-click='carouselClick' data-selection='settings-floorplan'><iron-icon icon='mdi:floor-plan'></iron-icon>Floorplan</paper-item>
-                          <paper-item on-click='carouselClick' data-selection='settings-cameras'><iron-icon icon='mdi:cctv'></iron-icon>Cameras</paper-item>
-                          <paper-item on-click='carouselClick' data-selection='settings-mqtt'><iron-icon icon='mdi:access-point'></iron-icon>MQTT</paper-item>
-                          <paper-item on-click='carouselClick' data-selection='settings-custom'><iron-icon icon='mdi:atom'></iron-icon>Custom</paper-item>
+                          <paper-item on-click='carouselClick' data-selection='settings-info'><ha-icon icon='mdi:information-outline'></ha-icon>About</paper-item>
+                          <paper-item on-click='carouselClick' data-selection='settings-panel'><ha-icon icon='mdi:brush'></ha-icon>Panel</paper-item>
+                          <paper-item on-click='carouselClick' data-selection='settings-alarm'><ha-icon icon='mdi:dialpad'></ha-icon>Alarm</paper-item>
+                          <paper-item on-click='carouselClick' data-selection='settings-sensors'><ha-icon icon='mdi:radio-tower'></ha-icon>Modes</paper-item>
+                          <paper-item on-click='carouselClick' data-selection='settings-floorplan'><ha-icon icon='mdi:floor-plan'></ha-icon>Floorplan</paper-item>
+                          <paper-item on-click='carouselClick' data-selection='settings-cameras'><ha-icon icon='mdi:cctv'></ha-icon>Cameras</paper-item>
+                          <paper-item on-click='carouselClick' data-selection='settings-mqtt'><ha-icon icon='mdi:access-point'></ha-icon>MQTT</paper-item>
+                          <paper-item on-click='carouselClick' data-selection='settings-custom'><ha-icon icon='mdi:atom'></ha-icon>Custom</paper-item>
                         </paper-listbox>
                       </paper-dropdown-menu>
                     </div>
@@ -472,12 +477,12 @@
 
                       <div>
                         <h1>Contribute</h1>
-                        <a href='https://github.com/akasma74/Hass-Custom-Alarm/issues'><iron-icon icon='mdi:bug' style='padding-right: 8px'></iron-icon><span>Found a bug or got a feature idea? Let's talk about it on Github</span></a><br>
-                        <iron-icon icon='mdi:earth' style='padding-right: 8px'></iron-icon><span><a href='https://community.home-assistant.io/t/bwalarm-akasma74-edition/113666'>Talk to your friends and colleagues about how awesome this alarm and smart panel is</a></span><br>
+                        <a href='https://github.com/akasma74/Hass-Custom-Alarm/issues'><ha-icon icon='mdi:bug' style='padding-right: 8px'></ha-icon><span>Found a bug or got a feature idea? Let's talk about it on Github</span></a><br>
+                        <ha-icon icon='mdi:earth' style='padding-right: 8px'></ha-icon><span><a href='https://community.home-assistant.io/t/bwalarm-akasma74-edition/113666'>Talk to your friends and colleagues about how awesome this alarm and smart panel is</a></span><br>
                       </div>
 
                       <div class='setting-outer vertical layout'>
-                        <h1><iron-icon icon='mdi:heart-pulse' style='padding-right: 8px'></iron-icon>Help Support This Work</h1>
+                        <h1><ha-icon icon='mdi:heart-pulse' style='padding-right: 8px'></ha-icon>Help Support This Work</h1>
 
                         <span class='info-detail'>Thanks to the community for all the input into this. Consider supporting this project and donate! All funds will go towards bug squashing! It is a community effort to make both the alarm and this smart panel feature-rich as well as simple to deploy and use. We need all the help we can get!</span>
                         <div class='setting-inner horizontal layout flexwrap' style='padding-top: 10px;'>
@@ -518,7 +523,7 @@
                         </div>
                       </div>
 
-                      <button id='restart' data-type='button' on-click='restartHA'><iron-icon icon='mdi:restart' style='padding-right: 8px'></iron-icon><span>Restart Home Assistant</span></button>
+                      <button id='restart' data-type='button' on-click='restartHA'><ha-icon icon='mdi:restart' style='padding-right: 8px'></ha-icon><span>Restart Home Assistant</span></button>
                     </div>
 
                     <!-- ########################################################################### @PANEL ##################################################################################################### -->
@@ -533,7 +538,7 @@
                             <div class='setting-middle vertical layout'>
                               <div class='setting-inner horizontal layout' title='Password to access Settings panel'>
                                 <paper-input id='admin_password' class="expand" type="password" label='Admin Password' always-float-label></paper-input>
-                                <paper-icon-button data-type='input_text' data-setting='root' data-attribute='admin_password' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
+                                <ha-icon-button data-type='input_text' data-setting='root' data-attribute='admin_password' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></ha-icon-button>
                               </div>
 
                               <div class='setting-inner horizontal layout'>
@@ -579,7 +584,7 @@
 
                               <div class='setting-inner horizontal layout' title='Text to prefix the alarm status with in the status bar'>
                                 <paper-input id='panel_title' class="expand" label='Title' always-float-label value='{{alarm.attributes.panel.panel_title}}'></paper-input>
-                                <paper-icon-button data-type='input_text' data-setting='panel' data-attribute='panel_title' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
+                                <ha-icon-button data-type='input_text' data-setting='panel' data-attribute='panel_title' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></ha-icon-button>
                               </div>
 
                               <div class="setting-inner horizontal layout">
@@ -664,14 +669,14 @@
                                     <paper-listbox id='themes-listbox' class='vertical layout'>
                                     <template is='dom-repeat' items='[[alarm.attributes.themes]]'>
                                       <div class='horizontal layout'>
-                                        <paper-item on-click='defineColors' data-theme$='[[item.name]]' style='width: 75%;  text-transform: uppercase; text-transform: uppercase;'><iron-icon on-click='defineColors' data-theme$='[[item.name]]' icon='mdi:format-paint' style=' padding-right: 7px;'></iron-icon>[[item.name]]</paper-item>
+                                        <paper-item on-click='defineColors' data-theme$='[[item.name]]' style='width: 75%;  text-transform: uppercase; text-transform: uppercase;'><ha-icon on-click='defineColors' data-theme$='[[item.name]]' icon='mdi:format-paint' style=' padding-right: 7px;'></ha-icon>[[item.name]]</paper-item>
                                         <ha-switch class='setting-toggle' checked$='[[isChecked(item.active)]]' on-change='settingsSave' data-type='boolean' name$='[[item.name]]' data-attribute='activated' data-setting='themes'>Activated?</ha-switch>
-                                        <paper-icon-button on-click='settingsSave' data-setting='themes' name$='[[item.name]]' data-type='delete' icon='mdi:delete' style='margin-left: 20px; color: white;'></paper-icon-button>
+                                        <ha-icon-button on-click='settingsSave' data-setting='themes' name$='[[item.name]]' data-type='delete' icon='mdi:delete' style='margin-left: 20px; color: white;'></ha-icon-button>
                                       </div>
                                     </template>
                                   </paper-listbox>
                                 </template>
-                                <button on-click='unhideDiv' data-div='#themeDetail' style='background: unset; text-transform: capitalize; color: var(--panel-text-color);'><iron-icon  on-click='unhideDiv' data-div='#themeDetail' icon='mdi:plus-circle-outline' style='padding-right: 7px;'></iron-icon>New</button>
+                                <button on-click='unhideDiv' data-div='#themeDetail' style='background: unset; text-transform: capitalize; color: var(--panel-text-color);'><ha-icon  on-click='unhideDiv' data-div='#themeDetail' icon='mdi:plus-circle-outline' style='padding-right: 7px;'></ha-icon>New</button>
 
                                 <!-- /* Theme Name [Input] | Update [Button] | Delete [Button] */ -->
                                 <div id='themeDetail' class='remove'>
@@ -682,7 +687,7 @@
                                       <span class='info-detail'>Name of the theme.</span>
                                       <div class='setting-input horizontal layout'>
                                         <paper-input id='theme-name' type="text" placeholder='Theme Name'></paper-input>
-                                        <paper-icon-button id='theme-name-button' data-type='input_text' data-attribute='theme-name' data-setting='themes' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
+                                        <ha-icon-button id='theme-name-button' data-type='input_text' data-attribute='theme-name' data-setting='themes' on-click='settingsSave' icon='mdi:check-circle-outline'></ha-icon-button>
                                       </div>
                                     </div>
                                   </div>
@@ -694,9 +699,9 @@
                                           <span class='info-header'>[[color.header]]: </span>
                                         </div>
                                         <div class='horizontal layout' style='float: right'>
-                                          <button class='deleteThemeColor' on-click='settingsSave' name$='[[color.theme]]' data-attribute$='[[color.name]]' data-type='clear' data-setting='themes' style='background: unset;'><iron-icon icon='mdi:delete'></iron-icon>Clear?</button>
+                                          <button class='deleteThemeColor' on-click='settingsSave' name$='[[color.theme]]' data-attribute$='[[color.name]]' data-type='clear' data-setting='themes' style='background: unset;'><ha-icon icon='mdi:delete'></ha-icon>Clear?</button>
                                           <span class='colPicker' id$='[[color.name]]_span' value='[[color.color]]' style='margin: auto;'></span>
-                                          <paper-icon-button data-type='color' data-setting='themes' name$='[[color.theme]]' data-attribute$='[[color.name]]' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
+                                          <ha-icon-button data-type='color' data-setting='themes' name$='[[color.theme]]' data-attribute$='[[color.name]]' on-click='settingsSave' icon='mdi:check-circle-outline'></ha-icon-button>
                                         </div>
                                       </div>
                                       <span class='info-detail'>[[color.description]]</span>
@@ -719,12 +724,12 @@
 
                           <div class='horizontal layout setting-row' title='Master passcode to set/disarm the alarm'>
                             <paper-input id='code' type="password" label="Master Passcode" always-float-label></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='root' data-attribute='code' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
+                            <ha-icon-button data-type='input_text' data-setting='root' data-attribute='code' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></ha-icon-button>
                           </div>
 
                           <div class='horizontal layout setting-row' title="Panic code to disarm the alarm">
                             <paper-input id='panic_code' type="password" label='Panic code' always-float-label></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='root' data-attribute='panic_code' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
+                            <ha-icon-button data-type='input_text' data-setting='root' data-attribute='panic_code' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></ha-icon-button>
                           </div>
 
                           <span class="info-header">On arming</span>
@@ -742,12 +747,12 @@
                           <div class='vertical layout settings-group'>
                             <div class='horizontal layout setting-row' title="The alarm will only allow the set amount of attempts before timing out, `-1` allows for unlimited number of attempts">
                               <paper-input id='passcode_attempts' value='{{alarm.attributes.passcode_attempts}}' label='No. of attempts' always-float-label></paper-input>
-                              <paper-icon-button data-type='input_text' data-setting='root' data-attribute='passcode_attempts' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
+                              <ha-icon-button data-type='input_text' data-setting='root' data-attribute='passcode_attempts' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></ha-icon-button>
                             </div>
 
                             <div class='horizontal layout setting-row' title="Amount of time the panel will be locked after permitted no. of failed attempts">
                               <paper-input id='passcode_attempts_timeout' value='{{alarm.attributes.passcode_attempts_timeout}}' label='Timeout (sec)' always-float-label></paper-input>
-                              <paper-icon-button data-type='input_text' data-setting='root' data-attribute='passcode_attempts_timeout' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
+                              <ha-icon-button data-type='input_text' data-setting='root' data-attribute='passcode_attempts_timeout' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></ha-icon-button>
                             </div>
                           </div>
 
@@ -762,7 +767,7 @@
                           <div class$="[[invisibleIfDisabled(alarm.attributes.enable_log)]]">
                             <div class='horizontal layout settings-group setting-row' title="Maximum number of the newest log entries to keep in the log file">
                               <paper-input id='log_size' value='{{alarm.attributes.log_size}}' label='Max. entries to keep' always-float-label></paper-input>
-                              <paper-icon-button data-type='input_text' data-setting='root' data-attribute='log_size' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
+                              <ha-icon-button data-type='input_text' data-setting='root' data-attribute='log_size' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></ha-icon-button>
                             </div>
                           </div>
 
@@ -789,16 +794,16 @@
                                 </div>
                                   <!--</button>-->
 
-                                  <paper-icon-button data-userid$='[[user.id]]' on-click='deleteUser' icon='mdi:delete' title='Delete user'></paper-icon-button>
+                                  <ha-icon-button data-userid$='[[user.id]]' on-click='deleteUser' icon='mdi:delete' title='Delete user'></ha-icon-button>
 
                                   <!--<div style='margin-top: auto; margin-bottom: auto;'>
-                                    <button  data-userid$='[[user.id]]' on-click='deleteUser' style='color: white; background-color: unset;'><iron-icon icon='mdi:delete'></iron-icon>&nbsp;&nbsp;Delete</button>
+                                    <button  data-userid$='[[user.id]]' on-click='deleteUser' style='color: white; background-color: unset;'><ha-icon icon='mdi:delete'></ha-icon>&nbsp;&nbsp;Delete</button>
                                   </div>-->
                                 </div>
                               </template>
                             </div>
 
-                            <paper-icon-button id='user-add' class="setting-row" data-type='button' on-click='unhideDiv' data-div='#userDetail' icon='mdi:account-plus' title="Add new user"></paper-icon-button>
+                            <ha-icon-button id='user-add' class="setting-row" data-type='button' on-click='unhideDiv' data-div='#userDetail' icon='mdi:account-plus' title="Add new user"></ha-icon-button>
 
                             <div id='userDetail' class='remove'>
                               <h1>Update User</h1>
@@ -820,8 +825,8 @@
                                 </div>
 
                                 <div class='horizontal layout setting-row'>
-                                  <paper-icon-button id='user-save' data-type='button' on-click='saveUser' icon='mdi:content-save' title="Save user data">Save</paper-icon-button>
-                                  <paper-icon-button on-click='resetUserDetail' icon='mdi:cancel'>Cancel</paper-icon-button>
+                                  <ha-icon-button id='user-save' data-type='button' on-click='saveUser' icon='mdi:content-save' title="Save user data">Save</ha-icon-button>
+                                  <ha-icon-button on-click='resetUserDetail' icon='mdi:cancel'>Cancel</ha-icon-button>
                                 </div>
 
                               </div>
@@ -842,17 +847,17 @@
                         <div class='setting-inner horizontal layout'>
                           <div class='horizontal layout setting-input' title='Grace time (also known as Exit time) in seconds before the alarm is armed. Any sensor tripped within this time period will not trigger the alarm'>
                             <paper-input id='armed_away-pending_time' class='expand' label='Pending Time' always-float-label type='number' value='[[alarm.attributes.states.armed_away.pending_time]]' required auto-validate error-message='Enter number'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_away' data-attribute='pending_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
+                            <ha-icon-button data-type='input_text' data-setting='states' data-mode='armed_away' data-attribute='pending_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></ha-icon-button>
                           </div>
 
                           <div class='horizontal layout setting-input' title='Grace time (also known as Entry time) in seconds before the alarm is triggered. Any sensor tripped within this time period will not trigger the alarm'>
                             <paper-input id='armed_away-warning_time' class='expand' label='Warning Time' always-float-label type='number' value='[[alarm.attributes.states.armed_away.warning_time]]' required auto-validate error-message='Enter number'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_away' data-attribute='warning_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
+                            <ha-icon-button data-type='input_text' data-setting='states' data-mode='armed_away' data-attribute='warning_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></ha-icon-button>
                           </div>
 
                           <div class='horizontal layout setting-input no-right-margin' title='The amount of time in seconds the alarm stays triggered before returning to its previous state'>
                             <paper-input id='armed_away-trigger_time' class='expand' label='Trigger Time' always-float-label type='number' value='[[alarm.attributes.states.armed_away.trigger_time]]' required auto-validate error-message='Enter number'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_away' data-attribute='trigger_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
+                            <ha-icon-button data-type='input_text' data-setting='states' data-mode='armed_away' data-attribute='trigger_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></ha-icon-button>
                           </div>
                         </div>
 
@@ -890,17 +895,17 @@
                         <div class='setting-inner horizontal layout'>
                           <div class='horizontal layout setting-input' title='Grace time (also known as Exit time) in seconds before the alarm is armed. Any sensor tripped within this time period will not trigger the alarm'>
                             <paper-input id='armed_home-pending_time' class='expand' label='Pending Time' always-float-label type='number' value='[[alarm.attributes.states.armed_home.pending_time]]' required auto-validate error-message='Enter number'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_home' data-attribute='pending_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
+                            <ha-icon-button data-type='input_text' data-setting='states' data-mode='armed_home' data-attribute='pending_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></ha-icon-button>
                           </div>
 
                           <div class='horizontal layout setting-input' title='Grace time (also known as Entry time) in seconds before the alarm is triggered. Any sensor tripped within this time period will not trigger the alarm'>
                             <paper-input id='armed_home-warning_time' class='expand' label='Warning Time' always-float-label type='number' value='[[alarm.attributes.states.armed_home.warning_time]]' required auto-validate error-message='Enter number'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_home' data-attribute='warning_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
+                            <ha-icon-button data-type='input_text' data-setting='states' data-mode='armed_home' data-attribute='warning_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></ha-icon-button>
                           </div>
 
                           <div class='horizontal layout setting-input no-right-margin' title='The amount of time in seconds the alarm stays triggered before returning to its previous state'>
                             <paper-input id='armed_home-trigger_time' class='expand' label='Trigger Time' always-float-label type='number' value='[[alarm.attributes.states.armed_home.trigger_time]]' required auto-validate error-message='Enter number'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_home' data-attribute='trigger_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
+                            <ha-icon-button data-type='input_text' data-setting='states' data-mode='armed_home' data-attribute='trigger_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></ha-icon-button>
                           </div>
                         </div>
 
@@ -937,17 +942,17 @@
                         <div class='setting-inner horizontal layout'>
                           <div class='horizontal layout setting-input' title='Grace time (also known as Exit time) in seconds before the alarm is armed. Any sensor tripped within this time period will not trigger the alarm'>
                             <paper-input id='armed_night-pending_time' class='expand' label='Pending Time' always-float-label type='number' value='[[alarm.attributes.states.armed_night.pending_time]]' required auto-validate error-message='Enter number'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_night' data-attribute='pending_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
+                            <ha-icon-button data-type='input_text' data-setting='states' data-mode='armed_night' data-attribute='pending_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></ha-icon-button>
                           </div>
 
                           <div class='horizontal layout setting-input' title='Grace time (also known as Entry time) in seconds before the alarm is triggered. Any sensor tripped within this time period will not trigger the alarm'>
                             <paper-input id='armed_night-warning_time' class='expand' label='Warning Time' always-float-label type='number' value='[[alarm.attributes.states.armed_night.warning_time]]' required auto-validate error-message='Enter number'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_night' data-attribute='warning_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
+                            <ha-icon-button data-type='input_text' data-setting='states' data-mode='armed_night' data-attribute='warning_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></ha-icon-button>
                           </div>
 
                           <div class='horizontal layout setting-input no-right-margin' title='The amount of time in seconds the alarm stays triggered before returning to its previous state'>
                             <paper-input id='armed_night-trigger_time' class='expand' label='Trigger Time' always-float-label type='number' value='[[alarm.attributes.states.armed_night.trigger_time]]' required auto-validate error-message='Enter number'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='states' data-mode='armed_night' data-attribute='trigger_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></paper-icon-button>
+                            <ha-icon-button data-type='input_text' data-setting='states' data-mode='armed_night' data-attribute='trigger_time' on-click='settingsSave' icon='mdi:content-save' title='Save changes'></ha-icon-button>
                           </div>
                         </div>
 
@@ -1015,7 +1020,7 @@
                           <span class='info-detail'>The time in seconds the camera image updates.<br>Default: 5 seconds</span>
                           <div class='setting-input horizontal layout'>
                             <paper-input id='camera_update_interval' value='{{alarm.attributes.panel.camera_update_interval}}' placeholder='Update Interval'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='panel' data-attribute='camera_update_interval' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
+                            <ha-icon-button data-type='input_text' data-setting='panel' data-attribute='camera_update_interval' on-click='settingsSave' icon='mdi:check-circle-outline'></ha-icon-button>
                           </div>
                         </div>
                       </div>
@@ -1043,7 +1048,7 @@
                           <span class='info-detail'>Quality of Service. The maximum QoS level for subscribing and publishing to MQTT messages.<br>Default: 0</span>
                           <div class='setting-input horizontal layout'>
                             <paper-input id='qos' value='{{alarm.attributes.mqtt.qos}}' placeholder='QOS'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='mqtt' data-attribute='qos' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
+                            <ha-icon-button data-type='input_text' data-setting='mqtt' data-attribute='qos' on-click='settingsSave' icon='mdi:check-circle-outline'></ha-icon-button>
                           </div>
                         </div>
                       </div>
@@ -1054,7 +1059,7 @@
                           <span class='info-detail'>The MQTT topic HA will publish state updates to.<br>Default: home/alarm</span>
                           <div class='setting-input horizontal layout'>
                             <paper-input id='state_topic' value='{{alarm.attributes.mqtt.state_topic}}' placeholder='State Topic'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='mqtt' data-attribute='state_topic' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
+                            <ha-icon-button data-type='input_text' data-setting='mqtt' data-attribute='state_topic' on-click='settingsSave' icon='mdi:check-circle-outline'></ha-icon-button>
                           </div>
                         </div>
                       </div>
@@ -1065,7 +1070,7 @@
                           <span class='info-detail'>The MQTT topic HA will subscribe to, to receive commands from a remote device to change the alarm state.<br>Default: home/alarm/set</span>
                           <div class='setting-input horizontal layout'>
                             <paper-input id='command_topic' value='{{alarm.attributes.mqtt.command_topic}}' placeholder='Command Topic'></paper-input>
-                            <paper-icon-button data-type='imput_text' data-setting='mqtt' data-attribute='command_topic' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
+                            <ha-icon-button data-type='imput_text' data-setting='mqtt' data-attribute='command_topic' on-click='settingsSave' icon='mdi:check-circle-outline'></ha-icon-button>
                           </div>
                         </div>
                       </div>
@@ -1076,7 +1081,7 @@
                           <span class='info-detail'>Command to set armed-night mode on this Alarm Panel.<br>Default: ARM_NIGHT</span>
                           <div class='setting-input horizontal layout'>
                             <paper-input id='payload_arm_night' value='{{alarm.attributes.mqtt.payload_arm_night}}' placeholder='Payload Night'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='mqtt' data-attribute='payload_arm_night' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
+                            <ha-icon-button data-type='input_text' data-setting='mqtt' data-attribute='payload_arm_night' on-click='settingsSave' icon='mdi:check-circle-outline'></ha-icon-button>
                           </div>
                         </div>
                       </div>
@@ -1087,7 +1092,7 @@
                           <span class='info-detail'>Command to set armed-home mode.<br>Default: ARM_HOME</span>
                           <div class='setting-input horizontal layout'>
                             <paper-input id='payload_arm_home' value='{{alarm.attributes.mqtt.payload_arm_home}}' placeholder='Payload Home'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='mqtt' data-attribute='payload_arm_home' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
+                            <ha-icon-button data-type='input_text' data-setting='mqtt' data-attribute='payload_arm_home' on-click='settingsSave' icon='mdi:check-circle-outline'></ha-icon-button>
                           </div>
                         </div>
                       </div>
@@ -1098,7 +1103,7 @@
                           <span class='info-detail'>Command to set armed-away mode.<br>Default: ARM_AWAY</span>
                           <div class='setting-input horizontal layout'>
                             <paper-input id='payload_arm_away' value='{{alarm.attributes.mqtt.payload_arm_away}}' placeholder='Payload Away'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='mqtt' data-attribute='payload_arm_away' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
+                            <ha-icon-button data-type='input_text' data-setting='mqtt' data-attribute='payload_arm_away' on-click='settingsSave' icon='mdi:check-circle-outline'></ha-icon-button>
                           </div>
                         </div>
                       </div>
@@ -1109,7 +1114,7 @@
                           <span class='info-detail'>Command to disarm this Alarm Panel.<br>Default: DISARM</span>
                           <div class='setting-input horizontal layout'>
                             <paper-input id='payload_disarm' value='{{alarm.attributes.mqtt.payload_disarm}}' placeholder='Payload Disarm'></paper-input>
-                            <paper-icon-button data-type='input_text' data-setting='mqtt' data-attribute='payload_disarm' on-click='settingsSave' icon='mdi:check-circle-outline'></paper-icon-button>
+                            <ha-icon-button data-type='input_text' data-setting='mqtt' data-attribute='payload_disarm' on-click='settingsSave' icon='mdi:check-circle-outline'></ha-icon-button>
                           </div>
                         </div>
                       </div>
@@ -1152,30 +1157,30 @@
 
         <!-- ###########################################SELECTION BAR############################################### -->
         <div id='info-panel-selection'>
-          <paper-icon-button icon='mdi:dialpad' title='Keypad' on-click='carouselClick' data-selection='controls' style$='filter: [[computeInfoPanelButtonFilter("controls", carouselMainSelected)]];'></paper-icon-button>
+          <ha-icon-button icon='mdi:dialpad' title='Keypad' on-click='carouselClick' data-selection='controls' style$='filter: [[computeInfoPanelButtonFilter("controls", carouselMainSelected)]];'></ha-icon-button>
 
           <template is='dom-if' if='[[isChecked(alarm.attributes.panel.enable_floorplan_panel)]]' >
-            <paper-icon-button icon='mdi:floor-plan' title='Floorplan' on-click='carouselClick' data-selection='floorplan' style$='filter: [[computeInfoPanelButtonFilter("floorplan", carouselMainSelected)]];'></paper-icon-button>
+            <ha-icon-button icon='mdi:floor-plan' title='Floorplan' on-click='carouselClick' data-selection='floorplan' style$='filter: [[computeInfoPanelButtonFilter("floorplan", carouselMainSelected)]];'></ha-icon-button>
           </template>
 
           <template is='dom-if' if='[[needSensorsPanel(alarm.state, alarm.attributes.panel)]]'>
-            <paper-icon-button icon='mdi:radio-tower' title='Sensors' on-click='carouselClick' data-selection='sensors' style$='color: [[computeButtonColor(allopensensors)]]; filter: [[computeInfoPanelButtonFilter("sensors", carouselMainSelected)]];'></paper-icon-button>
+            <ha-icon-button icon='mdi:radio-tower' title='Sensors' on-click='carouselClick' data-selection='sensors' style$='color: [[computeButtonColor(allopensensors)]]; filter: [[computeInfoPanelButtonFilter("sensors", carouselMainSelected)]];'></ha-icon-button>
           </template>
 
           <template is='dom-if' if='[[isChecked(alarm.attributes.panel.enable_camera_panel)]]' >
-            <paper-icon-button icon='mdi:cctv' title='Cameras' on-click='carouselClick' data-selection='cameras' style$='filter: [[computeInfoPanelButtonFilter("cameras", carouselMainSelected)]];'></paper-icon-button>
+            <ha-icon-button icon='mdi:cctv' title='Cameras' on-click='carouselClick' data-selection='cameras' style$='filter: [[computeInfoPanelButtonFilter("cameras", carouselMainSelected)]];'></ha-icon-button>
           </template>
 
           <template is='dom-if' if='[[needLogPanel(alarm)]]' >
-            <paper-icon-button icon='mdi:view-headline' title='Activity log' on-click='carouselClick' data-selection='log' style$='filter: [[computeInfoPanelButtonFilter("log", carouselMainSelected)]];'></paper-icon-button>
+            <ha-icon-button icon='mdi:view-headline' title='Activity log' on-click='carouselClick' data-selection='log' style$='filter: [[computeInfoPanelButtonFilter("log", carouselMainSelected)]];'></ha-icon-button>
           </template>
 
           <template is='dom-if' if='[[isChecked(alarm.attributes.panel.enable_custom_panel)]]' >
-            <paper-icon-button icon='mdi:atom' title='Custom Panel' on-click='carouselClick' data-selection='custom' style$='filter: [[computeInfoPanelButtonFilter("custom", carouselMainSelected)]];'></paper-icon-button>
+            <ha-icon-button icon='mdi:atom' title='Custom Panel' on-click='carouselClick' data-selection='custom' style$='filter: [[computeInfoPanelButtonFilter("custom", carouselMainSelected)]];'></ha-icon-button>
           </template>
 
           <template is='dom-if' if='[[isDisarmed(alarm)]]' >
-            <paper-icon-button icon='mdi:tune' title='Settings' on-click='carouselClick' data-selection='set-login' style$='filter: [[computeInfoPanelButtonFilter("set-login", carouselMainSelected)]];'></paper-icon-button>
+            <ha-icon-button icon='mdi:tune' title='Settings' on-click='carouselClick' data-selection='set-login' style$='filter: [[computeInfoPanelButtonFilter("set-login", carouselMainSelected)]];'></ha-icon-button>
           </template>
         </div>
 
@@ -1198,7 +1203,7 @@
           <div id='modalError' style='color: white'>
             <div class='horizontal layout'>
               <div id='error-icon'>
-                <iron-icon icon='mdi:alert-circle-outline'></iron-icon>
+                <ha-icon icon='mdi:alert-circle-outline'></ha-icon>
               </div>
               <div>
                 <div id='error-title'>This component is not working</div>

@@ -267,7 +267,7 @@ paper-checkbox span.checkbox-title {
   text-align: center;
   margin: auto;
 }
-#error-icon iron-icon{
+#error-icon ha-icon{
   height: 100px;
   width: 100px;
   color: var(--title-color);
@@ -331,7 +331,7 @@ paper-checkbox span.checkbox-title {
   width: 90%;
 }
 
-.dropdown-content iron-icon {
+.dropdown-content ha-icon {
   padding-right: 10px;
 }
 .sensors {
@@ -615,7 +615,7 @@ div.invisible {
   justify-content: space-between;
 }
 
-.setting-input > paper-icon-button {
+.setting-input > ha-icon-button{
   width: 50px;
   height: 50px;
 }
@@ -638,8 +638,9 @@ div.invisible {
   justify-content: center;
 }
 
-#info-panel-selection paper-icon-button {
- height: 100%;
+#info-panel-selection ha-icon-button {
+ /*width: 60px;*/
+ --mdc-icon-size: calc(var(--info-panel-height) + 0);
  max-width: 30%;
  flex: 1 1 auto;
 }
@@ -1366,7 +1367,7 @@ div.arm button {
     margin-right: 20px;
    }
 
-  .settings-nav-inner paper-icon-button {
+  .settings-nav-inner ha-icon-button {
     width: 60px;
     height: 60px;
 
@@ -1377,7 +1378,7 @@ div.arm button {
     font-size: xx-large;
   }
 
-   #info-panel-selection paper-icon-button {
+   #info-panel-selection ha-icon-button {
     width: 60px;
     height: 60px;
     margin-left: 15px;
