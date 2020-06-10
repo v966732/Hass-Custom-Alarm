@@ -712,7 +712,7 @@ class BWAlarm(AlarmControlPanelEntity):
     #        return None if self._code is None else '.+'
         FNAME = '[code_format]'
         res = None if (self._code is None or (self._state == STATE_ALARM_DISARMED and not self.code_arm_required)) else parent.FORMAT_NUMBER
-        _LOGGER.debug("{} self._code: {}, self._state: {}, code_arm_required: {}, returning {}".format(FNAME, self._code, self._state, self.code_arm_required, res))
+        _LOGGER.debug("{} self._code: {}, self._state: {}, code_arm_required: {} - return {}".format(FNAME, self._code, self._state, self.code_arm_required, res))
         return res
 
     @property
@@ -1072,14 +1072,14 @@ class BWAlarm(AlarmControlPanelEntity):
         """ Save alarm state """
         FNAME = '[save_alarm_state]'
 
-        _LOGGER.debug("{} ({}) begin".format(FNAME, self._state))
+        _LOGGER.debug("{} state: {} - begin".format(FNAME, self._state))
         self._persistence_list["state"]     = self._state
         self._persistence_list["timeoutat"] = self._timeoutat.isoformat() if self._timeoutat else None
         self._persistence_list["returnto"]  = self._returnto
         self._persistence_list[CONF_STATES]  = self._clean_states_info(self._states)
         self._persistence_list["armstate"]  = self._armstate
         self.save_persistence(self._persistence_list)
-        _LOGGER.debug("{} ({}) end".format(FNAME, self._state))
+        _LOGGER.debug("{} state: {} - end".format(FNAME, self._state))
 
     def load_log(self):
         """ Load activity log from file """
@@ -1256,11 +1256,12 @@ class BWAlarm(AlarmControlPanelEntity):
     def setsignals(self, state):
         """ Figure out what to sense and how """
         FNAME = '[setsignals]'
-        _LOGGER.debug("{} {}".format(FNAME, state))
 
         self.immediate = self._states[state][CONF_IMMEDIATE].copy()
         self.delayed   = self._states[state][CONF_DELAYED].copy()
         self.override  = self._states[state][CONF_OVERRIDE].copy()
+        _LOGGER.debug("{} state: {}, immediate: {}, delayed: {}, override: {}".format(FNAME, state, self.immediate, self.delayed, self.override))
+
         # TODO?
         self.ignored   = set(self._allsensors) - (set(self.immediate) | set(self.delayed))
         # make room for a trigger
@@ -1282,7 +1283,7 @@ class BWAlarm(AlarmControlPanelEntity):
 
     def process_event(self, event, override_pending_time=False):
         FNAME = '[process_event]'
-        _LOGGER.debug("{}".format(FNAME))
+        _LOGGER.debug("{} event: {}, state: {}, override_pending_time: {} - begin".format(FNAME, event, self._state, override_pending_time))
 
         old_state = self._state
 
@@ -1293,9 +1294,9 @@ class BWAlarm(AlarmControlPanelEntity):
         elif event == Events.Trigger:
             self._state = STATE_ALARM_TRIGGERED
 
-        #If there is a pending time set in either of the state configs then drop into pending mode else simply arm the alarm
+        # If there is a pending time set in either of the state configs then drop into pending mode else simply arm the alarm
         elif old_state == STATE_ALARM_DISARMED:
-            if   event == Events.ArmHome:
+            if event == Events.ArmHome:
                 if (datetime.timedelta(seconds=int(self._states[STATE_ALARM_ARMED_HOME][CONF_PENDING_TIME])) and override_pending_time == False):
                     self._state = STATE_ALARM_PENDING
                 else:
@@ -1319,7 +1320,7 @@ class BWAlarm(AlarmControlPanelEntity):
                 self._armstate = STATE_ALARM_ARMED_NIGHT
 
         elif old_state == STATE_ALARM_PENDING:
-            if   event == Events.Timeout:       self._state = self._armstate
+            if event == Events.Timeout:       self._state = self._armstate
 
         elif old_state == STATE_ALARM_ARMED_HOME or \
              old_state == STATE_ALARM_ARMED_AWAY or \
@@ -1333,21 +1334,22 @@ class BWAlarm(AlarmControlPanelEntity):
                 event == Events.ImmediateTrip:       self._state = STATE_ALARM_TRIGGERED
 
         elif old_state == STATE_ALARM_TRIGGERED:
-            if   event == Events.Timeout:       self._state = self._returnto
+            if event == Events.Timeout:       self._state = self._returnto
 
         new_state = self._state
         if old_state != new_state:
             _LOGGER.debug("{} state changes from {} to {}".format(FNAME, old_state, new_state))
             # Things to do on entering state
             if new_state == STATE_ALARM_WARNING:
-                _LOGGER.debug("{} Turning on warning".format(FNAME))
                 if self._config.get(CONF_WARNING):
+                    _LOGGER.debug("{} Turning on warning".format(FNAME))
                     self._hass.services.call(self._config.get(CONF_WARNING).split('.')[0], 'turn_on', {'entity_id':self._config.get(CONF_WARNING)})
                 self._timeoutat = now() +  datetime.timedelta(seconds=int(self._states[self._armstate][CONF_WARNING_TIME]))
+                _LOGGER.debug("{} _armstate: {}, warning time: {}, _timeoutat: {}".format(FNAME, self._armstate, int(self._states[self._armstate][CONF_WARNING_TIME]), self._timeoutat))
                 self._update_log(None, LOG.TRIPPED, self._lasttrigger)
             elif new_state == STATE_ALARM_TRIGGERED:
-                _LOGGER.debug("{} Turning on alarm".format(FNAME))
                 if self._config.get(CONF_ALARM):
+                    _LOGGER.debug("{} Turning on alarm".format(FNAME))
                     self._hass.services.call(self._config.get(CONF_ALARM).split('.')[0], 'turn_on', {'entity_id':self._config.get(CONF_ALARM)})
                 if (self._states[self._armstate][CONF_TRIGGER_TIME] == -1):
                     self._timeoutat = now() + datetime.timedelta(hours=int(24))
@@ -1378,7 +1380,6 @@ class BWAlarm(AlarmControlPanelEntity):
             if (old_state == STATE_ALARM_WARNING or old_state == STATE_ALARM_PENDING) and self._config.get(CONF_WARNING):
                 _LOGGER.debug("{} Turning off warning".format(FNAME))
                 self._hass.services.call(self._config.get(CONF_WARNING).split('.')[0], 'turn_off', {'entity_id':self._config.get(CONF_WARNING)})
-
             elif old_state == STATE_ALARM_TRIGGERED and self._config.get(CONF_ALARM):
                 _LOGGER.debug("{} Turning off alarm".format(FNAME))
                 self._hass.services.call(self._config.get(CONF_ALARM).split('.')[0], 'turn_off', {'entity_id':self._config.get(CONF_ALARM)})
@@ -1395,18 +1396,19 @@ class BWAlarm(AlarmControlPanelEntity):
 
             # check if the sensor that triggered the alarm is still in alarm state
             if old_state == STATE_ALARM_TRIGGERED and new_state != STATE_ALARM_DISARMED and self._lasttrigger:
-                _LOGGER.debug("{} Checking state of {}..".format(FNAME, self._lasttrigger))
+                _LOGGER.debug("{} Checking state of the sensor {} that triggered the alarm..".format(FNAME, self._lasttrigger))
                 lasttrigger_state = self._hass.states.get(self._lasttrigger)
                 if (lasttrigger_state != None):
                     _state = lasttrigger_state.state.lower()
-                    _LOGGER.debug("{} {} is {}".format(FNAME, self._lasttrigger, _state))
+                    _LOGGER.debug("{} Sensor {} is {}".format(FNAME, self._lasttrigger, _state))
                     if _state in self._supported_statuses_on:
-                        _LOGGER.info("{} {} is still in alarm state, trigger the alarm immediately".format(FNAME, self._lasttrigger))
+                        _LOGGER.info("{} {} is still active, trigger the alarm immediately".format(FNAME, self._lasttrigger))
                         self.process_event(Events.ImmediateTrip)
                     else:
-                        _LOGGER.debug("{} {} is in normal state, nothing to do".format(FNAME, self._lasttrigger))
+                        _LOGGER.debug("{} Sensor {} is inactive, nothing to do".format(FNAME, self._lasttrigger))
                 else:
                     _LOGGER.info("{} sensor {} is not found!".format(FNAME, self._lasttrigger))
+        _LOGGER.debug("{} event: {}, state: {}, override_pending_time: {} - end".format(FNAME, event, self._state, override_pending_time))
 
     def _validate_code(self, code):
         """Validate given code."""
@@ -1487,12 +1489,12 @@ class BWAlarm(AlarmControlPanelEntity):
                 if new_state.state.lower() in self._supported_statuses_on:
                     eid = event.data['entity_id']
                     if eid in self.immediate:
-                        _LOGGER.debug("{} immediate: {} is {}".format(FNAME, event.data['entity_id'], new_state.state))
+                        _LOGGER.debug("{} immediate sensor {} is activated ({})".format(FNAME, event.data['entity_id'], new_state.state))
                         self._lasttrigger = eid
                         self.process_event(Events.ImmediateTrip)
                     elif eid in self.delayed and self._state != STATE_ALARM_WARNING:
                         # don't react on delayed sensors when it's Warning state
-                        _LOGGER.debug("{} delayed: {} is {}".format(FNAME, event.data['entity_id'], new_state.state))
+                        _LOGGER.debug("{} delayed sensor {} is activated ({})".format(FNAME, event.data['entity_id'], new_state.state))
                         self._lasttrigger = eid
                         self.process_event(Events.DelayedTrip)
 
