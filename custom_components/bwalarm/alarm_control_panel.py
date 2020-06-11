@@ -392,6 +392,19 @@ async def async_setup_platform(hass, config, async_add_devices, discovery_info=N
     url = "/api/panel_custom/alarm"
     resources = os.path.join(_resources_folder(hass), PANEL_FNAME)
     hass.http.register_static_path(url, resources)
+
+    panels = hass.data.get("frontend_panels", {})
+    if len(panels) > 0:
+        _LOGGER.debug("{} frontend_panels({}): ".format(FNAME, len(panels), panels))
+        for panel in panels:
+            _LOGGER.debug("{} frontend_panel {}: {} ".format(FNAME, panel, panels[panel].to_response()))
+    else:
+        _LOGGER.debug("{} no frontend_panels found".format(FNAME))
+
+    if 'alarm' in panels:
+        _LOGGER.info("{} frontend_url_path is in frontend_panels, let's remove it".format(FNAME))
+        hass.components.frontend.async_remove_panel('alarm')
+
     await hass.components.panel_custom.async_register_panel(
         webcomponent_name='alarm',
         frontend_url_path="alarm",
@@ -1144,7 +1157,7 @@ class BWAlarm(AlarmControlPanelEntity):
         service = einfo[EATTR_SERVICE]
         state = einfo[EATTR_STATE]
 
-        _LOGGER.debug("{} (service: {}, passcode: \"{}\", ignore_open_sensors: {}) begin".format(FNAME, service, code, ignore_open_sensors))
+        _LOGGER.debug("{} service: {}, passcode: \"{}\", ignore_open_sensors: {} - begin".format(FNAME, service, code, ignore_open_sensors))
 
         admin_id = 'HA'
         user_id = admin_id
@@ -1189,7 +1202,7 @@ class BWAlarm(AlarmControlPanelEntity):
 
         self.process_event(event, arm_immediately)
         self._update_log(user_id, event)
-        _LOGGER.debug("{} (service: {}, passcode: \"{}\", ignore_open_sensors: {}) end".format(FNAME, service, code, ignore_open_sensors))
+        _LOGGER.debug("{} service: {}, passcode: \"{}\", ignore_open_sensors: {} - end".format(FNAME, service, code, ignore_open_sensors))
         return True
 
     def alarm_arm_home(self, code=None):
@@ -1229,7 +1242,7 @@ class BWAlarm(AlarmControlPanelEntity):
     def alarm_disarm(self, code=None):
         FNAME = "[alarm_disarm]"
 
-        _LOGGER.debug("{} (passcode: \"{}\") begin".format(FNAME, code))
+        _LOGGER.debug("{} passcode: \"{}\" - begin".format(FNAME, code))
 
         #If the provided code matches the panic alarm then deactivate the alarm but set the state of the panic mode to active.
         if self._validate_panic_code(code):
@@ -1239,17 +1252,17 @@ class BWAlarm(AlarmControlPanelEntity):
             self._update_log(None, LOG.DISARMED) #Show a default disarm message incase this is displayed on the interface
             # Let HA know that something changed
             self.schedule_update_ha_state()
-            _LOGGER.debug("{} (passcode: \"{}\") end (return True)".format(FNAME, code))
+            _LOGGER.debug("{} passcode: \"{}\" - end (return True)".format(FNAME, code))
             return True
 
         if not self._validate_code(code):
             _LOGGER.error("{} Failed to disarm: invalid passcode \"{}\"".format(FNAME, code))
             self._update_log(None, LOG.DISARM_FAIL)
-            _LOGGER.debug("{} (passcode: \"{}\") end (return False)".format(FNAME, code))
+            _LOGGER.debug("{} passcode: \"{}\" - end (return False)".format(FNAME, code))
             return False
 
         self.process_event(Events.Disarm)
-        _LOGGER.debug("{} (passcode: \"{}\") end (return True)".format(FNAME, code))
+        _LOGGER.debug("{} passcode: \"{}\" - end (return True)".format(FNAME, code))
         return True
 
     ### Internal processing
