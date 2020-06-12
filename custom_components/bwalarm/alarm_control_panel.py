@@ -1236,8 +1236,10 @@ class BWAlarm(AlarmControlPanelEntity):
             return False
 
     def alarm_trigger(self, code=None):
-        self.process_event(Events.Trigger)
-        self._update_log(None, LOG.TRIGGERED)
+        FNAME = "[alarm_trigger]"
+        _LOGGER.debug("{} code: \"{}\" - begin".format(FNAME, code))
+        # self.process_event(Events.Trigger)
+        # self._update_log(None, LOG.TRIGGERED)
 
     def alarm_disarm(self, code=None):
         FNAME = "[alarm_disarm]"
