@@ -1238,6 +1238,7 @@ class BWAlarm(AlarmControlPanelEntity):
     def alarm_trigger(self, code=None):
         FNAME = "[alarm_trigger]"
         _LOGGER.debug("{} code: \"{}\" - begin".format(FNAME, code))
+        raise ValueError(f"service alarm_trigger called")
         # self.process_event(Events.Trigger)
         # self._update_log(None, LOG.TRIGGERED)
 
