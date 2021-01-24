@@ -488,26 +488,24 @@ class BwResources(HomeAssistantView):
 
     async def head(self, request, path):
         """Check if file exists."""
-        safe_path = sanitize_path(path)
-        if path != safe_path:
-            raise web.HTTPBadRequest
-        override_path = "{}/{}".format(self.override_folder, safe_path)
-        default_path = "{}/{}".format(self.default_folder, safe_path)
+        override_path = "{}/{}".format(self.override_folder, path)
+        default_path = "{}/{}".format(self.default_folder, path)
 
         response = web.HTTPOk if os.path.exists(override_path) or os.path.exists(default_path) else web.HTTPNotFound
         return web.Response(status=response.status_code)
 
     async def get(self, request, path):
         """Retrieve file."""
-        override_path = "{}/{}".format(self.override_folder, path)
-        default_path = "{}/{}".format(self.default_folder, path)
+        safe_path = sanitize_path(path)
+        if path != safe_path:
+            raise web.HTTPBadRequest
+        override_path = "{}/{}".format(self.override_folder, safe_path)
+        default_path = "{}/{}".format(self.default_folder, safe_path)
 
         if os.path.exists(override_path):
             return web.FileResponse(override_path)
         elif os.path.exists(default_path):
             return web.FileResponse(default_path)
-#        else:
-#            return None
 
 class BWAlarm(AlarmControlPanelEntity):
 
