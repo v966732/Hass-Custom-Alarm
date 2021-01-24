@@ -50,7 +50,7 @@ from homeassistant.util.dt       import utcnow                       as now
 from homeassistant.loader        import bind_hass
 from homeassistant.helpers.event import async_track_point_in_time
 from homeassistant.helpers.event import async_track_state_change
-from homeassistant.util          import sanitize_filename
+from homeassistant.util          import sanitize_path
 from homeassistant.exceptions    import HomeAssistantError
 from homeassistant.components.http import HomeAssistantView
 
@@ -488,8 +488,11 @@ class BwResources(HomeAssistantView):
 
     async def head(self, request, path):
         """Check if file exists."""
-        override_path = "{}/{}".format(self.override_folder, path)
-        default_path = "{}/{}".format(self.default_folder, path)
+        safe_path = sanitize_path(path)
+        if path != safe_path:
+            raise web.HTTPBadRequest
+        override_path = "{}/{}".format(self.override_folder, safe_path)
+        default_path = "{}/{}".format(self.default_folder, safe_path)
 
         response = web.HTTPOk if os.path.exists(override_path) or os.path.exists(default_path) else web.HTTPNotFound
         return web.Response(status=response.status_code)
@@ -730,10 +733,10 @@ class BWAlarm(AlarmControlPanelEntity):
     def code_format(self):
         """Regex for code format or None if no code is required."""
         # affects Lovelace keypad presence (None means no keypad)
-    #        return None if self._code is None else '.+'
+        # display keypad unless alarm is disarmed and no code to arm required
         FNAME = '[code_format]'
-        res = None if (self._code is None or (self._state == STATE_ALARM_DISARMED and not self.code_arm_required)) else parent.FORMAT_NUMBER
-        _LOGGER.debug("{} self._code: {}, self._state: {}, code_arm_required: {}, returning {}".format(FNAME, self._code, self._state, self.code_arm_required, res))
+        res = None if self._state == STATE_ALARM_DISARMED and not self.code_arm_required else parent.FORMAT_NUMBER
+        _LOGGER.debug("{} self._state: {}, code_arm_required: {}, returning {}".format(FNAME, self._state, self.code_arm_required, res))
         return res
 
     @property
@@ -1425,8 +1428,8 @@ class BWAlarm(AlarmControlPanelEntity):
         FNAME = '[_validate_code]'
 
         if ((int(self._passcode_attempt_allowed) == -1) or (self._passcodeAttemptNo <= int(self._passcode_attempt_allowed))):
-            check = not self._code or code == self._code or self._validate_user_codes(code)
-            if code == self._code:
+            check = (self._code != None and code == self._code) or self._validate_user_codes(code)
+            if (self._code != None and code == self._code):
                 self._update_log(None, LOG.DISARMED)
             return self._validate_code_attempts(check)
         else:
