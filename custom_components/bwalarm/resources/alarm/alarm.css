@@ -640,8 +640,10 @@ div.invisible {
 
 #info-panel-selection ha-icon-button {
  /*width: 60px;*/
- --mdc-icon-size: calc(var(--info-panel-height) + 0);
- max-width: 30%;
+ --mdc-icon-size: calc(var(--info-panel-height) - 16px);
+ --mdc-icon-button-size: calc(var(--info-panel-height) - 10px);
+ --mdc-icon-button-ripple-opacity: 0;
+ /*max-width: 30%;*/
  flex: 1 1 auto;
 }
 
@@ -1379,9 +1381,10 @@ div.arm button {
   }
 
    #info-panel-selection ha-icon-button {
-    width: 60px;
+    --mdc-icon-size: 60px;
+    /*width: 60px;
     height: 60px;
-    margin-left: 15px;
+    margin-left: 15px;*/
   }
 }
 
