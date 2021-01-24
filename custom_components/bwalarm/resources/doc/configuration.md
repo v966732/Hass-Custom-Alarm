@@ -42,7 +42,7 @@
 
 <a id="code"></a>
 **code**  
-&nbsp;&nbsp;&nbsp; _(string) (Required)_  
+&nbsp;&nbsp;&nbsp; _(string) (Optional)_  
 <a id="passcode_requirements"></a>
 &nbsp;&nbsp;&nbsp; Master passcode to set/disarm the alarm. It must consist of one or more digits surrounded by quotes.  
 
